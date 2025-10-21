@@ -11,6 +11,7 @@
     "src/VeDustRevenue-contract/**/*",
     "src/NeverlandUiProvider-contract/**/*",
     "src/DustAPR-contract/**/*",
+    "src/ClaimRewards-contract/**/*",
     "src/index.ts"
   ],
   "exclude": [
