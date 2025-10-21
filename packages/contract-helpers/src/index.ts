@@ -15,4 +15,5 @@ export type UserReservesHelperInput = {
 export * from './DustIncentiveProvider-contract/types';
 export { DustLockHelper } from './DustLock-contract';
 export * from './DustLock-contract/types';
+export { InterestRate } from './interestRate';
 
