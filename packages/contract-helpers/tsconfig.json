@@ -9,6 +9,7 @@
     "src/v3-UiPoolDataProvider-contract/**/*",
     "src/WETHGatewayLegacy-contract/**/*",
     "src/VeDustRevenue-contract/**/*",
+    "src/NeverlandUiProvider-contract/**/*",
     "src/index.ts"
   ],
   "exclude": [
