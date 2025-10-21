@@ -1,0 +1,1866 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_dustLock",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_revenueReward",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_dustRewardsController",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_dustOracle",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_aaveLendingPoolAddressProvider",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "AddressZero",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "AssetPriceUnavailable",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PriceOracleUnavailable",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "aaveLendingPoolAddressProvider",
+    "outputs": [
+      {
+        "internalType": "contract IPoolAddressesProvider",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "dustLock",
+    "outputs": [
+      {
+        "internalType": "contract IDustLock",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "dustOracle",
+    "outputs": [
+      {
+        "internalType": "contract INeverlandDustHelper",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "dustRewardsController",
+    "outputs": [
+      {
+        "internalType": "contract IDustRewardsController",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllPrices",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address[]",
+            "name": "tokens",
+            "type": "address[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "prices",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "lastUpdated",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "bool[]",
+            "name": "isStale",
+            "type": "bool[]"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.PriceData",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "getBatchTokenDetails",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "end",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "effectiveStart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isPermanent",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "votingPower",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "rewardReceiver",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.LockInfo[]",
+        "name": "locks",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "revenueRewards",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "emissionRewards",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "address[]",
+            "name": "rewardTokens",
+            "type": "address[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "totalEarned",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.RewardSummary[]",
+        "name": "rewards",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "offset",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "getEssentialUserView",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "tokenIds",
+                "type": "uint256[]"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint256",
+                    "name": "tokenId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "end",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "effectiveStart",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isPermanent",
+                    "type": "bool"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "votingPower",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "rewardReceiver",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "owner",
+                    "type": "address"
+                  }
+                ],
+                "internalType": "struct INeverlandUiProvider.LockInfo[]",
+                "name": "locks",
+                "type": "tuple[]"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint256",
+                    "name": "tokenId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "revenueRewards",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "emissionRewards",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "address[]",
+                    "name": "rewardTokens",
+                    "type": "address[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "totalEarned",
+                    "type": "uint256[]"
+                  }
+                ],
+                "internalType": "struct INeverlandUiProvider.RewardSummary[]",
+                "name": "rewardSummaries",
+                "type": "tuple[]"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalVotingPower",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalLockedAmount",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.UserDashboardData",
+            "name": "user",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "totalSupply",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalVotingPower",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "permanentLockBalance",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address[]",
+                "name": "rewardTokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "totalRewardsPerToken",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256",
+                "name": "epoch",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "activeTokenCount",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.GlobalStats",
+            "name": "globalStats",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address[]",
+                "name": "rewardTokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "totalRewards",
+                "type": "uint256[]"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.EmissionData",
+            "name": "emissions",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address[]",
+                "name": "rewardTokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "rewardTokenBalances",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "distributionRates",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256",
+                "name": "nextEpochTimestamp",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "currentEpoch",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "epochRewards",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "nextEpochRewards",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalValueLockedUSD",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.MarketData",
+            "name": "marketData",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.EssentialUserView",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "offset",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "getExtendedUserView",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "uint256[]",
+                "name": "unlockTimes",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "amounts",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "tokenIds",
+                "type": "uint256[]"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.UnlockSchedule",
+            "name": "unlockSchedule",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256[]",
+                "name": "totalRevenue",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "totalEmissions",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "totalHistorical",
+                "type": "uint256[]"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.UserRewardsSummary",
+            "name": "rewardsSummary",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address[]",
+                "name": "tokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "prices",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "lastUpdated",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "bool[]",
+                "name": "isStale",
+                "type": "bool[]"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.PriceData",
+            "name": "allPrices",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "rewardToken",
+                "type": "address"
+              },
+              {
+                "internalType": "address[]",
+                "name": "assets",
+                "type": "address[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "amounts",
+                "type": "uint256[]"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.EmissionAssetBreakdown[]",
+            "name": "emissionBreakdowns",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.ExtendedUserView",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGlobalStats",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "totalSupply",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalVotingPower",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "permanentLockBalance",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address[]",
+            "name": "rewardTokens",
+            "type": "address[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "totalRewardsPerToken",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "epoch",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "activeTokenCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.GlobalStats",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getMarketData",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address[]",
+            "name": "rewardTokens",
+            "type": "address[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "rewardTokenBalances",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "distributionRates",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nextEpochTimestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "currentEpoch",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "epochRewards",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "nextEpochRewards",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalValueLockedUSD",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.MarketData",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNetworkData",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "currentBlock",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "currentTimestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gasPrice",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.NetworkData",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getProtocolMeta",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "dustLock",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "revenueReward",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "dustRewardsController",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "dustOracle",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "earlyWithdrawPenalty",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minLockAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "rewardDistributor",
+            "type": "address"
+          },
+          {
+            "internalType": "address[]",
+            "name": "revenueRewardTokens",
+            "type": "address[]"
+          },
+          {
+            "internalType": "address[]",
+            "name": "emissionRewardTokens",
+            "type": "address[]"
+          },
+          {
+            "internalType": "address[]",
+            "name": "emissionStrategies",
+            "type": "address[]"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.ProtocolMeta",
+        "name": "meta",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTokenDetails",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "end",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "effectiveStart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isPermanent",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "votingPower",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "rewardReceiver",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.LockInfo",
+        "name": "",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "revenueRewards",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "emissionRewards",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "address[]",
+            "name": "rewardTokens",
+            "type": "address[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "totalEarned",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.RewardSummary",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getUiBootstrap",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "dustLock",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "revenueReward",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "dustRewardsController",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "dustOracle",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "earlyWithdrawPenalty",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "minLockAmount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "rewardDistributor",
+                "type": "address"
+              },
+              {
+                "internalType": "address[]",
+                "name": "revenueRewardTokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "address[]",
+                "name": "emissionRewardTokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "address[]",
+                "name": "emissionStrategies",
+                "type": "address[]"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.ProtocolMeta",
+            "name": "meta",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "totalSupply",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalVotingPower",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "permanentLockBalance",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address[]",
+                "name": "rewardTokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "totalRewardsPerToken",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256",
+                "name": "epoch",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "activeTokenCount",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.GlobalStats",
+            "name": "globalStats",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address[]",
+                "name": "rewardTokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "rewardTokenBalances",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "distributionRates",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256",
+                "name": "nextEpochTimestamp",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "currentEpoch",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "epochRewards",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "nextEpochRewards",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalValueLockedUSD",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.MarketData",
+            "name": "marketData",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address[]",
+                "name": "tokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "prices",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "lastUpdated",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "bool[]",
+                "name": "isStale",
+                "type": "bool[]"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.PriceData",
+            "name": "allPrices",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "currentBlock",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "currentTimestamp",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "gasPrice",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.NetworkData",
+            "name": "network",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.UiBootstrap",
+        "name": "boot",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "offset",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "getUiFullBundle",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "dustLock",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "revenueReward",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "dustRewardsController",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "dustOracle",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "earlyWithdrawPenalty",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "minLockAmount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "rewardDistributor",
+                "type": "address"
+              },
+              {
+                "internalType": "address[]",
+                "name": "revenueRewardTokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "address[]",
+                "name": "emissionRewardTokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "address[]",
+                "name": "emissionStrategies",
+                "type": "address[]"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.ProtocolMeta",
+            "name": "meta",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "components": [
+                  {
+                    "internalType": "address",
+                    "name": "user",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "tokenIds",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "components": [
+                      {
+                        "internalType": "uint256",
+                        "name": "tokenId",
+                        "type": "uint256"
+                      },
+                      {
+                        "internalType": "uint256",
+                        "name": "amount",
+                        "type": "uint256"
+                      },
+                      {
+                        "internalType": "uint256",
+                        "name": "end",
+                        "type": "uint256"
+                      },
+                      {
+                        "internalType": "uint256",
+                        "name": "effectiveStart",
+                        "type": "uint256"
+                      },
+                      {
+                        "internalType": "bool",
+                        "name": "isPermanent",
+                        "type": "bool"
+                      },
+                      {
+                        "internalType": "uint256",
+                        "name": "votingPower",
+                        "type": "uint256"
+                      },
+                      {
+                        "internalType": "address",
+                        "name": "rewardReceiver",
+                        "type": "address"
+                      },
+                      {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
+                      }
+                    ],
+                    "internalType": "struct INeverlandUiProvider.LockInfo[]",
+                    "name": "locks",
+                    "type": "tuple[]"
+                  },
+                  {
+                    "components": [
+                      {
+                        "internalType": "uint256",
+                        "name": "tokenId",
+                        "type": "uint256"
+                      },
+                      {
+                        "internalType": "uint256[]",
+                        "name": "revenueRewards",
+                        "type": "uint256[]"
+                      },
+                      {
+                        "internalType": "uint256[]",
+                        "name": "emissionRewards",
+                        "type": "uint256[]"
+                      },
+                      {
+                        "internalType": "address[]",
+                        "name": "rewardTokens",
+                        "type": "address[]"
+                      },
+                      {
+                        "internalType": "uint256[]",
+                        "name": "totalEarned",
+                        "type": "uint256[]"
+                      }
+                    ],
+                    "internalType": "struct INeverlandUiProvider.RewardSummary[]",
+                    "name": "rewardSummaries",
+                    "type": "tuple[]"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "totalVotingPower",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "totalLockedAmount",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct INeverlandUiProvider.UserDashboardData",
+                "name": "user",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint256",
+                    "name": "totalSupply",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "totalVotingPower",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "permanentLockBalance",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "address[]",
+                    "name": "rewardTokens",
+                    "type": "address[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "totalRewardsPerToken",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "epoch",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "activeTokenCount",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct INeverlandUiProvider.GlobalStats",
+                "name": "globalStats",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "address[]",
+                    "name": "rewardTokens",
+                    "type": "address[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "totalRewards",
+                    "type": "uint256[]"
+                  }
+                ],
+                "internalType": "struct INeverlandUiProvider.EmissionData",
+                "name": "emissions",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "address[]",
+                    "name": "rewardTokens",
+                    "type": "address[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "rewardTokenBalances",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "distributionRates",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "nextEpochTimestamp",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "currentEpoch",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "epochRewards",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "nextEpochRewards",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "totalValueLockedUSD",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct INeverlandUiProvider.MarketData",
+                "name": "marketData",
+                "type": "tuple"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.EssentialUserView",
+            "name": "essential",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "components": [
+                  {
+                    "internalType": "uint256[]",
+                    "name": "unlockTimes",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "amounts",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "tokenIds",
+                    "type": "uint256[]"
+                  }
+                ],
+                "internalType": "struct INeverlandUiProvider.UnlockSchedule",
+                "name": "unlockSchedule",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint256[]",
+                    "name": "totalRevenue",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "totalEmissions",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "totalHistorical",
+                    "type": "uint256[]"
+                  }
+                ],
+                "internalType": "struct INeverlandUiProvider.UserRewardsSummary",
+                "name": "rewardsSummary",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "address[]",
+                    "name": "tokens",
+                    "type": "address[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "prices",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "lastUpdated",
+                    "type": "uint256[]"
+                  },
+                  {
+                    "internalType": "bool[]",
+                    "name": "isStale",
+                    "type": "bool[]"
+                  }
+                ],
+                "internalType": "struct INeverlandUiProvider.PriceData",
+                "name": "allPrices",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "address",
+                    "name": "rewardToken",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address[]",
+                    "name": "assets",
+                    "type": "address[]"
+                  },
+                  {
+                    "internalType": "uint256[]",
+                    "name": "amounts",
+                    "type": "uint256[]"
+                  }
+                ],
+                "internalType": "struct INeverlandUiProvider.EmissionAssetBreakdown[]",
+                "name": "emissionBreakdowns",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.ExtendedUserView",
+            "name": "extended",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "currentBlock",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "currentTimestamp",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "gasPrice",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.NetworkData",
+            "name": "network",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.UiFullBundle",
+        "name": "bundle",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "getUnlockSchedule",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "unlockTimes",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "offset",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "getUserDashboard",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "user",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "tokenIds",
+            "type": "uint256[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "end",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "effectiveStart",
+                "type": "uint256"
+              },
+              {
+                "internalType": "bool",
+                "name": "isPermanent",
+                "type": "bool"
+              },
+              {
+                "internalType": "uint256",
+                "name": "votingPower",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "rewardReceiver",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.LockInfo[]",
+            "name": "locks",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "revenueRewards",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "emissionRewards",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "address[]",
+                "name": "rewardTokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "totalEarned",
+                "type": "uint256[]"
+              }
+            ],
+            "internalType": "struct INeverlandUiProvider.RewardSummary[]",
+            "name": "rewardSummaries",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalVotingPower",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalLockedAmount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.UserDashboardData",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "rewardToken",
+        "type": "address"
+      }
+    ],
+    "name": "getUserEmissionBreakdown",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "assets",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "address[]",
+        "name": "rewardTokens",
+        "type": "address[]"
+      }
+    ],
+    "name": "getUserEmissionRewards",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "emissionRewards",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "getUserEmissions",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "rewardTokens",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "totalRewards",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "address[]",
+        "name": "rewardTokens",
+        "type": "address[]"
+      }
+    ],
+    "name": "getUserRevenueRewards",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "revenueRewards",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "address[]",
+        "name": "rewardTokens",
+        "type": "address[]"
+      }
+    ],
+    "name": "getUserRewardsSummary",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256[]",
+            "name": "totalRevenue",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "totalEmissions",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "totalHistorical",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct INeverlandUiProvider.UserRewardsSummary",
+        "name": "summary",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "getUserTokenCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "count",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "revenueReward",
+    "outputs": [
+      {
+        "internalType": "contract IRevenueReward",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

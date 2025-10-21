@@ -1,0 +1,26 @@
+{
+  "name": "@neverland-money/contract-helpers",
+  "version": "1.0.0",
+  "description": "Contract helper classes for Neverland protocol",
+  "main": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "check-types": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neverland-Money/neverland-utilities.git"
+  },
+  "dependencies": {
+    "@neverland-money/contract-types": "1.0.0",
+    "ethers": "^5.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

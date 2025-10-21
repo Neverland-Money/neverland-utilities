@@ -1,0 +1,40 @@
+{
+  "name": "@neverland-money/address-book",
+  "version": "0.1.0",
+  "description": "Address book for Neverland Lending protocol contract addresses",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "jest",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "keywords": [
+    "neverland",
+    "lending",
+    "defi",
+    "monad",
+    "addresses",
+    "contracts"
+  ],
+  "author": "Neverland Team",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neverland-Money/address-book"
+  }
+}

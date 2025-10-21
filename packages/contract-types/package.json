@@ -1,0 +1,25 @@
+{
+  "name": "@neverland-money/contract-types",
+  "version": "1.0.0",
+  "description": "Typed ABIs for Neverland protocol contracts",
+  "main": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "check-types": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neverland-Money/neverland-utilities.git"
+  },
+  "dependencies": {
+    "abitype": "^1.0.0",
+    "viem": "^2.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
