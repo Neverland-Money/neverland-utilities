@@ -10,6 +10,7 @@
     "src/WETHGatewayLegacy-contract/**/*",
     "src/VeDustRevenue-contract/**/*",
     "src/NeverlandUiProvider-contract/**/*",
+    "src/DustAPR-contract/**/*",
     "src/index.ts"
   ],
   "exclude": [

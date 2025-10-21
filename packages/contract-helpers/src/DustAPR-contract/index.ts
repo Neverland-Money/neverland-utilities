@@ -1,0 +1,100 @@
+import { ethers } from 'ethers';
+import { dustRewardsControllerAbi } from '@neverland-money/contract-types';
+import type { MarketAPR, MarketConfig, PriceMap, DustRewardData } from './types';
+const getNetworkNowSec = (): number => Math.floor(Date.now() / 1000);
+
+export class DustAPRCalculator {
+  private static readonly SECONDS_PER_YEAR = 31536000;
+  private static readonly PRICE_PRECISION = 1e8;
+  private static readonly APR_PRECISION = 10000;
+
+  async calculateMarketAPR(
+    asset: string,
+    rewardToken: string,
+    rewardsController: string,
+    provider: ethers.providers.Provider,
+    tokenPrices: PriceMap
+  ): Promise<MarketAPR> {
+    try {
+      const controller = new ethers.Contract(rewardsController, dustRewardsControllerAbi as any, provider);
+      const rewardData = await controller.getRewardsData(asset, rewardToken);
+      const { emissionPerSecond, distributionEnd, totalSupply }: DustRewardData = {
+        emissionPerSecond: rewardData.emissionPerSecond.toString(),
+        distributionEnd: rewardData.distributionEnd.toNumber(),
+        totalSupply: rewardData.totalSupply.toString?.() ?? rewardData.totalSupply,
+      };
+
+      const now = getNetworkNowSec();
+      const isActive = distributionEnd > now;
+      if (!isActive || ethers.BigNumber.from(emissionPerSecond).eq(0)) {
+        return { apr: 0, isActive: false, emissionPerSecond, distributionEnd, totalSupply };
+      }
+
+      const annualEmissions = ethers.BigNumber.from(emissionPerSecond).mul(DustAPRCalculator.SECONDS_PER_YEAR);
+      const dustPrice = tokenPrices[rewardToken.toLowerCase()] || 0;
+      const assetPrice = tokenPrices[asset.toLowerCase()] || 1;
+
+      const dustPriceBN = ethers.BigNumber.from(Math.floor(dustPrice * DustAPRCalculator.PRICE_PRECISION));
+      const assetPriceBN = ethers.BigNumber.from(Math.floor(assetPrice * DustAPRCalculator.PRICE_PRECISION));
+
+      const annualRewardValue = annualEmissions.mul(dustPriceBN).div(DustAPRCalculator.PRICE_PRECISION);
+      const totalSupplyValue = ethers.BigNumber.from(totalSupply).mul(assetPriceBN).div(DustAPRCalculator.PRICE_PRECISION);
+      const apr = totalSupplyValue.gt(0)
+        ? annualRewardValue.mul(DustAPRCalculator.APR_PRECISION).div(totalSupplyValue)
+        : ethers.BigNumber.from(0);
+
+      return {
+        apr: apr.toNumber() / 100,
+        isActive: true,
+        emissionPerSecond,
+        distributionEnd,
+        totalSupply,
+        annualEmissions: annualEmissions.toString(),
+      };
+    } catch {
+      return { apr: 0, isActive: false, emissionPerSecond: '0', distributionEnd: 0, totalSupply: '0' };
+    }
+  }
+
+  async calculateBatchAPR(
+    markets: MarketConfig[],
+    rewardsController: string,
+    provider: ethers.providers.Provider,
+    tokenPrices: PriceMap
+  ): Promise<{ [marketId: string]: MarketAPR }> {
+    const results: { [marketId: string]: MarketAPR } = {};
+    const aprPromises = markets.map(async market => {
+      const apr = await this.calculateMarketAPR(market.asset, market.dustToken, rewardsController, provider, tokenPrices);
+      return { marketId: market.id, apr };
+    });
+    const aprResults = await Promise.allSettled(aprPromises);
+    aprResults.forEach((result, index) => {
+      if (result.status === 'fulfilled') results[result.value.marketId] = result.value.apr;
+      else results[markets[index]?.id || ''] = { apr: 0, isActive: false, emissionPerSecond: '0', distributionEnd: 0, totalSupply: '0' };
+    });
+    return results;
+  }
+
+  static validateMarketConfig(market: MarketConfig): boolean {
+    return (
+      ethers.utils.isAddress(market.asset) &&
+      ethers.utils.isAddress(market.dustToken) &&
+      ethers.utils.isAddress(market.transferStrategy) &&
+      market.id.length > 0 &&
+      market.symbol.length > 0
+    );
+  }
+
+  static calculateWeightedAverageAPR(
+    markets: Array<{ apr: number; totalSupply: string; isActive: boolean }>
+  ): number {
+    const activeMarkets = markets.filter(m => m.isActive && m.apr > 0);
+    if (activeMarkets.length === 0) return 0;
+    const totalWeight = activeMarkets.reduce((sum, m) => sum + parseFloat(m.totalSupply), 0);
+    if (totalWeight === 0) return 0;
+    const weightedSum = activeMarkets.reduce((sum, m) => sum + m.apr * parseFloat(m.totalSupply), 0);
+    return weightedSum / totalWeight;
+  }
+}
+
+

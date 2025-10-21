@@ -22,4 +22,6 @@ export { VeDustRevenueHelper } from './VeDustRevenue-contract';
 export * from './VeDustRevenue-contract/types';
 export { NeverlandUiService } from './NeverlandUiProvider-contract';
 export * as NeverlandUiTypes from './NeverlandUiProvider-contract/types';
+export { DustAPRCalculator } from './DustAPR-contract';
+export * as DustAPRTypes from './DustAPR-contract/types';
 
