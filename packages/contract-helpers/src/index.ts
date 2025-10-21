@@ -18,4 +18,6 @@ export * from './DustLock-contract/types';
 export { InterestRate } from './interestRate';
 export { WETHGatewayLegacyAdapter } from './WETHGatewayLegacy-contract';
 export * from './WETHGatewayLegacy-contract/index';
+export { VeDustRevenueHelper } from './VeDustRevenue-contract';
+export * from './VeDustRevenue-contract/types';
 

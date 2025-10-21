@@ -8,6 +8,7 @@
     "src/DustIncentiveProvider-contract/**/*",
     "src/v3-UiPoolDataProvider-contract/**/*",
     "src/WETHGatewayLegacy-contract/**/*",
+    "src/VeDustRevenue-contract/**/*",
     "src/index.ts"
   ],
   "exclude": [
