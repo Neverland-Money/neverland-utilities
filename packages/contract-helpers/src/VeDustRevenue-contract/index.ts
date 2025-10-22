@@ -1,26 +1,19 @@
 import { ethers } from 'ethers';
 import { dustLockAbi, revenueRewardAbi } from '@neverland-money/contract-types';
+import { AbiBaseService } from '../commons/BaseService';
+import type { Abi } from 'abitype';
 import type { VeDustRevenueHelperContext, VeDustRevenueData } from './types';
 
-export class VeDustRevenueHelper {
-  private provider: ethers.providers.Provider;
+export class VeDustRevenueHelper extends AbiBaseService<Abi> {
   private revenueContract: ethers.Contract;
   private dustLockContract: ethers.Contract;
   private revenueIfaceManual: ethers.utils.Interface;
 
   constructor(context: VeDustRevenueHelperContext) {
-    this.provider = context.provider;
-
-    this.revenueContract = new ethers.Contract(
-      context.revenueAddress,
-      revenueRewardAbi as any,
-      this.provider,
-    );
-    this.dustLockContract = new ethers.Contract(
-      context.dustLockAddress,
-      dustLockAbi as any,
-      this.provider,
-    );
+    super(context.provider, revenueRewardAbi as any);
+    const svcLock = new AbiBaseService(this.provider, dustLockAbi as any);
+    this.revenueContract = this.getContractInstance(context.revenueAddress);
+    this.dustLockContract = svcLock.getContractInstance(context.dustLockAddress);
 
     this.revenueIfaceManual = new ethers.utils.Interface([
       'function rewardTokens(uint256 index) view returns (address)',

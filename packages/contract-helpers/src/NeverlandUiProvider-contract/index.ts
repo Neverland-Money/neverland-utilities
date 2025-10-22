@@ -1,6 +1,8 @@
 import { BigNumber, ethers } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import { neverlandUiProviderAbi } from '@neverland-money/contract-types';
+import { AbiBaseService } from '../commons/BaseService';
+import type { Abi } from 'abitype';
 import type {
   UserDashboardData,
   LockInfo,
@@ -18,15 +20,12 @@ import type {
   UiFullBundle,
 } from './types';
 
-export class NeverlandUiService {
+export class NeverlandUiService extends AbiBaseService<Abi> {
   private contract: ethers.Contract;
 
   constructor(contractAddress: string, provider: ethers.providers.Provider) {
-    this.contract = new ethers.Contract(
-      contractAddress,
-      neverlandUiProviderAbi as any,
-      provider
-    );
+    super(provider, neverlandUiProviderAbi as any);
+    this.contract = this.getContractInstance(contractAddress);
   }
 
   async getUserEmissionBreakdown(

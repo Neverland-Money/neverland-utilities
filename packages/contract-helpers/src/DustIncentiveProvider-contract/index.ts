@@ -1,6 +1,8 @@
 import { Contract, providers, BigNumber, utils } from 'ethers';
 import { isAddress } from 'ethers/lib/utils';
 import { dustRewardsControllerAbi } from '@neverland-money/contract-types';
+import { AbiBaseService } from '../commons/BaseService';
+import type { Abi } from 'abitype';
 import type { RewardData, UserRewardsResult } from './types';
 
 /**
@@ -25,22 +27,20 @@ export interface DustIncentiveProviderInterface {
   isEmissionsActive: (asset: string, reward: string, currentTimestamp?: number) => Promise<boolean>;
 }
 
-export class DustIncentiveProvider implements DustIncentiveProviderInterface {
+export class DustIncentiveProvider
+  extends AbiBaseService<Abi>
+  implements DustIncentiveProviderInterface
+{
   private contract: Contract;
-  private provider: providers.Provider;
   public readonly address: string;
 
   constructor(context: DustIncentiveProviderContext) {
     if (!isAddress(context.dustIncentiveProviderAddress)) {
       throw new Error('contract address is not valid');
     }
-    this.provider = context.provider;
+    super(context.provider, dustRewardsControllerAbi as any);
     this.address = context.dustIncentiveProviderAddress;
-    this.contract = new Contract(
-      context.dustIncentiveProviderAddress,
-      dustRewardsControllerAbi as any,
-      context.provider,
-    );
+    this.contract = this.getContractInstance(context.dustIncentiveProviderAddress);
   }
 
   /**

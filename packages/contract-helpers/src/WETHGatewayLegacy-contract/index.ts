@@ -1,44 +1,20 @@
 import { InterestRate } from '../interestRate';
 import { ethers } from 'ethers';
 import { wethGatewayLegacyAbi } from '@neverland-money/contract-types';
-
-export interface LegacyWETHBorrowParamsType {
-  lendingPool: string;
-  user: string;
-  amount: string;
-  interestRateMode: InterestRate;
-  referralCode?: string;
-}
-
-export interface LegacyWETHRepayParamsType {
-  lendingPool: string;
-  user: string;
-  amount: string;
-  onBehalfOf?: string;
-  interestRateMode: InterestRate;
-}
-
-export interface WETHDepositParamsType {
-  lendingPool: string;
-  user: string;
-  amount: string;
-  onBehalfOf?: string;
-  referralCode?: string;
-}
-
-export interface WETHWithdrawParamsType {
-  lendingPool: string;
-  user: string;
-  amount: string;
-  aTokenAddress: string;
-  onBehalfOf?: string;
-}
+import { AbiBaseService } from '../commons/BaseService';
+import type { Abi } from 'abitype';
+import {
+  LegacyWETHBorrowParamsType,
+  LegacyWETHRepayParamsType,
+  WETHDepositParamsType,
+  WETHWithdrawParamsType,
+} from './types';
 
 /**
  * Simplified adapter for legacy WrappedTokenGatewayV3 contracts
  * that handles the ABI differences (extra interestRateMode parameters)
  */
-export class WETHGatewayLegacyAdapter {
+export class WETHGatewayLegacyAdapter extends AbiBaseService<Abi> {
   readonly wethGatewayAddress: string;
   readonly provider: ethers.providers.Provider;
   readonly contract: ethers.Contract;
@@ -47,16 +23,13 @@ export class WETHGatewayLegacyAdapter {
   constructor(
     provider: ethers.providers.Provider,
     _erc20Service: unknown, // For compatibility
-    wethGatewayAddress: string
+    wethGatewayAddress: string,
   ) {
+    super(provider, wethGatewayLegacyAbi as any);
     this.provider = provider;
     this.wethGatewayAddress = wethGatewayAddress;
     this.contractInterface = new ethers.utils.Interface(wethGatewayLegacyAbi as any);
-    this.contract = new ethers.Contract(
-      wethGatewayAddress,
-      wethGatewayLegacyAbi as any,
-      provider
-    );
+    this.contract = this.getContractInstance(wethGatewayAddress);
   }
 
   /**
@@ -73,7 +46,7 @@ export class WETHGatewayLegacyAdapter {
       lendingPool,
       onBehalfOf ?? user,
       referralCode,
-      { value: amount }
+      { value: amount },
     );
   }
 
@@ -92,7 +65,7 @@ export class WETHGatewayLegacyAdapter {
       lendingPool,
       amount,
       numericRateMode,
-      referralCode
+      referralCode,
     );
     return result;
   }
@@ -114,7 +87,7 @@ export class WETHGatewayLegacyAdapter {
       amount,
       numericRateMode,
       onBehalfOf ?? user,
-      { value: amount }
+      { value: amount },
     );
   }
 
@@ -127,11 +100,7 @@ export class WETHGatewayLegacyAdapter {
     amount,
     onBehalfOf,
   }: WETHWithdrawParamsType): Promise<ethers.PopulatedTransaction> {
-    return this.contract.populateTransaction.withdrawETH!(
-      lendingPool,
-      amount,
-      onBehalfOf ?? user
-    );
+    return this.contract.populateTransaction.withdrawETH!(lendingPool, amount, onBehalfOf ?? user);
   }
 
   /**
@@ -144,11 +113,7 @@ export class WETHGatewayLegacyAdapter {
   /**
    * Encode function data for legacy contract calls
    */
-  encodeDepositETH(
-    lendingPool: string,
-    onBehalfOf: string,
-    referralCode: string = '0'
-  ): string {
+  encodeDepositETH(lendingPool: string, onBehalfOf: string, referralCode: string = '0'): string {
     return this.contractInterface.encodeFunctionData('depositETH', [
       lendingPool,
       onBehalfOf,
@@ -160,7 +125,7 @@ export class WETHGatewayLegacyAdapter {
     lendingPool: string,
     amount: string,
     interestRateMode: InterestRate,
-    referralCode: string = '0'
+    referralCode: string = '0',
   ): string {
     return this.contractInterface.encodeFunctionData('borrowETH', [
       lendingPool,
@@ -174,7 +139,7 @@ export class WETHGatewayLegacyAdapter {
     lendingPool: string,
     amount: string,
     interestRateMode: InterestRate,
-    onBehalfOf: string
+    onBehalfOf: string,
   ): string {
     return this.contractInterface.encodeFunctionData('repayETH', [
       lendingPool,
@@ -185,12 +150,6 @@ export class WETHGatewayLegacyAdapter {
   }
 
   encodeWithdrawETH(lendingPool: string, amount: string, to: string): string {
-    return this.contractInterface.encodeFunctionData('withdrawETH', [
-      lendingPool,
-      amount,
-      to,
-    ]);
+    return this.contractInterface.encodeFunctionData('withdrawETH', [lendingPool, amount, to]);
   }
 }
-
-

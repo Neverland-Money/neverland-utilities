@@ -1,6 +1,8 @@
 import { Contract, providers, BigNumber, utils } from 'ethers';
 import { isAddress } from 'ethers/lib/utils';
 import { dustLockAbi, erc20Abi, multicall3Abi } from '@neverland-money/contract-types';
+import { AbiBaseService } from '../commons/BaseService';
+import type { Abi } from 'abitype';
 import type {
   LockInfo,
   UserLock,
@@ -19,24 +21,26 @@ export interface DustLockHelperContext {
   chainId?: number;
 }
 
-export class DustLockHelper {
+export class DustLockHelper extends AbiBaseService<Abi> {
   private readonly lockAddress: string;
   private readonly dustTokenAddress: string;
-  private readonly provider: providers.Provider;
   private readonly lockInterface = new utils.Interface(dustLockAbi as any);
   private readonly erc20Interface = new utils.Interface(erc20Abi as any);
   private readonly lockContract: Contract;
   private readonly erc20Contract: Contract;
 
   constructor(context: DustLockHelperContext) {
+    super(context.provider, dustLockAbi as any);
+
     if (!isAddress(context.lockAddress)) throw new Error('lockAddress is not valid');
     if (!isAddress(context.dustTokenAddress)) throw new Error('dustTokenAddress is not valid');
 
+    super(context.provider, dustLockAbi as any);
     this.lockAddress = context.lockAddress;
     this.dustTokenAddress = context.dustTokenAddress;
-    this.provider = context.provider;
-    this.lockContract = new Contract(this.lockAddress, dustLockAbi as any, this.provider);
-    this.erc20Contract = new Contract(this.dustTokenAddress, erc20Abi as any, this.provider);
+    const svcErc20 = new AbiBaseService(this.provider, erc20Abi as any);
+    this.lockContract = this.getContractInstance(this.lockAddress);
+    this.erc20Contract = svcErc20.getContractInstance(this.dustTokenAddress);
   }
 
   // ---------- Tx data encoders ----------
@@ -47,7 +51,7 @@ export class DustLockHelper {
   getCreateLockTxData(params: CreateLockParams): { to: string; data: string } {
     const { amount, lockDuration } = params;
     return this.encode('createLock', [amount, lockDuration]);
-    }
+  }
 
   getCreateLockPermanentTxData(params: CreateLockPermanentParams): { to: string; data: string } {
     const { amount, lockDuration } = params;
@@ -64,7 +68,10 @@ export class DustLockHelper {
     return this.encode('increaseAmount', [tokenId, amount]);
   }
 
-  getIncreaseUnlockTimeTxData(tokenId: number, lockDurationSeconds: number): { to: string; data: string } {
+  getIncreaseUnlockTimeTxData(
+    tokenId: number,
+    lockDurationSeconds: number,
+  ): { to: string; data: string } {
     return this.encode('increaseUnlockTime', [tokenId, lockDurationSeconds]);
   }
 
@@ -176,7 +183,8 @@ export class DustLockHelper {
     multicallAddress: string,
     calls: { target: string; allowFailure: boolean; callData: string }[],
   ): Promise<{ success: boolean; returnData: string }[]> {
-    const mc = new Contract(multicallAddress, multicall3Abi as any, this.provider);
+    const svcMc = new AbiBaseService(this.provider, multicall3Abi as any);
+    const mc = svcMc.getContractInstance(multicallAddress);
     return await mc.aggregate3(calls);
   }
 
@@ -211,8 +219,14 @@ export class DustLockHelper {
       if (!lockedRes?.success || !balRes?.success) continue;
 
       try {
-        const [locked] = this.lockInterface.decodeFunctionResult('locked', lockedRes.returnData) as any[];
-        const [veDust] = this.lockInterface.decodeFunctionResult('balanceOfNFT', balRes.returnData) as any[];
+        const [locked] = this.lockInterface.decodeFunctionResult(
+          'locked',
+          lockedRes.returnData,
+        ) as any[];
+        const [veDust] = this.lockInterface.decodeFunctionResult(
+          'balanceOfNFT',
+          balRes.returnData,
+        ) as any[];
         const end = locked[2]?.toNumber?.() ?? 0;
         const isPermanent = (locked[3] ?? false) && end === 0;
 
@@ -250,15 +264,38 @@ export class DustLockHelper {
   async getUserDustDataWithMulticall(
     userAddress: string,
     multicallAddress: string,
-  ): Promise<{ userLocks: UserLock[]; dustBalance: BigNumber; dustAllowance: BigNumber; minLockAmount: BigNumber }>
-  {
+  ): Promise<{
+    userLocks: UserLock[];
+    dustBalance: BigNumber;
+    dustAllowance: BigNumber;
+    minLockAmount: BigNumber;
+  }> {
     if (!isAddress(multicallAddress)) throw new Error('multicallAddress is not valid');
 
     const calls = [
-      { target: this.lockAddress, allowFailure: true, callData: this.lockInterface.encodeFunctionData('balanceOf', [userAddress]) },
-      { target: this.dustTokenAddress, allowFailure: true, callData: this.erc20Interface.encodeFunctionData('balanceOf', [userAddress]) },
-      { target: this.dustTokenAddress, allowFailure: true, callData: this.erc20Interface.encodeFunctionData('allowance', [userAddress, this.lockAddress]) },
-      { target: this.lockAddress, allowFailure: true, callData: this.lockInterface.encodeFunctionData('minLockAmount', []) },
+      {
+        target: this.lockAddress,
+        allowFailure: true,
+        callData: this.lockInterface.encodeFunctionData('balanceOf', [userAddress]),
+      },
+      {
+        target: this.dustTokenAddress,
+        allowFailure: true,
+        callData: this.erc20Interface.encodeFunctionData('balanceOf', [userAddress]),
+      },
+      {
+        target: this.dustTokenAddress,
+        allowFailure: true,
+        callData: this.erc20Interface.encodeFunctionData('allowance', [
+          userAddress,
+          this.lockAddress,
+        ]),
+      },
+      {
+        target: this.lockAddress,
+        allowFailure: true,
+        callData: this.lockInterface.encodeFunctionData('minLockAmount', []),
+      },
     ];
     const res = await this.aggregate3(multicallAddress, calls);
 
@@ -272,10 +309,15 @@ export class DustLockHelper {
       ? (this.erc20Interface.decodeFunctionResult('allowance', res[2].returnData)[0] as BigNumber)
       : BigNumber.from(0);
     const minLockAmount = res[3]?.success
-      ? (this.lockInterface.decodeFunctionResult('minLockAmount', res[3].returnData)[0] as BigNumber)
+      ? (this.lockInterface.decodeFunctionResult(
+          'minLockAmount',
+          res[3].returnData,
+        )[0] as BigNumber)
       : BigNumber.from(0);
 
-    const userLocks = balance.gt(0) ? await this.getUserLocksWithMulticall(userAddress, multicallAddress) : [];
+    const userLocks = balance.gt(0)
+      ? await this.getUserLocksWithMulticall(userAddress, multicallAddress)
+      : [];
 
     return { userLocks, dustBalance, dustAllowance, minLockAmount };
   }
@@ -303,12 +345,29 @@ export class DustLockHelper {
     return Math.round(ve * 100) / 100;
   }
 
-  static calculateMergedVeDustPower(totalDustAmount: number, toPositionEndTimestamp: number, toPositionIsPermanent: boolean): number {
-    return DustLockHelper.calculateVeDustPower({ dustAmount: totalDustAmount, endTimestamp: toPositionEndTimestamp, isPermanent: toPositionIsPermanent });
+  static calculateMergedVeDustPower(
+    totalDustAmount: number,
+    toPositionEndTimestamp: number,
+    toPositionIsPermanent: boolean,
+  ): number {
+    return DustLockHelper.calculateVeDustPower({
+      dustAmount: totalDustAmount,
+      endTimestamp: toPositionEndTimestamp,
+      isPermanent: toPositionIsPermanent,
+    });
   }
 
-  static calculateVeDustIncrease(additionalDustAmount: number, currentVeDustPower: number, lockEndTimestamp: number, isPermanent: boolean): number {
-    const inc = DustLockHelper.calculateVeDustPower({ dustAmount: additionalDustAmount, endTimestamp: lockEndTimestamp, isPermanent });
+  static calculateVeDustIncrease(
+    additionalDustAmount: number,
+    currentVeDustPower: number,
+    lockEndTimestamp: number,
+    isPermanent: boolean,
+  ): number {
+    const inc = DustLockHelper.calculateVeDustPower({
+      dustAmount: additionalDustAmount,
+      endTimestamp: lockEndTimestamp,
+      isPermanent,
+    });
     return currentVeDustPower + inc;
   }
 
@@ -325,5 +384,3 @@ export class DustLockHelper {
     });
   }
 }
-
-

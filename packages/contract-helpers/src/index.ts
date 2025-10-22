@@ -26,4 +26,5 @@ export { DustAPRCalculator } from './DustAPR-contract';
 export * as DustAPRTypes from './DustAPR-contract/types';
 export { ClaimRewardsHelper } from './ClaimRewards-contract';
 export * as ClaimRewardsTypes from './ClaimRewards-contract/types';
+export { AbiBaseService, ProtocolAction as AbiProtocolAction, eEthereumTxType as AbiTxType } from './commons/BaseService';
 

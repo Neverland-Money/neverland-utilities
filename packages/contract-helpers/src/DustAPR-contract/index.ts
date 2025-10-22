@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import { dustRewardsControllerAbi } from '@neverland-money/contract-types';
+import { AbiBaseService } from '../commons/BaseService';
 import type { MarketAPR, MarketConfig, PriceMap, DustRewardData } from './types';
 const getNetworkNowSec = (): number => Math.floor(Date.now() / 1000);
 
@@ -16,7 +17,8 @@ export class DustAPRCalculator {
     tokenPrices: PriceMap
   ): Promise<MarketAPR> {
     try {
-      const controller = new ethers.Contract(rewardsController, dustRewardsControllerAbi as any, provider);
+      const svc = new AbiBaseService(provider, dustRewardsControllerAbi as any);
+      const controller = svc.getContractInstance(rewardsController);
       const rewardData = await controller.getRewardsData(asset, rewardToken);
       const { emissionPerSecond, distributionEnd, totalSupply }: DustRewardData = {
         emissionPerSecond: rewardData.emissionPerSecond.toString(),

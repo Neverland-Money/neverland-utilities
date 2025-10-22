@@ -1,151 +1,109 @@
-import { Provider } from '@ethersproject/providers';
-import {
-  BigNumber,
-  Contract,
-  PopulatedTransaction,
-  providers,
-  Signer,
-} from 'ethers';
-import { estimateGasByNetwork } from './gasStation';
-import {
-  tEthereumAddress,
-  TransactionGenerationMethod,
-  transactionType,
-  GasResponse,
-  ProtocolAction,
-  EthereumTransactionTypeExtended,
-  eEthereumTxType,
-  TransactionGenerationMethodNew,
-} from './types';
-import { DEFAULT_NULL_VALUE_ON_TX, gasLimitRecommendations } from './utils';
+import { BigNumber, Contract, PopulatedTransaction, providers, utils } from 'ethers';
+import type { Abi, ExtractAbiFunctionNames, ExtractAbiFunction, AbiParametersToPrimitiveTypes } from 'abitype';
 
-export interface ContractsFactory {
-  connect: (address: string, signerOrProvider: Signer | Provider) => Contract;
+export type tEthereumAddress = string;
+
+export enum ProtocolAction {
+  default = 'default',
 }
 
-export default class BaseService<T extends Contract> {
-  readonly contractInstances: Record<string, T>;
+export enum eEthereumTxType {
+  ERC20_APPROVAL = 'ERC20_APPROVAL',
+}
 
-  readonly contractFactory: ContractsFactory;
+export type transactionType = {
+  value?: string;
+  from?: string;
+  to?: string;
+  nonce?: number;
+  gasLimit?: BigNumber;
+  gasPrice?: BigNumber;
+  data?: string;
+  chainId?: number;
+};
 
+export type TransactionGenerationMethod = {
+  rawTxMethod: () => Promise<PopulatedTransaction>;
+  from: tEthereumAddress;
+  value?: string;
+  gasSurplus?: number;
+  action?: ProtocolAction;
+};
+
+export type GasType = {
+  gasLimit: string | undefined;
+  gasPrice: string;
+};
+export type GasResponse = (force?: boolean) => Promise<GasType | null>;
+
+const DEFAULT_NULL_VALUE_ON_TX = BigNumber.from(0).toHexString();
+const gasLimitRecommendations: Record<ProtocolAction, { limit: string; recommended: string }> = {
+  [ProtocolAction.default]: { limit: '210000', recommended: '210000' },
+};
+
+export class AbiBaseService<A extends Abi> {
+  readonly contractInstances: Record<string, Contract> = {};
   readonly provider: providers.Provider;
+  readonly abi: A;
+  readonly iface: utils.Interface;
 
-  constructor(provider: providers.Provider, contractFactory: ContractsFactory) {
-    this.contractFactory = contractFactory;
+  constructor(provider: providers.Provider, abi: A) {
     this.provider = provider;
-    this.contractInstances = {};
+    this.abi = abi;
+    this.iface = new utils.Interface(abi as any);
   }
 
-  public getContractInstance = (address: tEthereumAddress): T => {
+  public getContractInstance = (address: tEthereumAddress): Contract => {
     if (!this.contractInstances[address]) {
-      this.contractInstances[address] = this.contractFactory.connect(
-        address,
-        this.provider,
-      ) as T;
+      this.contractInstances[address] = new Contract(address, this.abi as any, this.provider);
     }
-
     return this.contractInstances[address];
   };
 
-  readonly generateTxCallback =
-    ({
-      rawTxMethod,
-      from,
-      value,
-      gasSurplus,
-      action,
-    }: TransactionGenerationMethod): (() => Promise<transactionType>) =>
+  public encodeFunctionData<Name extends ExtractAbiFunctionNames<A>>(
+    functionName: Name,
+    args: AbiParametersToPrimitiveTypes<ExtractAbiFunction<A, Name>['inputs']>,
+  ): string {
+    return this.iface.encodeFunctionData(functionName as string, args as any);
+  }
+
+  public buildTx<Name extends ExtractAbiFunctionNames<A>>(
+    to: tEthereumAddress,
+    functionName: Name,
+    args: AbiParametersToPrimitiveTypes<ExtractAbiFunction<A, Name>['inputs']>,
+    from?: tEthereumAddress,
+    value?: string,
+  ): transactionType {
+    const data = this.encodeFunctionData(functionName, args);
+    return { to, from, data, value: value ?? DEFAULT_NULL_VALUE_ON_TX };
+  }
+
+  readonly generateTxCallback = ({ rawTxMethod, from, value, action }: TransactionGenerationMethod): (() => Promise<transactionType>) =>
     async () => {
       const txRaw: PopulatedTransaction = await rawTxMethod();
-
-      const tx: transactionType = {
-        ...txRaw,
-        from,
-        value: value ?? DEFAULT_NULL_VALUE_ON_TX,
-      };
-
-      tx.gasLimit = await estimateGasByNetwork(tx, this.provider, gasSurplus);
-
-      if (
-        action &&
-        gasLimitRecommendations[action] &&
-        tx.gasLimit.lte(BigNumber.from(gasLimitRecommendations[action].limit))
-      ) {
-        tx.gasLimit = BigNumber.from(
-          gasLimitRecommendations[action].recommended,
-        );
+      const tx: transactionType = { ...txRaw, from, value: value ?? DEFAULT_NULL_VALUE_ON_TX };
+      tx.gasLimit = await this.provider.estimateGas(tx);
+      if (action && gasLimitRecommendations[action] && tx.gasLimit.lte(BigNumber.from(gasLimitRecommendations[action].limit))) {
+        tx.gasLimit = BigNumber.from(gasLimitRecommendations[action].recommended);
       }
-
       return tx;
     };
 
-  readonly generateTxPriceEstimation =
-    (
-      txs: EthereumTransactionTypeExtended[],
-      txCallback: () => Promise<transactionType>,
-      action: string = ProtocolAction.default,
-    ): GasResponse =>
+  readonly generateTxPriceEstimation = (
+    txs: Array<{ txType: eEthereumTxType }>,
+    txCallback: () => Promise<transactionType>,
+    action: ProtocolAction = ProtocolAction.default,
+  ): GasResponse =>
     async (force = false) => {
       const gasPrice = await this.provider.getGasPrice();
-      const hasPendingApprovals = txs.find(
-        tx => tx.txType === eEthereumTxType.ERC20_APPROVAL,
-      );
+      const hasPendingApprovals = txs.find(tx => tx.txType === eEthereumTxType.ERC20_APPROVAL);
       if (!hasPendingApprovals || force) {
-        const { gasLimit, gasPrice: gasPriceProv }: transactionType =
-          await txCallback();
-        if (!gasLimit) {
-          // If we don't receive the correct gas we throw an error
-          throw new Error('Transaction calculation error');
-        }
-
-        return {
-          gasLimit: gasLimit.toString(),
-          gasPrice: gasPriceProv
-            ? gasPriceProv.toString()
-            : gasPrice.toString(),
-        };
+        const { gasLimit, gasPrice: gasPriceProv }: transactionType = await txCallback();
+        if (!gasLimit) throw new Error('Transaction calculation error');
+        return { gasLimit: gasLimit.toString(), gasPrice: gasPriceProv ? gasPriceProv.toString() : gasPrice.toString() };
       }
-
-      return {
-        gasLimit: gasLimitRecommendations[action].recommended,
-        gasPrice: gasPrice.toString(),
-      };
+      return { gasLimit: gasLimitRecommendations[action].recommended, gasPrice: gasPrice.toString() };
     };
-
-  readonly estimateGasLimit = async ({
-    tx,
-    gasSurplus,
-    action,
-    skipGasEstimation,
-  }: TransactionGenerationMethodNew): Promise<PopulatedTransaction> => {
-    const gasLimit = action
-      ? BigNumber.from(gasLimitRecommendations[action].limit)
-      : BigNumber.from(gasLimitRecommendations[ProtocolAction.default].limit);
-    if (skipGasEstimation) {
-      tx.gasLimit = gasLimit;
-      return tx;
-    }
-
-    let estimatedGasLimit = BigNumber.from('0');
-    try {
-      estimatedGasLimit = await estimateGasByNetwork(
-        {
-          ...tx,
-          value: tx.value ? tx.value.toHexString() : DEFAULT_NULL_VALUE_ON_TX,
-        },
-        this.provider,
-        gasSurplus,
-      );
-    } catch (_: unknown) {
-      // Don't log anything as this is expected to for methods requiring approval
-    }
-
-    if (estimatedGasLimit.gt(gasLimit)) {
-      tx.gasLimit = estimatedGasLimit;
-    } else {
-      tx.gasLimit = gasLimit;
-    }
-
-    return tx;
-  };
 }
+
+
