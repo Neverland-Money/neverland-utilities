@@ -4,6 +4,7 @@
   "description": "Contract helper classes for Neverland protocol",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
+  "author": "Neverland Team",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -26,9 +27,5 @@
   "dependencies": {
     "@neverland-money/contract-types": "0.1.0",
     "ethers": "^5.7.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.0.0"
   }
 }

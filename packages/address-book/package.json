@@ -4,6 +4,7 @@
   "description": "Address book for Neverland Lending protocol contract addresses",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
+  "author": "Neverland Team",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -20,12 +21,10 @@
     "addresses",
     "contracts"
   ],
-  "author": "Neverland Team",
   "files": [
     "dist",
     "README.md"
   ],
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Neverland-Money/neverland-utilities.git"
