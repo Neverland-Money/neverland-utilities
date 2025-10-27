@@ -6,13 +6,20 @@
   "types": "dist/esm/index.d.ts",
   "author": "Neverland Team",
   "license": "MIT",
-  "private": false,
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "tsc",
-    "prepublishOnly": "npm run build",
-    "lint": "eslint src --ext .ts",
-    "format": "prettier --write \"src/**/*.ts\""
+    "clean": "cd ../.. && npx rimraf packages/address-book/dist packages/address-book/*.log*",
+    "lint": "cd ../.. && eslint packages/address-book/src/**/*.ts",
+    "check-types": "yarn build -- --noEmit",
+    "prebuild": "npm run clean",
+    "build": "cd ../.. && tsc -p packages/address-book/tsconfig.json && tsc -p packages/address-book/tsconfig.json --module commonjs --outDir ./packages/address-book/dist/cjs",
+    "test": "cd ../.. && yarn test packages/address-book",
+    "test:watch": "cd ../.. && yarn test --watch packages/address-book",
+    "cover": "cd ../.. && yarn cover packages/address-book",
+    "commit": "cd ../.. && yarn commit",
+    "prepublishOnly": "yarn build"
   },
   "keywords": [
     "neverland",

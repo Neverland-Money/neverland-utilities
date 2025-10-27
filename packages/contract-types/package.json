@@ -6,12 +6,20 @@
   "types": "dist/esm/index.d.ts",
   "author": "Neverland Team",
   "license": "MIT",
-  "private": false,
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "tsc",
-    "clean": "rimraf dist",
-    "check-types": "tsc --noEmit"
+    "clean": "cd ../.. && npx rimraf packages/contract-types/dist packages/contract-types/*.log*",
+    "lint": "cd ../.. && eslint packages/contract-types/src/**/*.ts",
+    "check-types": "yarn build -- --noEmit",
+    "prebuild": "npm run clean",
+    "build": "cd ../.. && tsc -p packages/contract-types/tsconfig.json && tsc -p packages/contract-types/tsconfig.json --module commonjs --outDir ./packages/contract-types/dist/cjs",
+    "test": "cd ../.. && yarn test packages/contract-types",
+    "test:watch": "cd ../.. && yarn test --watch packages/contract-types",
+    "cover": "cd ../.. && yarn cover packages/contract-types",
+    "commit": "cd ../.. && yarn commit",
+    "prepublishOnly": "yarn build"
   },
   "keywords": [
     "neverland",
