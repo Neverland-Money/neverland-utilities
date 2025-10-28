@@ -10,8 +10,8 @@ export class VeDustRevenueHelper extends AbiBaseService<Abi> {
   private revenueIfaceManual: ethers.utils.Interface;
 
   constructor(context: VeDustRevenueHelperContext) {
-    super(context.provider, revenueRewardAbi as any);
-    const svcLock = new AbiBaseService(this.provider, dustLockAbi as any);
+    super(context.provider, revenueRewardAbi as any, context.revenueAddress);
+    const svcLock = new AbiBaseService(this.provider, dustLockAbi as any, context.dustLockAddress);
     this.revenueContract = this.getContractInstance(context.revenueAddress);
     this.dustLockContract = svcLock.getContractInstance(context.dustLockAddress);
 

@@ -25,7 +25,7 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<Abi> {
     _erc20Service: unknown, // For compatibility
     wethGatewayAddress: string,
   ) {
-    super(provider, wethGatewayLegacyAbi as any);
+    super(provider, wethGatewayLegacyAbi as any, wethGatewayAddress);
     this.provider = provider;
     this.wethGatewayAddress = wethGatewayAddress;
     this.contractInterface = new ethers.utils.Interface(wethGatewayLegacyAbi as any);

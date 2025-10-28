@@ -30,15 +30,13 @@ export class DustLockHelper extends AbiBaseService<Abi> {
   private readonly erc20Contract: Contract;
 
   constructor(context: DustLockHelperContext) {
-    super(context.provider, dustLockAbi as any);
+    super(context.provider, dustLockAbi as any, context.lockAddress);
 
     if (!isAddress(context.lockAddress)) throw new Error('lockAddress is not valid');
     if (!isAddress(context.dustTokenAddress)) throw new Error('dustTokenAddress is not valid');
-
-    super(context.provider, dustLockAbi as any);
     this.lockAddress = context.lockAddress;
     this.dustTokenAddress = context.dustTokenAddress;
-    const svcErc20 = new AbiBaseService(this.provider, erc20Abi as any);
+    const svcErc20 = new AbiBaseService(this.provider, erc20Abi as any, context.dustTokenAddress);
     this.lockContract = this.getContractInstance(this.lockAddress);
     this.erc20Contract = svcErc20.getContractInstance(this.dustTokenAddress);
   }

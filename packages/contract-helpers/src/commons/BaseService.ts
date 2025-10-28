@@ -46,11 +46,13 @@ export class AbiBaseService<A extends Abi> {
   readonly provider: providers.Provider;
   readonly abi: A;
   readonly iface: utils.Interface;
+  readonly defaultAddress?: tEthereumAddress;
 
-  constructor(provider: providers.Provider, abi: A) {
+  constructor(provider: providers.Provider, abi: A, defaultAddress?: tEthereumAddress) {
     this.provider = provider;
     this.abi = abi;
     this.iface = new utils.Interface(abi as any);
+    this.defaultAddress = defaultAddress;
   }
 
   public getContractInstance = (address: tEthereumAddress): Contract => {

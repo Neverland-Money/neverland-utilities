@@ -38,7 +38,7 @@ export class DustIncentiveProvider
     if (!isAddress(context.dustIncentiveProviderAddress)) {
       throw new Error('contract address is not valid');
     }
-    super(context.provider, dustRewardsControllerAbi as any);
+    super(context.provider, dustRewardsControllerAbi as any, context.dustIncentiveProviderAddress);
     this.address = context.dustIncentiveProviderAddress;
     this.contract = this.getContractInstance(context.dustIncentiveProviderAddress);
   }

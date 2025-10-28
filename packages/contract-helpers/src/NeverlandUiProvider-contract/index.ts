@@ -24,7 +24,7 @@ export class NeverlandUiService extends AbiBaseService<Abi> {
   private contract: ethers.Contract;
 
   constructor(contractAddress: string, provider: ethers.providers.Provider) {
-    super(provider, neverlandUiProviderAbi as any);
+    super(provider, neverlandUiProviderAbi as any, contractAddress);
     this.contract = this.getContractInstance(contractAddress);
   }
 
