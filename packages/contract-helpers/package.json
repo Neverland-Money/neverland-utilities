@@ -1,6 +1,6 @@
 {
   "name": "@neverland-money/contract-helpers",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Contract helper classes for Neverland protocol",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
