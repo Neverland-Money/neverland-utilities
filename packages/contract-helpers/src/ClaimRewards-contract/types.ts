@@ -9,9 +9,7 @@ export interface ClaimRewardsResult {
   txHash: string;
   rewardsList: string[];
   claimedAmounts: string[];
-  tokenId?: number;
-  isPermanentLock?: boolean;
+  tokenId?: number; // Extracted from transaction events for new lock creation
+  isPermanentLock?: boolean; // Added after permanent lock conversion
   requiresManualVerification?: boolean;
 }
-
-

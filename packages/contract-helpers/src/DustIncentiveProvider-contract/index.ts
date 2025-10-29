@@ -5,6 +5,8 @@ import { AbiBaseService } from '../commons/BaseService';
 import type { Abi } from 'abitype';
 import type { RewardData, UserRewardsResult } from './types';
 
+const rewardsControllerIface = new utils.Interface(dustRewardsControllerAbi as any);
+
 /**
  * Helper class for interacting with the DustRewardsController contract
  * Provides typed methods for fetching reward data, user rewards, and claiming
@@ -229,5 +231,61 @@ export class DustIncentiveProvider
    */
   getContract(): Contract {
     return this.contract;
+  }
+}
+
+// ---------- Multicall helpers (static) ----------
+export namespace DustIncentiveProvider {
+  /**
+   * Encode getRewardsData(asset, reward) for multicall
+   */
+  export function encodeGetRewardsData(
+    controller: string,
+    asset: string,
+    reward: string,
+  ): { to: string; data: string } {
+    return {
+      to: controller,
+      data: rewardsControllerIface.encodeFunctionData('getRewardsData', [asset, reward]),
+    };
+  }
+
+  /**
+   * Decode getRewardsData result into RewardData
+   */
+  export function decodeGetRewardsData(returnData: string): RewardData {
+    const [index, emissionPerSecond, lastUpdateTimestamp, distributionEnd] =
+      rewardsControllerIface.decodeFunctionResult('getRewardsData', returnData) as [
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ];
+    return { index, emissionPerSecond, lastUpdateTimestamp, distributionEnd };
+  }
+
+  /**
+   * Encode getUserRewards(assets[], user, reward) for multicall
+   */
+  export function encodeGetUserRewards(
+    controller: string,
+    assets: string[],
+    user: string,
+    reward: string,
+  ): { to: string; data: string } {
+    return {
+      to: controller,
+      data: rewardsControllerIface.encodeFunctionData('getUserRewards', [assets, user, reward]),
+    };
+    }
+
+  /**
+   * Decode getUserRewards result into BigNumber
+   */
+  export function decodeGetUserRewards(returnData: string): BigNumber {
+    const [amount] = rewardsControllerIface.decodeFunctionResult('getUserRewards', returnData) as [
+      BigNumber
+    ];
+    return amount;
   }
 }

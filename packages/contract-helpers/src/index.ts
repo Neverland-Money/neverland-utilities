@@ -1,5 +1,6 @@
 // Export contract helpers
 export { DustIncentiveProvider } from './DustIncentiveProvider-contract';
+export type { DustIncentiveProviderInterface, DustIncentiveProviderContext } from './DustIncentiveProvider-contract';
 
 // Shared helper input types (used by v3-UiPoolDataProvider-contract)
 export type ReservesHelperInput = {
