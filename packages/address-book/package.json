@@ -1,6 +1,6 @@
 {
   "name": "@neverland-money/address-book",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Address book for Neverland Lending protocol contract addresses",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
