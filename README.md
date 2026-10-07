@@ -62,7 +62,9 @@ The packages mirror the deployed protocol, so they change when a contract is upg
   [docs.neverland.money](https://docs.neverland.money). Proxy implementations, logic libraries, and
   base token implementations change on every upgrade.
 - Helpers cast ABIs to `Abi` and call contract methods by name, so the TypeScript build does not
-  catch ABI drift. When an ABI changes, review the helpers that call it.
+  catch ABI drift. `abiUsage.test.ts` in `contract-helpers` fails when a helper names a function
+  that its ABI lacks or overloads. It does not compare arguments or return values, so when an ABI
+  changes, still review the helpers that call it.
 
 ## Development
 
@@ -73,7 +75,13 @@ nvm use
 corepack enable
 yarn install
 yarn build
+yarn test
 ```
+
+The tests are Jest suites next to the code they cover (`packages/*/src/**/*.test.ts`). They resolve
+the workspace packages to their sources and mock every contract read, so they need neither a build
+nor an RPC endpoint. `.github/workflows/ci.yml` runs the same install, build, and tests on every
+commit pushed to a pull request.
 
 Yarn is configured with immutable installs, so a change to `yarn.lock` has to be committed. The Yarn
 cache under `.yarn/cache` is committed as well. Installing on a different operating system swaps
@@ -95,6 +103,8 @@ yarn build
   `src/<Name>-contract/`, plus shared code in `src/commons/`.
 - `lerna.json`: Lerna configuration with independent versioning.
 - `tsconfig.json`: TypeScript configuration shared by every package.
+- `jest.config.js` and `tsconfig.test.json`: Jest configuration for the `*.test.ts` suites.
+- `.github/workflows/ci.yml`: the pull request workflow.
 - `dist/`: generated build output inside each package, not committed.
 
 ## Release

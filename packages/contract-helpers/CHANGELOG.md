@@ -37,8 +37,9 @@ All notable changes to this project will be documented in this file. See
 - **DustLockHelper:** `getEarlyWithdrawTxData` encodes the full overload signature. The bare name is
   ambiguous in the current DustLock ABI and would throw.
 - **NeverlandUiService:** dashboards and bundles follow the contract's `nextRawOffset` and `hasMore`
-  cursor instead of assuming raw offsets equal `index * pageSize`, and the paginated bundle merges
-  the per-page unlock schedule instead of keeping only the first page's.
+  cursor instead of assuming raw offsets equal `index * pageSize`. The paginated bundle merges the
+  per-page unlock schedule instead of keeping only the first page's, and when a later page reverts
+  it returns the pages already loaded instead of discarding the whole bundle.
 - **DustLockHelper:** `getUserLocksWithMulticall` and `getUserDustDataWithMulticall` read through
   `callStatic`. They previously tried to send a transaction and failed on read-only providers.
 - **DustIncentiveProvider:** `getRewardsData`, `getRewardsDataHumanized` and `isEmissionsActive`

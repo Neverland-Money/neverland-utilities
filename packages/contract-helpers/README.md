@@ -127,8 +127,10 @@ Reads that can partly fail are fail-soft on-chain, so results carry resolution s
 - Every aggregate read reports `asOfBlock` and `asOfTimestamp`.
 
 User dashboards are paginated over the raw DustLock enumeration, and pages are compacted to live
-veNFTs. The helper follows the contract's `nextRawOffset` / `hasMore` cursor for you. If you call
-`getUserDashboard` on the contract directly, never page by `tokenIds.length`.
+veNFTs. The helper follows the contract's `nextRawOffset` / `hasMore` cursor for you. When a page
+after the first reverts, the dashboard and the bundle return the pages already loaded with `hasMore`
+still `true` and `nextRawOffset` at the page to retry. If you call `getUserDashboard` on the
+contract directly, never page by `tokenIds.length`.
 
 ### Revenue: VeDustRevenueHelper
 

@@ -234,7 +234,9 @@ export class NeverlandUiService extends AbiBaseService<Abi> {
   /**
    * Fetches the full UI bundle, following the same raw-offset cursor as
    * {@link getUserDashboardWithPagination}. Global, market and price data come from the first page;
-   * the unlock schedule is built per page by the contract, so it is concatenated across pages.
+   * the unlock schedule is built per page by the contract, so it is concatenated across pages. If a
+   * later page reverts, the pages already loaded are returned with `hasMore` set and
+   * `nextRawOffset` pointing at the page to retry; a revert on the first page throws.
    */
   async getUiFullBundlePaginated(
     userAddress: string,
@@ -246,11 +248,27 @@ export class NeverlandUiService extends AbiBaseService<Abi> {
     let offset = 0;
 
     for (;;) {
-      const page = (await this.contract.getUiFullBundle(
-        userAddress,
-        BigNumber.from(offset),
-        BigNumber.from(pageSize),
-      )) as UiFullBundle;
+      let page: UiFullBundle;
+      try {
+        page = (await this.contract.getUiFullBundle(
+          userAddress,
+          BigNumber.from(offset),
+          BigNumber.from(pageSize),
+        )) as UiFullBundle;
+      } catch (error) {
+        // Without the first page there is no meta, market or price data to return.
+        if (!first) throw error;
+        // eslint-disable-next-line no-console
+        console.warn('NeverlandUiProvider.getUiFullBundle reverted', {
+          offset,
+          pageSize,
+          userAddress,
+          error,
+        });
+        user.hasMore = true;
+        user.nextRawOffset = BigNumber.from(offset);
+        break;
+      }
       if (!first) first = page;
 
       this.appendDashboardPage(user, page.essential.user);
