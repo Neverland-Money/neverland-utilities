@@ -8,6 +8,8 @@ reviews:
     - '!packages/contract-types/src/abis/*Abi.ts'
     - '!packages/contract-types/src/abis/index.ts'
     - '!packages/contract-types/src/types.ts'
+    # Package manager cache and generated metadata.
+    - '!.yarn/**'
     # Build and test output.
     - '!packages/*/dist/**'
     - '!coverage/**'
