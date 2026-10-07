@@ -1,6 +1,7 @@
 # @neverland-money/contract-helpers
 
-Contract helper classes for interacting with Neverland protocol smart contracts. Provides a clean, typed API over raw contract calls.
+Contract helper classes for interacting with Neverland protocol smart contracts. Provides a clean,
+typed API over raw contract calls.
 
 ## Features
 
@@ -18,223 +19,158 @@ This package is part of the Neverland utilities monorepo.
 yarn install
 ```
 
+The helpers use ethers v5 and load their ABIs from `@neverland-money/contract-types`. Contract
+addresses live in `@neverland-money/address-book`.
+
 ## Available Helpers
 
-### DustRewardsControllerHelper
+| Helper                     | Contract                                           |
+| -------------------------- | -------------------------------------------------- |
+| `DustIncentiveProvider`    | `DustRewardsController` reads (emissions, rewards) |
+| `ClaimRewardsHelper`       | `DustRewardsController` claim transaction data     |
+| `DustLockHelper`           | `DustLock` (veDUST) transaction data and reads     |
+| `VeDustRevenueHelper`      | `RevenueReward` plus `DustLock` revenue data       |
+| `NeverlandUiService`       | `NeverlandUiProvider` aggregated UI reads          |
+| `WETHGatewayLegacyAdapter` | Legacy `WrappedTokenGatewayV3` (with rate mode)    |
+| `DustAPRCalculator`        | Emission APR (known issue, see below)              |
 
-Helper for interacting with the DustRewardsController contract that manages DUST token emissions and rewards.
+## Known issues
+
+`DustAPRCalculator.calculateMarketAPR` currently always returns the inactive result (`apr: 0`,
+`isActive: false`). It reads fields the rewards controller does not return, swallows the resulting
+error, and assumes 18 decimals for every asset. Use `DustIncentiveProvider.calculateEmissionAPR`
+with your own TVL and price inputs until it is fixed.
 
 ## Usage
 
-### Basic Setup
+### Emissions: DustIncentiveProvider
 
 ```typescript
 import { providers } from 'ethers';
-import { DustRewardsControllerHelper } from '@neverland-money/contract-helpers';
+import { DustIncentiveProvider } from '@neverland-money/contract-helpers';
 
-// Create provider
 const provider = new providers.JsonRpcProvider('https://rpc.monad.xyz');
 
-// Create helper instance
-const rewardsHelper = new DustRewardsControllerHelper({
+const incentives = new DustIncentiveProvider({
   provider,
-  contractAddress: '0x...', // DustRewardsController address
+  dustIncentiveProviderAddress: '0x...', // DustRewardsController
+});
+
+// Reward configuration for an asset
+const data = await incentives.getRewardsData(aTokenAddress, dustTokenAddress);
+console.log('Emission per second:', data.emissionPerSecond.toString());
+console.log('Distribution end:', data.distributionEnd.toNumber());
+
+// Are emissions running right now?
+const active = await incentives.isEmissionsActive(aTokenAddress, dustTokenAddress);
+
+// Unclaimed rewards across several assets
+const { rewardTokens, unclaimedAmounts } = await incentives.getAllUserRewards(
+  [aToken, variableDebtToken],
+  userAddress,
+);
+
+// The user's last-synced reward index for one asset
+const index = await incentives.getUserAssetIndex(userAddress, aToken, dustTokenAddress);
+```
+
+Static helpers: `DustIncentiveProvider.calculateAnnualEmissions(emissionPerSecond, decimals?)` and
+`DustIncentiveProvider.calculateEmissionAPR(emissionPerSecond, rewardPriceUSD, tvlUSD, decimals?)`.
+
+### veDUST locks: DustLockHelper
+
+```typescript
+import { DustLockHelper } from '@neverland-money/contract-helpers';
+
+const lock = new DustLockHelper({
+  provider,
+  lockAddress: '0x...', // DustLock
+  dustTokenAddress: '0x...', // DUST
+});
+
+const locks = await lock.getUserLocks(userAddress);
+
+// Transaction data for a signer to send
+const { to, data } = lock.getCreateLockTxData({
+  amount: '1000000000000000000',
+  lockDuration: 7 * 86400,
+});
+
+// Early withdraw. Pass a maximum penalty (DUST, wei) to revert instead of paying more than quoted.
+lock.getEarlyWithdrawTxData(tokenId);
+lock.getEarlyWithdrawTxData(tokenId, maxPenaltyWei);
+```
+
+`getUserLocksWithMulticall` and `getUserDustDataWithMulticall` batch the same reads through
+Multicall3.
+
+### UI aggregation: NeverlandUiService
+
+```typescript
+import { NeverlandUiService } from '@neverland-money/contract-helpers';
+import type { NeverlandUiTypes } from '@neverland-money/contract-helpers';
+
+const ui = new NeverlandUiService('0x...', provider); // NeverlandUiProvider
+
+const bundle = await ui.getUiFullBundle(userAddress);
+const prices = await ui.getAllPrices();
+```
+
+Reads that can partly fail are fail-soft on-chain, so results carry resolution signals:
+
+- `PriceData.resolvedMask` and `UserRewardsSummary.revenueResolvedMask` / `emissionsResolvedMask`
+  are bitmasks aligned with the input arrays. Check a row with
+  `NeverlandUiService.isRowResolved(mask, index)`.
+- `EmissionData.resolved`, `MarketData.totalValueLockedUSDResolved` and
+  `UserEmissionBreakdown.enumerationResolved` are booleans. `false` means a read failed, not that
+  the value is genuinely zero.
+- Every aggregate read reports `asOfBlock` and `asOfTimestamp`.
+
+User dashboards are paginated over the raw DustLock enumeration, and pages are compacted to live
+veNFTs. The helper follows the contract's `nextRawOffset` / `hasMore` cursor for you. If you call
+`getUserDashboard` on the contract directly, never page by `tokenIds.length`.
+
+### Revenue: VeDustRevenueHelper
+
+```typescript
+import { VeDustRevenueHelper } from '@neverland-money/contract-helpers';
+
+const revenue = new VeDustRevenueHelper({
+  provider,
+  chainId: 143,
+  revenueAddress: '0x...', // RevenueReward
+  dustLockAddress: '0x...', // DustLock
+});
+
+const protocol = await revenue.getProtocolData();
+const mine = await revenue.getUserVeDustRevenueData(userAddress);
+```
+
+### Claims: ClaimRewardsHelper
+
+```typescript
+import { ClaimRewardsHelper } from '@neverland-money/contract-helpers';
+
+const claim = new ClaimRewardsHelper({ provider, chainId: 143 });
+
+const { to, data } = claim.getClaimAllRewardsToSelfTxData({
+  assetAddresses: [aToken, variableDebtToken],
+  chainId: 143,
+  rewardsControllerAddress: '0x...',
+  lockTime: 0, // 0 for an instant claim
+  tokenId: 0,
 });
 ```
 
-### Get Rewards Data
+### Raw contract access
+
+Every helper extends `AbiBaseService`, so you can reach the underlying ethers contract and
+interface:
 
 ```typescript
-// Get reward configuration for an asset
-const rewardData = await rewardsHelper.getRewardsData(
-  aTokenAddress,
-  dustTokenAddress
-);
-
-console.log('Emissions per second:', rewardData.emissionPerSecond.toString());
-console.log('Distribution end:', rewardData.distributionEnd.toNumber());
+const contract = incentives.getContractInstance(controllerAddress);
+const calldata = incentives.encodeFunctionData('getRewardsList', []);
 ```
-
-### Check if Emissions are Active
-
-```typescript
-const isActive = await rewardsHelper.isEmissionsActive(
-  aTokenAddress,
-  dustTokenAddress
-);
-
-if (isActive) {
-  console.log('Rewards are currently active for this asset');
-}
-```
-
-### Get User Rewards
-
-```typescript
-// Get all user rewards across multiple assets
-const userRewards = await rewardsHelper.getAllUserRewards(
-  [aToken1, aToken2, variableDebtToken1],
-  userAddress
-);
-
-console.log('Reward tokens:', userRewards.rewardTokens);
-console.log('Unclaimed amounts:', userRewards.unclaimedAmounts);
-
-// Get user rewards for a specific reward token
-const dustRewards = await rewardsHelper.getUserRewards(
-  [aToken1, aToken2],
-  userAddress,
-  dustTokenAddress
-);
-
-console.log('Unclaimed DUST:', ethers.utils.formatUnits(dustRewards, 18));
-```
-
-### Calculate APR
-
-```typescript
-import { DustRewardsControllerHelper } from '@neverland-money/contract-helpers';
-
-const rewardData = await rewardsHelper.getRewardsData(
-  aTokenAddress,
-  dustTokenAddress
-);
-
-// Calculate APR
-const apr = DustRewardsControllerHelper.calculateEmissionAPR(
-  rewardData.emissionPerSecond,
-  dustPriceUSD, // e.g., 0.50
-  totalLiquidityUSD, // e.g., 1000000
-  18 // DUST decimals
-);
-
-console.log(`Emission APR: ${apr}%`);
-```
-
-### Calculate Annual Emissions
-
-```typescript
-const annualEmissions = DustRewardsControllerHelper.calculateAnnualEmissions(
-  rewardData.emissionPerSecond,
-  18
-);
-
-console.log(`Annual emissions: ${annualEmissions} DUST`);
-```
-
-### Advanced: Access Raw Contract
-
-```typescript
-// Get the underlying ethers contract for advanced usage
-const contract = rewardsHelper.getContract();
-
-// Call any contract method directly
-const customData = await contract.someCustomMethod();
-```
-
-## Integration with Frontend Services
-
-### Example: Refactored Service
-
-```typescript
-import { providers } from 'ethers';
-import { DustRewardsControllerHelper } from '@neverland-money/contract-helpers';
-
-export class DustIncentiveService {
-  private rewardsHelper: DustRewardsControllerHelper | null = null;
-
-  async initialize(provider: providers.Provider, controllerAddress: string) {
-    this.rewardsHelper = new DustRewardsControllerHelper({
-      provider,
-      contractAddress: controllerAddress,
-    });
-  }
-
-  async fetchIncentiveData(assetAddress: string, dustTokenAddress: string) {
-    if (!this.rewardsHelper) throw new Error('Not initialized');
-
-    const rewardData = await this.rewardsHelper.getRewardsData(
-      assetAddress,
-      dustTokenAddress
-    );
-
-    const isActive = await this.rewardsHelper.isEmissionsActive(
-      assetAddress,
-      dustTokenAddress
-    );
-
-    if (!isActive) return null;
-
-    return {
-      emissionPerSecond: rewardData.emissionPerSecond.toString(),
-      distributionEnd: rewardData.distributionEnd.toNumber(),
-      // ... more data
-    };
-  }
-
-  async getUserRewards(userAddress: string, assetAddresses: string[]) {
-    if (!this.rewardsHelper) throw new Error('Not initialized');
-
-    return await this.rewardsHelper.getAllUserRewards(
-      assetAddresses,
-      userAddress
-    );
-  }
-}
-```
-
-## API Reference
-
-### DustRewardsControllerHelper
-
-#### Constructor
-
-```typescript
-constructor(config: BaseContractHelperConfig)
-```
-
-- `config.provider` - Ethers provider instance
-- `config.contractAddress` - DustRewardsController contract address
-
-#### Methods
-
-##### getRewardsData(asset, reward)
-
-Get rewards configuration for an asset and reward token.
-
-##### getAllUserRewards(assets, user)
-
-Get all rewards for a user across multiple assets.
-
-##### getUserRewards(assets, user, reward)
-
-Get user rewards for specific assets and reward token.
-
-##### getUserAccruedRewards(user, reward)
-
-Get accrued rewards for a user and reward token.
-
-##### getRewardsList()
-
-Get list of all reward tokens configured.
-
-##### getUserAssetData(user, asset, reward)
-
-Get user's reward index and accrued amount for a specific asset.
-
-##### isEmissionsActive(asset, reward, currentTimestamp?)
-
-Check if emissions are currently active.
-
-#### Static Methods
-
-##### calculateAnnualEmissions(emissionPerSecond, decimals?)
-
-Calculate annual emissions from per-second rate.
-
-##### calculateEmissionAPR(emissionPerSecond, rewardPriceUSD, tvlUSD, decimals?)
-
-Calculate APR from emissions, reward price, and TVL.
 
 ## Building
 
@@ -242,13 +178,7 @@ Calculate APR from emissions, reward price, and TVL.
 yarn build
 ```
 
-## Type Checking
-
-```bash
-yarn check-types
-```
-
 ## Related Packages
 
 - `@neverland-money/contract-types` - Typed ABIs used by these helpers
-
+- `@neverland-money/address-book` - Deployed contract addresses

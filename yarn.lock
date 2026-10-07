@@ -1988,12 +1988,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@neverland-money/contract-helpers@workspace:packages/contract-helpers"
   dependencies:
-    "@neverland-money/contract-types": "npm:^0.2.0"
+    "@neverland-money/contract-types": "npm:^1.0.0"
     ethers: "npm:^5.7.0"
   languageName: unknown
   linkType: soft
 
-"@neverland-money/contract-types@npm:^0.2.0, @neverland-money/contract-types@workspace:packages/contract-types":
+"@neverland-money/contract-types@npm:^1.0.0, @neverland-money/contract-types@workspace:packages/contract-types":
   version: 0.0.0-use.local
   resolution: "@neverland-money/contract-types@workspace:packages/contract-types"
   dependencies:
