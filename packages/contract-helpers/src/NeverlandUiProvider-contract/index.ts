@@ -11,14 +11,40 @@ import type {
   GlobalStats,
   MarketData,
   NetworkData,
-  OptimalClaimResult,
   UnlockSchedule,
   EmissionData,
-  EssentialUserView,
-  UserEmissionAssetBreakdown,
+  UserEmissionBreakdown,
+  UserRewardsSummary,
   UiBootstrap,
   UiFullBundle,
+  ProtocolMeta,
+  PoolMarket,
 } from './types';
+
+const DEFAULT_PAGE_SIZE = 5;
+
+const emptyDashboard = (user: string): UserDashboardData => ({
+  user,
+  tokenIds: [],
+  locks: [],
+  rewardSummaries: [],
+  totalVotingPower: BigNumber.from(0),
+  totalLockedAmount: BigNumber.from(0),
+  rawTokenCount: BigNumber.from(0),
+  nextRawOffset: BigNumber.from(0),
+  hasMore: false,
+});
+
+const emptyEmissions = (): EmissionData => ({
+  rewardTokens: [],
+  totalRewards: [],
+  resolved: false,
+  asOfBlock: BigNumber.from(0),
+  asOfTimestamp: BigNumber.from(0),
+});
+
+const sumField = <T>(items: T[], pick: (item: T) => BigNumber | undefined): BigNumber =>
+  items.reduce((acc, item) => acc.add(pick(item) || BigNumber.from(0)), BigNumber.from(0));
 
 export class NeverlandUiService extends AbiBaseService<Abi> {
   private contract: ethers.Contract;
@@ -28,24 +54,42 @@ export class NeverlandUiService extends AbiBaseService<Abi> {
     this.contract = this.getContractInstance(contractAddress);
   }
 
+  /**
+   * True when bit `index` of a `resolvedMask` is set. Only the first 256 rows are representable,
+   * so any later row always reads as unresolved.
+   */
+  static isRowResolved(mask: BigNumber, index: number): boolean {
+    if (index < 0 || index > 255) return false;
+    return !mask.shr(index).and(1).isZero();
+  }
+
+  /** True when the first `count` bits of a `resolvedMask` are all set. */
+  static areAllRowsResolved(mask: BigNumber, count: number): boolean {
+    for (let i = 0; i < count; i++) {
+      if (!NeverlandUiService.isRowResolved(mask, i)) return false;
+    }
+    return true;
+  }
+
+  async getProtocolMeta(): Promise<ProtocolMeta> {
+    return (await this.contract.getProtocolMeta()) as ProtocolMeta;
+  }
+
+  /** Every lending market registered on the provider's pool address provider registry. */
+  async getRegisteredPoolMarkets(): Promise<PoolMarket[]> {
+    const markets = await this.contract.getRegisteredPoolMarkets();
+    return markets.map((m: PoolMarket) => ({ provider: m.provider, marketId: m.marketId }));
+  }
+
   async getUserEmissionBreakdown(
     userAddress: string,
-    rewardToken: string
-  ): Promise<UserEmissionAssetBreakdown> {
-    try {
-      const result = await this.contract.getUserEmissionBreakdown(
-        userAddress,
-        rewardToken
-      );
-      return {
-        assets: result.assets as string[],
-        amounts: result.amounts as BigNumber[],
-      };
-    } catch {
-      throw new Error(
-        'NeverlandUiProvider: getUserEmissionBreakdown is not available on this deployment'
-      );
-    }
+    rewardToken: string,
+  ): Promise<UserEmissionBreakdown> {
+    const result = await this.contract.getUserEmissionBreakdown(userAddress, rewardToken);
+    return {
+      breakdown: result.breakdown,
+      enumerationResolved: result.enumerationResolved as boolean,
+    };
   }
 
   async getUiBootstrap(): Promise<UiBootstrap> {
@@ -55,18 +99,16 @@ export class NeverlandUiService extends AbiBaseService<Abi> {
 
   async getUiFullBundle(userAddress: string): Promise<UiFullBundle | null> {
     try {
-      return await this.getUiFullBundlePaginated(userAddress, 5);
+      return await this.getUiFullBundlePaginated(userAddress, DEFAULT_PAGE_SIZE);
     } catch {
       return null;
     }
   }
 
-  async getUiFullBundleFromParts(
-    userAddress: string
-  ): Promise<UiFullBundle | null> {
+  async getUiFullBundleFromParts(userAddress: string): Promise<UiFullBundle | null> {
     try {
       const boot = await this.getUiBootstrap();
-      const userDash = await this.getUserDashboardWithPagination(userAddress, 5);
+      const userDash = await this.getUserDashboardWithPagination(userAddress, DEFAULT_PAGE_SIZE);
       let emissions: EmissionData;
       try {
         emissions = await this.getUserEmissions(userAddress);
@@ -78,30 +120,39 @@ export class NeverlandUiService extends AbiBaseService<Abi> {
             emissions = {
               rewardTokens: emissionTokens,
               totalRewards: summary.totalEmissions || [],
+              resolved: NeverlandUiService.areAllRowsResolved(
+                summary.emissionsResolvedMask,
+                emissionTokens.length,
+              ),
+              asOfBlock: summary.asOfBlock,
+              asOfTimestamp: summary.asOfTimestamp,
             };
           } else {
-            emissions = { rewardTokens: [], totalRewards: [] };
+            emissions = emptyEmissions();
           }
         } catch {
-          emissions = { rewardTokens: [], totalRewards: [] };
+          emissions = emptyEmissions();
         }
       }
 
       let unlockSchedule: UnlockSchedule = { unlockTimes: [], amounts: [], tokenIds: [] };
-      try { unlockSchedule = await this.getUnlockSchedule(userAddress); } catch {}
-
-      let rewardsSummary = { totalRevenue: [] as BigNumber[], totalEmissions: [] as BigNumber[], totalHistorical: [] as BigNumber[] };
       try {
-        const rt = boot?.meta?.revenueRewardTokens || [];
-        if (rt.length > 0) rewardsSummary = await this.getUserRewardsSummary(userAddress, rt);
-      } catch {}
+        unlockSchedule = await this.getUnlockSchedule(userAddress);
+      } catch {
+        // The schedule is optional; keep the empty default.
+      }
 
       return {
         meta: boot.meta,
-        essential: { user: userDash, globalStats: boot.globalStats, emissions, marketData: boot.marketData },
-        extended: { unlockSchedule, rewardsSummary, allPrices: boot.allPrices },
+        essential: {
+          user: userDash,
+          globalStats: boot.globalStats,
+          emissions,
+          marketData: boot.marketData,
+        },
+        extended: { unlockSchedule, allPrices: boot.allPrices },
         network: boot.network,
-      } as UiFullBundle;
+      };
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('NeverlandUiProvider.getUiFullBundleFromParts failed:', {
@@ -115,11 +166,17 @@ export class NeverlandUiService extends AbiBaseService<Abi> {
 
   async getUserEmissions(userAddress: string): Promise<EmissionData> {
     const result = await this.contract.getUserEmissions(userAddress);
-    return { rewardTokens: result.rewardTokens as string[], totalRewards: result.totalRewards as BigNumber[] };
+    return {
+      rewardTokens: result.rewardTokens as string[],
+      totalRewards: result.totalRewards as BigNumber[],
+      resolved: result.resolved as boolean,
+      asOfBlock: result.asOfBlock as BigNumber,
+      asOfTimestamp: result.asOfTimestamp as BigNumber,
+    };
   }
 
   async getUserDashboard(userAddress: string): Promise<UserDashboardData> {
-    return this.getUserDashboardWithPagination(userAddress, 5);
+    return this.getUserDashboardWithPagination(userAddress, DEFAULT_PAGE_SIZE);
   }
 
   async getUserTokenCount(userAddress: string): Promise<number> {
@@ -128,178 +185,225 @@ export class NeverlandUiService extends AbiBaseService<Abi> {
     return bn.toNumber();
   }
 
-  async getUserDashboardWithPagination(userAddress: string, pageSize = 5): Promise<UserDashboardData> {
-    const tokenIdsAll: BigNumber[] = [];
-    const locksAll: LockInfo[] = [];
-    const rewardsAll: RewardSummary[] = [];
-
-    const total = await this.getUserTokenCount(userAddress);
-    if (!total || total <= 0) {
-      return { user: userAddress, tokenIds: [], locks: [], rewardSummaries: [], totalVotingPower: BigNumber.from(0), totalLockedAmount: BigNumber.from(0) };
-    }
-
+  /**
+   * Walks every raw DustLock enumeration page for a user. Pages are compacted to live veNFTs, so
+   * the cursor is the contract's `nextRawOffset`, never the number of tokens returned. If a page
+   * reverts or the cursor stops advancing, the partial result is returned with `hasMore` set and
+   * `nextRawOffset` pointing at the page to retry.
+   */
+  async getUserDashboardWithPagination(
+    userAddress: string,
+    pageSize = DEFAULT_PAGE_SIZE,
+  ): Promise<UserDashboardData> {
+    const merged = emptyDashboard(userAddress);
     let offset = 0;
-    while (offset < total) {
-      const limit = Math.min(pageSize, total - offset);
+
+    for (;;) {
+      let page: UserDashboardData;
       try {
-        const page = (await this.contract.getEssentialUserView(userAddress, BigNumber.from(offset), BigNumber.from(limit))) as EssentialUserView;
-        const pageUser: UserDashboardData = page.user;
-        if (pageUser?.tokenIds?.length) tokenIdsAll.push(...pageUser.tokenIds);
-        if (pageUser?.locks?.length) locksAll.push(...pageUser.locks);
-        if (pageUser?.rewardSummaries?.length) rewardsAll.push(...pageUser.rewardSummaries);
-        offset += limit;
+        page = (await this.contract.getUserDashboard(
+          userAddress,
+          BigNumber.from(offset),
+          BigNumber.from(pageSize),
+        )) as UserDashboardData;
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.warn('NeverlandUiProvider.getEssentialUserView reverted', { offset, limit, userAddress, error });
+        console.warn('NeverlandUiProvider.getUserDashboard reverted', {
+          offset,
+          pageSize,
+          userAddress,
+          error,
+        });
+        merged.hasMore = true;
+        merged.nextRawOffset = BigNumber.from(offset);
         break;
       }
+
+      this.appendDashboardPage(merged, page);
+      if (!page.hasMore) break;
+
+      const next = page.nextRawOffset.toNumber();
+      if (next <= offset) break;
+      offset = next;
     }
 
-    const totalVotingPower = locksAll.reduce((acc, l) => acc.add(l?.votingPower || BigNumber.from(0)), BigNumber.from(0));
-    const totalLockedAmount = locksAll.reduce((acc, l) => acc.add(l?.amount || BigNumber.from(0)), BigNumber.from(0));
-
-    return { user: userAddress, tokenIds: tokenIdsAll, locks: locksAll, rewardSummaries: rewardsAll, totalVotingPower, totalLockedAmount };
+    this.recomputeDashboardTotals(merged);
+    return merged;
   }
 
-  async getUiFullBundlePaginated(userAddress: string, pageSize = 5): Promise<UiFullBundle> {
-    const total = await this.getUserTokenCount(userAddress);
-    let combined: UiFullBundle | null = null;
-    const pages: { offset: number; limit: number }[] = total > 0
-      ? Array.from({ length: Math.ceil(total / pageSize) }, (_, i) => ({ offset: i * pageSize, limit: Math.min(pageSize, total - i * pageSize) }))
-      : [{ offset: 0, limit: 0 }];
+  /**
+   * Fetches the full UI bundle, following the same raw-offset cursor as
+   * {@link getUserDashboardWithPagination}. Global, market and price data come from the first page;
+   * the unlock schedule is built per page by the contract, so it is concatenated across pages. If a
+   * later page reverts, the pages already loaded are returned with `hasMore` set and
+   * `nextRawOffset` pointing at the page to retry; a revert on the first page throws.
+   */
+  async getUiFullBundlePaginated(
+    userAddress: string,
+    pageSize = DEFAULT_PAGE_SIZE,
+  ): Promise<UiFullBundle> {
+    const user = emptyDashboard(userAddress);
+    const unlockSchedule: UnlockSchedule = { unlockTimes: [], amounts: [], tokenIds: [] };
+    let first: UiFullBundle | null = null;
+    let offset = 0;
 
-    const results = await Promise.all(pages.map(p => this.contract.getUiFullBundle(userAddress, BigNumber.from(p.offset), BigNumber.from(p.limit)) as Promise<UiFullBundle>));
-
-    results.forEach(pageBundle => {
-      if (!combined) {
-        combined = { meta: pageBundle.meta, essential: { ...pageBundle.essential, user: { ...pageBundle.essential.user, tokenIds: [...(pageBundle.essential.user.tokenIds || [])], locks: [...(pageBundle.essential.user.locks || [])], rewardSummaries: [...(pageBundle.essential.user.rewardSummaries || [])] } }, extended: pageBundle.extended, network: pageBundle.network };
-      } else {
-        const u: UserDashboardData = combined.essential.user;
-        const pu: UserDashboardData = pageBundle.essential.user;
-        if (pu?.tokenIds?.length) u.tokenIds.push(...(pu.tokenIds as BigNumber[]));
-        if (pu?.locks?.length) u.locks.push(...(pu.locks as LockInfo[]));
-        if (pu?.rewardSummaries?.length) u.rewardSummaries.push(...(pu.rewardSummaries as RewardSummary[]));
+    for (;;) {
+      let page: UiFullBundle;
+      try {
+        page = (await this.contract.getUiFullBundle(
+          userAddress,
+          BigNumber.from(offset),
+          BigNumber.from(pageSize),
+        )) as UiFullBundle;
+      } catch (error) {
+        // Without the first page there is no meta, market or price data to return.
+        if (!first) throw error;
+        // eslint-disable-next-line no-console
+        console.warn('NeverlandUiProvider.getUiFullBundle reverted', {
+          offset,
+          pageSize,
+          userAddress,
+          error,
+        });
+        user.hasMore = true;
+        user.nextRawOffset = BigNumber.from(offset);
+        break;
       }
-    });
+      if (!first) first = page;
 
-    if (!combined) {
-      const boot = await this.getUiBootstrap();
-      return {
-        meta: boot.meta,
-        essential: { user: { user: userAddress, tokenIds: [], locks: [], rewardSummaries: [], totalVotingPower: BigNumber.from(0), totalLockedAmount: BigNumber.from(0) }, globalStats: boot.globalStats, emissions: { rewardTokens: [], totalRewards: [] }, marketData: boot.marketData },
-        extended: { unlockSchedule: { unlockTimes: [], amounts: [], tokenIds: [] }, rewardsSummary: { totalRevenue: [], totalEmissions: [], totalHistorical: [] }, allPrices: boot.allPrices },
-        network: boot.network,
-      } as UiFullBundle;
+      this.appendDashboardPage(user, page.essential.user);
+      unlockSchedule.unlockTimes.push(...page.extended.unlockSchedule.unlockTimes);
+      unlockSchedule.amounts.push(...page.extended.unlockSchedule.amounts);
+      unlockSchedule.tokenIds.push(...page.extended.unlockSchedule.tokenIds);
+      if (!page.essential.user.hasMore) break;
+
+      const next = page.essential.user.nextRawOffset.toNumber();
+      if (next <= offset) break;
+      offset = next;
     }
 
-    const bundle = combined as UiFullBundle;
-    const locksAll: LockInfo[] = bundle.essential.user.locks || [];
-    const totalVotingPower = locksAll.reduce((acc: BigNumber, l: LockInfo) => acc.add(l?.votingPower || BigNumber.from(0)), BigNumber.from(0));
-    const totalLockedAmount = locksAll.reduce((acc: BigNumber, l: LockInfo) => acc.add(l?.amount || BigNumber.from(0)), BigNumber.from(0));
-    bundle.essential.user.totalVotingPower = totalVotingPower;
-    bundle.essential.user.totalLockedAmount = totalLockedAmount;
-    return bundle;
-  }
+    this.recomputeDashboardTotals(user);
 
-  async getUserPortfolioValue(userAddress: string): Promise<BigNumber> {
-    return await this.contract.getUserPortfolioValue(userAddress);
+    const head = first as UiFullBundle;
+    return {
+      meta: head.meta,
+      essential: {
+        user,
+        globalStats: head.essential.globalStats,
+        emissions: head.essential.emissions,
+        marketData: head.essential.marketData,
+      },
+      extended: { unlockSchedule, allPrices: head.extended.allPrices },
+      network: head.network,
+    };
   }
 
   async getAllPrices(): Promise<PriceData> {
-    const result = await this.contract.getAllPrices();
-    return { tokens: result.tokens, prices: result.prices, lastUpdated: result.lastUpdated, isStale: result.isStale };
+    return (await this.contract.getAllPrices()) as PriceData;
   }
 
   async getGlobalStats(): Promise<GlobalStats> {
-    const result = await this.contract.getGlobalStats();
-    return { totalSupply: result.totalSupply, totalVotingPower: result.totalVotingPower, permanentLockBalance: result.permanentLockBalance, rewardTokens: result.rewardTokens, totalRewardsPerToken: result.totalRewardsPerToken, epoch: result.epoch, activeTokenCount: result.activeTokenCount };
+    return (await this.contract.getGlobalStats()) as GlobalStats;
   }
 
   async getMarketData(): Promise<MarketData> {
-    const result = await this.contract.getMarketData();
-    return { rewardTokens: result.rewardTokens, rewardTokenBalances: result.rewardTokenBalances, distributionRates: result.distributionRates, nextEpochTimestamp: result.nextEpochTimestamp, currentEpoch: result.currentEpoch, epochRewards: result.epochRewards, nextEpochRewards: result.nextEpochRewards, totalValueLockedUSD: result.totalValueLockedUSD };
+    return (await this.contract.getMarketData()) as MarketData;
   }
 
-  async getUserRewardsSummary(userAddress: string, rewardTokens: string[]): Promise<{ totalRevenue: BigNumber[]; totalEmissions: BigNumber[]; totalHistorical: BigNumber[] }> {
-    const result = await this.contract.getUserRewardsSummary(userAddress, rewardTokens);
-    return { totalRevenue: result.totalRevenue, totalEmissions: result.totalEmissions, totalHistorical: result.totalHistorical };
+  async getUserRewardsSummary(
+    userAddress: string,
+    rewardTokens: string[],
+  ): Promise<UserRewardsSummary> {
+    return (await this.contract.getUserRewardsSummary(
+      userAddress,
+      rewardTokens,
+    )) as UserRewardsSummary;
   }
 
   async getNetworkData(): Promise<NetworkData> {
-    const result = await this.contract.getNetworkData();
-    return { currentBlock: result.currentBlock, currentTimestamp: result.currentTimestamp, gasPrice: result.gasPrice };
-  }
-
-  async getBatchTokenDetails(tokenIds: BigNumber[]): Promise<{ locks: LockInfo[]; rewards: RewardSummary[] }> {
-    const result = await this.contract.getBatchTokenDetails(tokenIds);
-    return { locks: result.locks, rewards: result.rewards };
-  }
-
-  async getTokenDetails(tokenId: BigNumber): Promise<{ lockInfo: LockInfo; rewardSummary: RewardSummary }> {
-    const result = await this.contract.getTokenDetails(tokenId);
-    return { lockInfo: result[0], rewardSummary: result[1] };
-  }
-
-  async getOptimalClaimOrder(userAddress: string): Promise<OptimalClaimResult> {
-    const result = await this.contract.getOptimalClaimOrder(userAddress);
-    return { tokenIds: result.tokenIds, totalGasOptimized: result.totalGasOptimized };
+    return (await this.contract.getNetworkData()) as NetworkData;
   }
 
   async getUnlockSchedule(userAddress: string): Promise<UnlockSchedule> {
     const result = await this.contract.getUnlockSchedule(userAddress);
-    return { unlockTimes: result.unlockTimes, amounts: result.amounts, tokenIds: result.tokenIds };
+    return {
+      unlockTimes: result.unlockTimes,
+      amounts: result.amounts,
+      tokenIds: result.tokenIds,
+    };
   }
 
-  async getUserTokensPaginated(userAddress: string, offset: BigNumber, limit: BigNumber): Promise<{ tokenIds: BigNumber[]; hasMore: boolean }> {
-    const result = await this.contract.getUserTokensPaginated(userAddress, offset, limit);
-    return { tokenIds: result.tokenIds, hasMore: result.hasMore };
-  }
-
-  async calculateUnlockPenalty(tokenId: BigNumber, userAddress: string): Promise<BigNumber> {
-    return await this.contract.calculateUnlockPenalty(tokenId, userAddress);
-  }
-
-  async getOptimalLockDuration(amount: BigNumber): Promise<{ duration: BigNumber; projectedRewards: BigNumber }> {
-    const result = await this.contract.getOptimalLockDuration(amount);
-    return { duration: result.duration, projectedRewards: result.projectedRewards };
-  }
-
-  async simulateClaim(userAddress: string, tokenIds: BigNumber[], rewardTokens: string[]): Promise<{ claimAmounts: BigNumber[]; gasEstimate: BigNumber }> {
-    const result = await this.contract.simulateClaim(userAddress, tokenIds, rewardTokens);
-    return { claimAmounts: result.claimAmounts, gasEstimate: result.gasEstimate };
-  }
-
-  calculateTotalRewardsUSD(rewardSummaries: RewardSummary[], priceData: PriceData, dustTokenAddress: string): { totalRewards: string; totalRewardsUSD: string } {
+  /**
+   * Total DUST rewards and their USD value. Revenue rewards come from the per-token summaries;
+   * pass `emissions` to include the user's per-user DUST emissions as well. The USD value is '0'
+   * when the DUST price row is unresolved.
+   */
+  calculateTotalRewardsUSD(
+    rewardSummaries: RewardSummary[],
+    priceData: PriceData,
+    dustTokenAddress: string,
+    emissions?: EmissionData,
+  ): { totalRewards: string; totalRewardsUSD: string } {
+    const dust = dustTokenAddress.toLowerCase();
     let totalDustRewards = BigNumber.from(0);
     rewardSummaries.forEach(summary => {
       summary.rewardTokens.forEach((token, index) => {
-        if (token.toLowerCase() === dustTokenAddress.toLowerCase()) {
-          const revenueReward = summary.revenueRewards[index];
-          const emissionReward = summary.emissionRewards[index];
-          totalDustRewards = totalDustRewards.add(revenueReward || BigNumber.from(0)).add(emissionReward || BigNumber.from(0));
+        if (token.toLowerCase() === dust) {
+          totalDustRewards = totalDustRewards.add(
+            summary.revenueRewards[index] || BigNumber.from(0),
+          );
         }
       });
     });
-    const dustPriceIndex = priceData.tokens.findIndex(token => token.toLowerCase() === dustTokenAddress.toLowerCase());
+    emissions?.rewardTokens.forEach((token, index) => {
+      if (token.toLowerCase() === dust) {
+        totalDustRewards = totalDustRewards.add(emissions.totalRewards[index] || BigNumber.from(0));
+      }
+    });
+
+    const dustPriceIndex = priceData.tokens.findIndex(token => token.toLowerCase() === dust);
     let totalRewardsUSD = '0';
-    if (dustPriceIndex !== -1 && !priceData.isStale[dustPriceIndex]) {
+    if (
+      dustPriceIndex !== -1 &&
+      NeverlandUiService.isRowResolved(priceData.resolvedMask, dustPriceIndex)
+    ) {
       const dustPrice = priceData.prices[dustPriceIndex];
       const rewardsInDust = parseFloat(formatUnits(totalDustRewards, 18));
       const priceInUSD = parseFloat(formatUnits(dustPrice || 0, 8));
       const usdValue = rewardsInDust * priceInUSD;
-      if (usdValue > 0 && usdValue < 0.01) totalRewardsUSD = '< 0.01'; else totalRewardsUSD = usdValue.toFixed(2);
+      totalRewardsUSD = usdValue > 0 && usdValue < 0.01 ? '< 0.01' : usdValue.toFixed(2);
     }
     return { totalRewards: totalDustRewards.toString(), totalRewardsUSD };
   }
 
   formatPortfolioValue(portfolioValueBN: BigNumber): string {
     const valueUSD = parseFloat(formatUnits(portfolioValueBN, 8));
-    return valueUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return valueUSD.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   }
 
   formatDustAmount(dustAmountBN: BigNumber): string {
     const amount = parseFloat(formatUnits(dustAmountBN, 18));
     return amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+  }
+
+  /** Copies one decoded page into `target`, which stays a plain mutable object. */
+  private appendDashboardPage(target: UserDashboardData, page: UserDashboardData): void {
+    target.tokenIds.push(...(page.tokenIds || []));
+    target.locks.push(...((page.locks || []) as LockInfo[]));
+    target.rewardSummaries.push(...((page.rewardSummaries || []) as RewardSummary[]));
+    target.rawTokenCount = page.rawTokenCount;
+    target.nextRawOffset = page.nextRawOffset;
+    target.hasMore = page.hasMore;
+  }
+
+  private recomputeDashboardTotals(dashboard: UserDashboardData): void {
+    dashboard.totalVotingPower = sumField(dashboard.locks, l => l?.votingPower);
+    dashboard.totalLockedAmount = sumField(dashboard.locks, l => l?.amount);
   }
 }
 

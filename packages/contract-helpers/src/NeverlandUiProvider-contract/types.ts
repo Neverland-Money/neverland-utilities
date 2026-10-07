@@ -1,74 +1,93 @@
+import type { BigNumber } from 'ethers';
+
+export interface PoolMarket {
+  /** The market's pool address provider. Key on this, never on `marketId` or list position. */
+  provider: string;
+  /** Display-only label from the market's own `getMarketId()`, or '' if that read failed. */
+  marketId: string;
+}
+
 export interface UserDashboardData {
   user: string;
-  tokenIds: import('ethers').BigNumber[];
+  tokenIds: BigNumber[];
   locks: LockInfo[];
   rewardSummaries: RewardSummary[];
-  totalVotingPower: import('ethers').BigNumber;
-  totalLockedAmount: import('ethers').BigNumber;
+  totalVotingPower: BigNumber;
+  totalLockedAmount: BigNumber;
+  /** Raw `DustLock.balanceOf(user)` enumeration length at query time. */
+  rawTokenCount: BigNumber;
+  /** Raw offset to pass as the next call's `offset`. */
+  nextRawOffset: BigNumber;
+  /** True when the page left live entries or sparse raw slots unscanned. */
+  hasMore: boolean;
 }
 
 export interface LockInfo {
-  tokenId: import('ethers').BigNumber;
-  amount: import('ethers').BigNumber;
-  end: import('ethers').BigNumber;
-  effectiveStart: import('ethers').BigNumber;
+  tokenId: BigNumber;
+  amount: BigNumber;
+  end: BigNumber;
+  effectiveStart: BigNumber;
   isPermanent: boolean;
-  votingPower: import('ethers').BigNumber;
+  votingPower: BigNumber;
   rewardReceiver: string;
   owner: string;
 }
 
+/** Emission rewards are per user, not per token: use `getUserEmissions` for those. */
 export interface RewardSummary {
-  tokenId: import('ethers').BigNumber;
-  revenueRewards: import('ethers').BigNumber[];
-  emissionRewards: import('ethers').BigNumber[];
+  tokenId: BigNumber;
+  revenueRewards: BigNumber[];
   rewardTokens: string[];
-  totalEarned: import('ethers').BigNumber[];
 }
 
 export interface PriceData {
   tokens: string[];
-  prices: import('ethers').BigNumber[];
-  lastUpdated: import('ethers').BigNumber[];
-  isStale: boolean[];
+  /** USD prices, 8 decimals. */
+  prices: BigNumber[];
+  lastUpdated: BigNumber[];
+  /** Bit i set means row i resolved. Only the first 256 rows are representable. */
+  resolvedMask: BigNumber;
+  /** True when the DUST price (row 0) came from the live oracle path. */
+  dustPriceFromOracle: boolean;
+  asOfBlock: BigNumber;
+  asOfTimestamp: BigNumber;
 }
 
 export interface GlobalStats {
-  totalSupply: import('ethers').BigNumber;
-  totalVotingPower: import('ethers').BigNumber;
-  permanentLockBalance: import('ethers').BigNumber;
+  totalSupply: BigNumber;
+  totalVotingPower: BigNumber;
+  permanentLockBalance: BigNumber;
   rewardTokens: string[];
-  totalRewardsPerToken: import('ethers').BigNumber[];
-  epoch: import('ethers').BigNumber;
-  activeTokenCount: import('ethers').BigNumber;
+  totalRewardsPerToken: BigNumber[];
+  epoch: BigNumber;
+  activeTokenCount: BigNumber;
 }
 
 export interface MarketData {
   rewardTokens: string[];
-  rewardTokenBalances: import('ethers').BigNumber[];
-  distributionRates: import('ethers').BigNumber[];
-  nextEpochTimestamp: import('ethers').BigNumber;
-  currentEpoch: import('ethers').BigNumber;
-  epochRewards: import('ethers').BigNumber[];
-  nextEpochRewards: import('ethers').BigNumber[];
-  totalValueLockedUSD: import('ethers').BigNumber;
+  rewardTokenBalances: BigNumber[];
+  distributionRates: BigNumber[];
+  nextEpochTimestamp: BigNumber;
+  currentEpoch: BigNumber;
+  epochRewards: BigNumber[];
+  nextEpochRewards: BigNumber[];
+  totalValueLockedUSD: BigNumber;
+  followingEpochRewards: BigNumber[];
+  totalValueLockedUSDResolved: boolean;
+  asOfBlock: BigNumber;
+  asOfTimestamp: BigNumber;
 }
 
 export interface NetworkData {
-  currentBlock: import('ethers').BigNumber;
-  currentTimestamp: import('ethers').BigNumber;
-  gasPrice: import('ethers').BigNumber;
-}
-
-export interface OptimalClaimResult {
-  tokenIds: import('ethers').BigNumber[];
-  totalGasOptimized: import('ethers').BigNumber;
+  currentBlock: BigNumber;
+  currentTimestamp: BigNumber;
+  gasPrice: BigNumber;
 }
 
 export interface UnlockSchedule {
-  unlockTimes: import('ethers').BigNumber[];
-  amounts: import('ethers').BigNumber[];
-  tokenIds: import('ethers').BigNumber[];
+  unlockTimes: BigNumber[];
+  amounts: BigNumber[];
+  tokenIds: BigNumber[];
 }
 
 export interface ProtocolMeta {
@@ -76,8 +95,8 @@ export interface ProtocolMeta {
   revenueReward: string;
   dustRewardsController: string;
   dustOracle: string;
-  earlyWithdrawPenalty: import('ethers').BigNumber;
-  minLockAmount: import('ethers').BigNumber;
+  earlyWithdrawPenalty: BigNumber;
+  minLockAmount: BigNumber;
   rewardDistributor: string;
   revenueRewardTokens: string[];
   emissionRewardTokens: string[];
@@ -86,7 +105,11 @@ export interface ProtocolMeta {
 
 export interface EmissionData {
   rewardTokens: string[];
-  totalRewards: import('ethers').BigNumber[];
+  totalRewards: BigNumber[];
+  /** False only when the aggregate emissions read failed. */
+  resolved: boolean;
+  asOfBlock: BigNumber;
+  asOfTimestamp: BigNumber;
 }
 
 export interface EssentialUserView {
@@ -98,17 +121,33 @@ export interface EssentialUserView {
 
 export interface ExtendedUserView {
   unlockSchedule: UnlockSchedule;
-  rewardsSummary: {
-    totalRevenue: import('ethers').BigNumber[];
-    totalEmissions: import('ethers').BigNumber[];
-    totalHistorical: import('ethers').BigNumber[];
-  };
   allPrices: PriceData;
 }
 
-export interface UserEmissionAssetBreakdown {
-  assets: string[];
-  amounts: import('ethers').BigNumber[];
+export interface UserRewardsSummary {
+  totalRevenue: BigNumber[];
+  totalEmissions: BigNumber[];
+  /** Bit j set means `totalRevenue[j]` is trustworthy, aligned with the `rewardTokens` argument. */
+  revenueResolvedMask: BigNumber;
+  /** Bit j set means `totalEmissions[j]` is trustworthy, aligned with the `rewardTokens` argument. */
+  emissionsResolvedMask: BigNumber;
+  asOfBlock: BigNumber;
+  asOfTimestamp: BigNumber;
+}
+
+export interface UserEmissionAsset {
+  asset: string;
+  amount: BigNumber;
+  symbol: string;
+  isDebt: boolean;
+  /** False means `amount` defaulted to 0 because this asset's read failed. */
+  resolved: boolean;
+}
+
+export interface UserEmissionBreakdown {
+  breakdown: UserEmissionAsset[];
+  /** False means at least one registered pool's asset list could not be enumerated. */
+  enumerationResolved: boolean;
 }
 
 export interface UiBootstrap {

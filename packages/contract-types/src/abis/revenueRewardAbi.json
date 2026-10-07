@@ -1,970 +1,1051 @@
 [
   {
+    "type": "constructor",
     "inputs": [
       {
-        "internalType": "address",
         "name": "_forwarder",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    "stateMutability": "nonpayable"
   },
   {
-    "inputs": [],
-    "name": "AddressZero",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "EndTimestampMoreThanCurrent",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidArrayLengths",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidRange",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "NotDustLock",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "NotOwner",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "NotRewardDistributor",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "UnknownRewardToken",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "ZeroAmount",
-    "type": "error"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "ClaimRewards",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint8",
-        "name": "version",
-        "type": "uint8"
-      }
-    ],
-    "name": "Initialized",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "epoch",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "NotifyReward",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "RecoverTokens",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "oldDistributor",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newDistributor",
-        "type": "address"
-      }
-    ],
-    "name": "RewardDistributorUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "token",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "rewardReceiver",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "isEnabled",
-        "type": "bool"
-      }
-    ],
-    "name": "SelfRepayingLoanUpdate",
-    "type": "event"
-  },
-  {
-    "inputs": [],
+    "type": "function",
     "name": "DURATION",
+    "inputs": [],
     "outputs": [
       {
-        "internalType": "uint256",
         "name": "",
-        "type": "uint256"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "view"
   },
   {
-    "inputs": [],
+    "type": "function",
     "name": "MAX_TOKENIDS",
+    "inputs": [],
     "outputs": [
       {
-        "internalType": "uint256",
         "name": "",
-        "type": "uint256"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "view"
   },
   {
-    "inputs": [],
+    "type": "function",
     "name": "MAX_TOKENS",
+    "inputs": [],
     "outputs": [
       {
-        "internalType": "uint256",
         "name": "",
-        "type": "uint256"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "view"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
+    "type": "function",
     "name": "disableSelfRepayLoan",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "disableSelfRepayLoanBatch",
+    "inputs": [
+      {
+        "name": "tokenIds",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      }
+    ],
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "nonpayable"
   },
   {
-    "inputs": [],
+    "type": "function",
     "name": "dustLock",
+    "inputs": [],
     "outputs": [
       {
-        "internalType": "contract IDustLock",
         "name": "",
-        "type": "address"
+        "type": "address",
+        "internalType": "contract IDustLock"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "view"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "endTs",
-        "type": "uint256"
-      }
-    ],
+    "type": "function",
     "name": "earnedRewards",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
-        "internalType": "address[]",
-        "name": "tokens",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "earnedRewardsAll",
-    "outputs": [
-      {
-        "internalType": "uint256[][]",
-        "name": "matrix",
-        "type": "uint256[][]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "totals",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address[]",
-        "name": "tokens",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "endTs",
-        "type": "uint256"
-      }
-    ],
-    "name": "earnedRewardsAllUntilTs",
-    "outputs": [
-      {
-        "internalType": "uint256[][]",
-        "name": "matrix",
-        "type": "uint256[][]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "totals",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_newRewardDistributor",
-        "type": "address"
-      }
-    ],
-    "name": "emergencyFixDistributor",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "enableSelfRepayLoan",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "enableSelfRepayLoanBatch",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address[]",
-        "name": "tokens",
-        "type": "address[]"
-      }
-    ],
-    "name": "getReward",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "address[]",
-        "name": "tokens",
-        "type": "address[]"
-      }
-    ],
-    "name": "getRewardBatch",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getRewardTokens",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "tokens",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address[]",
-        "name": "tokens",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "rewardPeriodEndTs",
-        "type": "uint256"
-      }
-    ],
-    "name": "getRewardUntilTs",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "address[]",
-        "name": "tokens",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "rewardPeriodEndTs",
-        "type": "uint256"
-      }
-    ],
-    "name": "getRewardUntilTsBatch",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      }
-    ],
-    "name": "getUserTokensWithSelfRepayingLoan",
-    "outputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "from",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "to",
-        "type": "uint256"
-      }
-    ],
-    "name": "getUsersWithSelfRepayingLoan",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_forwarder",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IDustLock",
-        "name": "_dustLock",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_rewardDistributor",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IUserVaultFactory",
-        "name": "_userVaultFactory",
-        "type": "address"
-      }
-    ],
-    "name": "initialize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_newRewardDistributor",
-        "type": "address"
-      }
-    ],
-    "name": "initializeV2",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_newRewardDistributor",
-        "type": "address"
-      }
-    ],
-    "name": "initializeV3",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "isRewardToken",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "forwarder",
-        "type": "address"
-      }
-    ],
-    "name": "isTrustedForwarder",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "lastEarnTime",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      }
-    ],
-    "name": "notifyAfterTokenBurned",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "fromToken",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "toToken",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      }
-    ],
-    "name": "notifyAfterTokenMerged",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "fromToken",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId1",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "token1Amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId2",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "token2Amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      }
-    ],
-    "name": "notifyAfterTokenSplit",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      }
-    ],
-    "name": "notifyAfterTokenTransferred",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "token",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "notifyRewardAmount",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
         "name": "tokenId",
-        "type": "uint256"
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "endTs",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "earnedRewardsAll",
+    "inputs": [
+      {
+        "name": "tokens",
+        "type": "address[]",
+        "internalType": "address[]"
+      },
+      {
+        "name": "tokenIds",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "matrix",
+        "type": "uint256[][]",
+        "internalType": "uint256[][]"
+      },
+      {
+        "name": "totals",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "earnedRewardsAllUntilTs",
+    "inputs": [
+      {
+        "name": "tokens",
+        "type": "address[]",
+        "internalType": "address[]"
+      },
+      {
+        "name": "tokenIds",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      },
+      {
+        "name": "endTs",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "matrix",
+        "type": "uint256[][]",
+        "internalType": "uint256[][]"
+      },
+      {
+        "name": "totals",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "enableSelfRepayLoan",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "enableSelfRepayLoanBatch",
+    "inputs": [
+      {
+        "name": "tokenIds",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getAllUsersWithSelfRepayingLoan",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "users",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getReward",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokens",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getRewardBatch",
+    "inputs": [
+      {
+        "name": "tokenIds",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      },
+      {
+        "name": "tokens",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getRewardTokens",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "tokens",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getRewardUntilTs",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokens",
+        "type": "address[]",
+        "internalType": "address[]"
+      },
+      {
+        "name": "rewardPeriodEndTs",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getRewardUntilTsBatch",
+    "inputs": [
+      {
+        "name": "tokenIds",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      },
+      {
+        "name": "tokens",
+        "type": "address[]",
+        "internalType": "address[]"
+      },
+      {
+        "name": "rewardPeriodEndTs",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getUserTokensWithSelfRepayingLoan",
+    "inputs": [
+      {
+        "name": "user",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "tokenIds",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getUserTokensWithSelfRepayingLoanRange",
+    "inputs": [
+      {
+        "name": "user",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "from",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "to",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "tokenIds",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getUsersWithSelfRepayingLoan",
+    "inputs": [
+      {
+        "name": "from",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "to",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "initialize",
+    "inputs": [
+      {
+        "name": "_forwarder",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_dustLock",
+        "type": "address",
+        "internalType": "contract IDustLock"
+      },
+      {
+        "name": "_rewardDistributor",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_userVaultFactory",
+        "type": "address",
+        "internalType": "contract IUserVaultFactory"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "isRewardToken",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "isTrustedForwarder",
+    "inputs": [
+      {
+        "name": "forwarder",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "lastEarnTime",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "notifyAfterTokenBurned",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "from",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "notifyAfterTokenMerged",
+    "inputs": [
+      {
+        "name": "fromToken",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "toToken",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "owner",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "notifyAfterTokenSplit",
+    "inputs": [
+      {
+        "name": "fromToken",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokenId1",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "token1Amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokenId2",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "token2Amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "owner",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "notifyAfterTokenTransferred",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "from",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "notifyRewardAmount",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "notifyRewardAmountForFollowingEpoch",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "notifyTokenMinted",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "nonpayable"
   },
   {
-    "inputs": [],
+    "type": "function",
     "name": "recoverTokens",
+    "inputs": [],
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "nonpayable"
   },
   {
-    "inputs": [],
+    "type": "function",
     "name": "rewardDistributor",
+    "inputs": [],
     "outputs": [
       {
-        "internalType": "address",
         "name": "",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "view"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "type": "function",
     "name": "rewardTokens",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "address",
         "name": "",
-        "type": "address"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
   },
   {
-    "inputs": [],
+    "type": "function",
     "name": "rewardTokensLength",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newRewardDistributor",
-        "type": "address"
-      }
-    ],
-    "name": "setRewardDistributor",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "tokenMintTime",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "tokenRewardReceiver",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "tokenRewardsPerEpoch",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "tokenRewardsRemainingAccScaled",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "totalRewardsPerToken",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
-    "name": "userVaultFactory",
     "outputs": [
       {
-        "internalType": "contract IUserVaultFactory",
         "name": "",
-        "type": "address"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "setRewardDistributor",
+    "inputs": [
+      {
+        "name": "newRewardDistributor",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "tokenMintTime",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "tokenRewardReceiver",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "tokenRewardsPerEpoch",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "tokenRewardsRemainingAccScaled",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "totalRewardsPerToken",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "userTokensWithSelfRepayingLoanLength",
+    "inputs": [
+      {
+        "name": "user",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "count",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "userVaultFactory",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract IUserVaultFactory"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "usersWithSelfRepayingLoanLength",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "count",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "version",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "event",
+    "name": "ClaimRewards",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "user",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "token",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Initialized",
+    "inputs": [
+      {
+        "name": "version",
+        "type": "uint8",
+        "indexed": false,
+        "internalType": "uint8"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "NotifyReward",
+    "inputs": [
+      {
+        "name": "from",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "token",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "epoch",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "RecoverTokens",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "RewardDistributorUpdated",
+    "inputs": [
+      {
+        "name": "oldDistributor",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "newDistributor",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "SelfRepayingLoanUpdate",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "rewardReceiver",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "name": "isEnabled",
+        "type": "bool",
+        "indexed": false,
+        "internalType": "bool"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "AddressZero",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ArrayNotSortedOrContainsDuplicates",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "EndTimestampMoreThanCurrent",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "EpochFinalizationPending",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidArrayLengths",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidRange",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidTokenId",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotDustLock",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotOwner",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotRewardDistributor",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "UnknownRewardToken",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroAmount",
+    "inputs": []
   }
 ]

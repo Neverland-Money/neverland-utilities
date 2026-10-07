@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-helpers@0.2.0...@neverland-money/contract-helpers@1.0.0) (2026-10-07)
+
+### ⚠ BREAKING CHANGES
+
+- **contract-helpers:** requires `@neverland-money/contract-types` `^1.0.0`.
+- **NeverlandUiService:** removed `getBatchTokenDetails` and `getTokenDetails`, which the contract
+  no longer exposes. Also removed `getUserPortfolioValue`, `getOptimalClaimOrder`,
+  `getUserTokensPaginated`, `calculateUnlockPenalty`, `getOptimalLockDuration` and `simulateClaim`,
+  which have no contract counterpart and always threw.
+- **NeverlandUiTypes:** `RewardSummary` loses `emissionRewards` and `totalEarned`. `PriceData` loses
+  `isStale` and gains `resolvedMask`, `dustPriceFromOracle`, `asOfBlock` and `asOfTimestamp`.
+  `UserDashboardData` gains `rawTokenCount`, `nextRawOffset` and `hasMore`. `MarketData` and
+  `EmissionData` gain resolution and as-of fields. `ExtendedUserView` loses `rewardsSummary`.
+  `UserEmissionAssetBreakdown` is replaced by `UserEmissionBreakdown`, and `OptimalClaimResult` is
+  removed.
+- **NeverlandUiService:** `getUserRewardsSummary` returns `UserRewardsSummary` (no
+  `totalHistorical`), and `getUserEmissionBreakdown` returns `{ breakdown, enumerationResolved }`.
+- **NeverlandUiService:** `calculateTotalRewardsUSD` no longer adds emission rewards per summary.
+  Pass the user's `EmissionData` as the fourth argument to include them, and the USD value is `'0'`
+  when the DUST price row is unresolved instead of stale.
+- **DustIncentiveProvider:** removed `getUserAssetData`, which the controller never exposed. Use
+  `getUserAssetIndex`.
+
+### Features
+
+- **NeverlandUiService:** add `getProtocolMeta`, `getRegisteredPoolMarkets`, and the static
+  `isRowResolved` and `areAllRowsResolved` mask helpers.
+- **DustLockHelper:** `getEarlyWithdrawTxData` accepts an optional `maxPenalty`.
+
+### Bug Fixes
+
+- **DustLockHelper:** `getEarlyWithdrawTxData` encodes the full overload signature. The bare name is
+  ambiguous in the current DustLock ABI and would throw.
+- **NeverlandUiService:** dashboards and bundles follow the contract's `nextRawOffset` and `hasMore`
+  cursor instead of assuming raw offsets equal `index * pageSize`. The paginated bundle merges the
+  per-page unlock schedule instead of keeping only the first page's, and when a later page reverts
+  it returns the pages already loaded instead of discarding the whole bundle.
+- **DustLockHelper:** `getUserLocksWithMulticall` and `getUserDustDataWithMulticall` read through
+  `callStatic`. They previously tried to send a transaction and failed on read-only providers.
+- **DustIncentiveProvider:** `getRewardsData`, `getRewardsDataHumanized` and `isEmissionsActive`
+  decode the controller's unnamed outputs by position. They previously returned undefined fields.
+
+### Known issues
+
+- **DustAPRCalculator:** `calculateMarketAPR` always returns the inactive result. It reads fields
+  the controller does not return, hides the error, and assumes 18 decimals for every asset. Not
+  changed in this release.
+
 # 0.2.0 (2025-10-29)
 
 ### Features

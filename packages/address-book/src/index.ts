@@ -1,1 +1,1 @@
-export * from "./addresses/NeverlandMonadTestnet";
+export * as NeverlandMonadMainnet from './addresses/NeverlandMonadMainnet';

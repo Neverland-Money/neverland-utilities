@@ -1,216 +1,349 @@
 [
   {
+    "type": "constructor",
     "inputs": [
       {
-        "internalType": "address",
         "name": "incentivesController",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       },
       {
-        "internalType": "address",
         "name": "rewardsAdmin",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       },
       {
-        "internalType": "address",
         "name": "dustVault",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       },
       {
-        "internalType": "address",
         "name": "dustLock",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    "stateMutability": "nonpayable"
   },
   {
-    "inputs": [],
-    "name": "AddressZero",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "CallerNotIncentivesController",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidRewardAddress",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidToAddress",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "NotTokenOwner",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "OnlyRewardsAdmin",
-    "type": "error"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "caller",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "EmergencyWithdrawal",
-    "type": "event"
-  },
-  {
-    "inputs": [],
+    "type": "function",
     "name": "DUST",
+    "inputs": [],
     "outputs": [
       {
-        "internalType": "address",
         "name": "",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "view"
   },
   {
-    "inputs": [],
+    "type": "function",
     "name": "DUST_LOCK",
+    "inputs": [],
     "outputs": [
       {
-        "internalType": "contract IDustLock",
         "name": "",
-        "type": "address"
+        "type": "address",
+        "internalType": "contract IDustLock"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "view"
   },
   {
-    "inputs": [],
+    "type": "function",
     "name": "DUST_VAULT",
+    "inputs": [],
     "outputs": [
       {
-        "internalType": "address",
         "name": "",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "view"
   },
   {
+    "type": "function",
+    "name": "assertActivationState",
     "inputs": [
       {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
+        "name": "expectedActive",
+        "type": "bool",
+        "internalType": "bool"
       }
     ],
-    "name": "emergencyWithdrawal",
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "view"
   },
   {
-    "inputs": [],
-    "name": "getIncentivesController",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getRewardsAdmin",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
+    "type": "function",
+    "name": "emergencyWithdrawal",
     "inputs": [
       {
-        "internalType": "address",
+        "name": "token",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
         "name": "to",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       },
       {
-        "internalType": "address",
-        "name": "reward",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
         "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lockTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
-    "name": "performTransfer",
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getIncentivesController",
+    "inputs": [],
     "outputs": [
       {
-        "internalType": "bool",
         "name": "",
-        "type": "bool"
+        "type": "address",
+        "internalType": "address"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getRewardsAdmin",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "performTransfer",
+    "inputs": [
+      {
+        "name": "to",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "reward",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "lockTime",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "previewClaim",
+    "inputs": [
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "lockTime",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "penaltyAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "netAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "version",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "event",
+    "name": "EmergencyWithdrawal",
+    "inputs": [
+      {
+        "name": "caller",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "token",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "to",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "RewardClaimPriced",
+    "inputs": [
+      {
+        "name": "to",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "destinationTokenId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "lockTime",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "gross",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "penalty",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "net",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "AddressZero",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "CallerNotIncentivesController",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "DepositForLockDurationTooShort",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "DustLockClaimReformInactive",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidActivationState",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidRewardAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidToAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "LockDurationTooLong",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "LockDurationTooShort",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "LockExpired",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotTokenOwner",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "OnlyRewardsAdmin",
+    "inputs": []
   }
 ]

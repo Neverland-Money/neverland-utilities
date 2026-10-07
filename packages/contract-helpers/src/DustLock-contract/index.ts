@@ -81,8 +81,14 @@ export class DustLockHelper extends AbiBaseService<Abi> {
     return this.encode('unlockPermanent', [tokenId]);
   }
 
-  getEarlyWithdrawTxData(tokenId: number): { to: string; data: string } {
-    return this.encode('earlyWithdraw', [tokenId]);
+  /**
+   * `earlyWithdraw` is overloaded, so the encoder needs the full signature. Pass `maxPenalty`
+   * (DUST, wei) to revert instead of paying more than a quoted penalty.
+   */
+  getEarlyWithdrawTxData(tokenId: number, maxPenalty?: string): { to: string; data: string } {
+    return maxPenalty === undefined
+      ? this.encode('earlyWithdraw(uint256)', [tokenId])
+      : this.encode('earlyWithdraw(uint256,uint256)', [tokenId, maxPenalty]);
   }
 
   getWithdrawTxData(tokenId: number): { to: string; data: string } {
@@ -183,7 +189,8 @@ export class DustLockHelper extends AbiBaseService<Abi> {
   ): Promise<{ success: boolean; returnData: string }[]> {
     const svcMc = new AbiBaseService(this.provider, multicall3Abi as any);
     const mc = svcMc.getContractInstance(multicallAddress);
-    return await mc.aggregate3(calls);
+    // aggregate3 is payable, so ethers only treats it as a read through callStatic.
+    return await mc.callStatic.aggregate3(calls);
   }
 
   async getUserLocksWithMulticall(owner: string, multicallAddress: string): Promise<UserLock[]> {

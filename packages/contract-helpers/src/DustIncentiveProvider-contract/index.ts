@@ -54,13 +54,10 @@ export class DustIncentiveProvider
   async getRewardsData(asset: string, reward: string): Promise<RewardData> {
     if (!isAddress(asset)) throw new Error('asset address is not valid');
     if (!isAddress(reward)) throw new Error('reward address is not valid');
-    const result = await this.contract.getRewardsData(asset, reward);
-    return {
-      index: result.index,
-      emissionPerSecond: result.emissionPerSecond,
-      lastUpdateTimestamp: result.lastUpdateTimestamp,
-      distributionEnd: result.distributionEnd,
-    };
+    // The ABI leaves these four outputs unnamed, so decode them by position.
+    const [index, emissionPerSecond, lastUpdateTimestamp, distributionEnd] =
+      await this.contract.getRewardsData(asset, reward);
+    return { index, emissionPerSecond, lastUpdateTimestamp, distributionEnd };
   }
 
   public async getRewardsDataHumanized(
@@ -141,19 +138,14 @@ export class DustIncentiveProvider
   }
 
   /**
-   * Get rewards data for a user on a specific asset
+   * Get a user's reward index for a specific asset
    * @param user User address
    * @param asset Asset address
    * @param reward Reward token address
-   * @returns User's reward index and accrued amount
+   * @returns The user's last-synced reward index for the asset
    */
-  async getUserAssetData(
-    user: string,
-    asset: string,
-    reward: string,
-  ): Promise<{ index: BigNumber; accrued: BigNumber }> {
-    const [index, accrued] = await this.contract.getUserAssetData(user, asset, reward);
-    return { index, accrued };
+  async getUserAssetIndex(user: string, asset: string, reward: string): Promise<BigNumber> {
+    return await this.contract.getUserAssetIndex(user, asset, reward);
   }
 
   /**
