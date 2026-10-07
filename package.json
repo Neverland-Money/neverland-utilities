@@ -36,7 +36,8 @@
     "release:check": "lerna changed",
     "release:latest": "NPM_CONFIG_PROVENANCE=true lerna publish --yes --conventional-commits --create-release github --message 'chore(release): publish [ci skip]'",
     "release:canary": "NPM_CONFIG_PROVENANCE=true lerna publish --canary --yes",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test:packages": "node scripts/check-packages.mjs"
   },
   "workspaces": [
     "packages/*"
@@ -65,29 +66,36 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.1.0",
-    "@commitlint/config-conventional": "^20.0.0",
-    "@commitlint/config-lerna-scopes": "^20.0.0",
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
+    "@commitlint/config-lerna-scopes": "^20.4.3",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.8.1",
-    "@typescript-eslint/eslint-plugin": "^8.46.1",
-    "@typescript-eslint/parser": "^8.46.1",
-    "commitizen": "^4.3.1",
+    "@types/node": "^24.19.1",
+    "@typescript-eslint/eslint-plugin": "^8.71.1",
+    "@typescript-eslint/parser": "^8.71.1",
+    "commitizen": "^4.3.2",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^9.38.0",
+    "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-config-xo": "^0.49.0",
     "eslint-config-xo-typescript": "^9.0.0",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-prettier": "^5.5.6",
     "husky": "^9.1.7",
-    "jest": "^30.2.0",
+    "jest": "^30.5.2",
     "jest-watch-typeahead": "^3.0.1",
-    "lerna": "^9.0.0",
-    "lint-staged": "^16.2.4",
-    "prettier": "^3.6.2",
-    "ts-jest": "^29.4.5",
+    "lerna": "^10.0.1",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.9.9",
+    "ts-jest": "^29.4.14",
     "typescript": "^5.9.3",
     "xo": "^1.2.3"
+  },
+  "resolutions": {
+    "@eslint/plugin-kit@npm:^0.2.7": "npm:0.3.5",
+    "js-yaml@npm:4.3.0": "npm:^4.3.2",
+    "pacote@npm:21.0.1": "npm:^21.5.1",
+    "undici@npm:7.29.0": "npm:^7.29.1",
+    "@istanbuljs/load-nyc-config/js-yaml": "npm:^4.3.2"
   }
 }

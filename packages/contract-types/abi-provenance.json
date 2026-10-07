@@ -1,0 +1,646 @@
+{
+  "schemaVersion": 1,
+  "hashFormat": "SHA-256 of UTF-8 JSON.stringify(abi), without whitespace or a trailing newline",
+  "sources": {
+    "neverland-contracts": {
+      "repository": "https://github.com/Neverland-Money/neverland-contracts",
+      "revision": "71c2d0658d6e12e61018156808f1bd6e9a24675c",
+      "compiler": "0.8.30+commit.73712a01",
+      "tool": "forge 1.5.1",
+      "settings": { "optimizer": true, "optimizerRuns": 200, "evmVersion": "cancun" },
+      "generation": "forge build src/ --use 0.8.30 --out <artifacts> --cache-path <scratch-cache>",
+      "artifactFormat": "Foundry"
+    },
+    "neverland-lending": {
+      "repository": "https://github.com/Neverland-Money/neverland-lending",
+      "revision": "a26582fcc24df718a57efd505d51d8cdeeed388d",
+      "package": "@neverland-money/lending-core@1.1.0",
+      "compiler": "0.8.10+commit.fc410830",
+      "tool": "Hardhat 2.26.3",
+      "settings": { "optimizer": true, "optimizerRuns": 100000, "evmVersion": "london" },
+      "generation": "npm run compile (SKIP_LOAD=true hardhat compile)",
+      "artifactFormat": "Hardhat"
+    },
+    "neverland-wrapped-tokens": {
+      "repository": "https://github.com/Neverland-Money/neverland-wrapped-tokens",
+      "revision": "5c6a9ed564f9f41308103c1be26d4731883d146c",
+      "compiler": "0.8.35+commit.47b9dedd",
+      "tool": "forge 1.5.1",
+      "settings": {
+        "optimizer": true,
+        "optimizerRuns": 200000,
+        "evmVersion": "prague",
+        "viaIR": false
+      },
+      "generation": "forge build src/StaticATokenLM.sol src/StaticATokenFactory.sol src/StataOracle.sol --use 0.8.35 --out <artifacts> --cache-path <scratch-cache>",
+      "artifactFormat": "Foundry",
+      "dependencies": {
+        "lib/aave-helpers": "1daafea0e7f7baafa82d2b386e284e3850abf048",
+        "lib/forge-std": "c22437a63d1c3418869bc35a7c55a5175a09b701"
+      }
+    },
+    "aave-v3-periphery": {
+      "repository": "https://github.com/aave/aave-v3-periphery",
+      "revision": "9afa82664affda1af6f472dfa9492b5feb0d32a9",
+      "compiler": "0.8.35+commit.47b9dedd",
+      "tool": "forge 1.5.1",
+      "settings": { "optimizer": true, "optimizerRuns": 200, "evmVersion": "cancun" },
+      "generation": "forge build lib/aave-v3-periphery/contracts/misc/{WalletBalanceProvider,UiPoolDataProviderV3,UiIncentiveDataProviderV3,WrappedTokenGatewayV3}.sol --use 0.8.35 --root <neverland-contracts> --out <artifacts> --cache-path <scratch-cache>",
+      "artifactFormat": "Foundry"
+    },
+    "contract-types-1.0.1": {
+      "package": "@neverland-money/contract-types@1.0.1",
+      "generation": "Retained unchanged from the published package; original compiler revision is not recorded.",
+      "artifactFormat": "ABI JSON"
+    },
+    "openzeppelin-contracts-v5": {
+      "repository": "https://github.com/OpenZeppelin/openzeppelin-contracts",
+      "revision": "5fd1781b1454fd1ef8e722282f86f9293cacf256",
+      "compiler": "0.8.35+commit.47b9dedd",
+      "tool": "forge 1.5.1",
+      "settings": { "optimizer": true, "optimizerRuns": 200, "evmVersion": "cancun" },
+      "generation": "forge build lib/openzeppelin-contracts-v5/contracts/interfaces/IERC4626.sol --use 0.8.35 --root <neverland-contracts> --out <artifacts> --cache-path <scratch-cache>",
+      "artifactFormat": "Foundry"
+    }
+  },
+  "abis": [
+    {
+      "export": "aTokenAbi",
+      "contract": "AToken",
+      "source": "neverland-lending",
+      "sourcePath": "contracts/protocol/tokenization/AToken.sol",
+      "artifact": "contracts/protocol/tokenization/AToken.sol/AToken.json",
+      "group": "lending",
+      "typeName": "ATokenAbi",
+      "sha256": "b11b3c8e67c9c26f4bd638dbec66e4db8602825f26cd73e90d9741c91af9d516",
+      "entries": { "constructor": 1, "function": 34, "event": 7, "error": 0 }
+    },
+    {
+      "export": "aaveOracleAbi",
+      "contract": "AaveOracle",
+      "source": "neverland-lending",
+      "sourcePath": "contracts/misc/AaveOracle.sol",
+      "artifact": "contracts/misc/AaveOracle.sol/AaveOracle.json",
+      "group": "lending",
+      "typeName": "AaveOracleAbi",
+      "sha256": "eddba4899431b35bfb046374cab319589a0984552da355aa28d661a8cee229e2",
+      "entries": { "constructor": 1, "function": 9, "event": 3, "error": 0 }
+    },
+    {
+      "export": "aaveProtocolDataProviderAbi",
+      "contract": "AaveProtocolDataProvider",
+      "source": "neverland-lending",
+      "sourcePath": "contracts/misc/AaveProtocolDataProvider.sol",
+      "artifact": "contracts/misc/AaveProtocolDataProvider.sol/AaveProtocolDataProvider.json",
+      "group": "lending",
+      "typeName": "AaveProtocolDataProviderAbi",
+      "sha256": "762c2c11724b15b6a0721d5d2c247fe748942754f808954bdcb13989a05fd5fd",
+      "entries": { "constructor": 1, "function": 19, "event": 0, "error": 0 }
+    },
+    {
+      "export": "aclManagerAbi",
+      "contract": "ACLManager",
+      "source": "neverland-lending",
+      "sourcePath": "contracts/protocol/configuration/ACLManager.sol",
+      "artifact": "contracts/protocol/configuration/ACLManager.sol/ACLManager.json",
+      "group": "lending",
+      "typeName": "AclManagerAbi",
+      "sha256": "3508e6d15f431d0b2d0a7fd9a3a05a111058bfdda6e98e4d6dd5f67d9ee556d3",
+      "entries": { "constructor": 1, "function": 33, "event": 3, "error": 0 }
+    },
+    {
+      "export": "defaultReserveInterestRateStrategyAbi",
+      "contract": "DefaultReserveInterestRateStrategy",
+      "source": "neverland-lending",
+      "sourcePath": "contracts/protocol/pool/DefaultReserveInterestRateStrategy.sol",
+      "artifact": "contracts/protocol/pool/DefaultReserveInterestRateStrategy.sol/DefaultReserveInterestRateStrategy.json",
+      "group": "lending",
+      "typeName": "DefaultReserveInterestRateStrategyAbi",
+      "sha256": "bb7df15c34107737fd4416a5217c7fbe87276be095041bf5326062953cde6c20",
+      "entries": { "constructor": 1, "function": 14, "event": 0, "error": 0 }
+    },
+    {
+      "export": "dustAbi",
+      "contract": "Dust",
+      "source": "neverland-contracts",
+      "sourcePath": "src/tokens/Dust.sol",
+      "artifact": "Dust.sol/Dust.json",
+      "group": "tokens",
+      "typeName": "DustAbi",
+      "sha256": "4e6a8b9d2d83e633d2685d9adc7153a2efc0a44b43609a93d8753df29a82d0e9",
+      "entries": { "constructor": 1, "function": 26, "event": 8, "error": 1 }
+    },
+    {
+      "export": "dustLockAbi",
+      "contract": "DustLock",
+      "source": "neverland-contracts",
+      "sourcePath": "src/tokens/DustLock.sol",
+      "artifact": "DustLock.sol/DustLock.json",
+      "group": "tokens",
+      "typeName": "DustLockAbi",
+      "sha256": "f40fe5f3e649c334d06d390ee7cf2c3192a2143e0f0c0d89bf023d8f02a2a7fc",
+      "entries": { "constructor": 1, "function": 81, "event": 27, "error": 38 }
+    },
+    {
+      "export": "dustLockLegendaryLedgerAbi",
+      "contract": "DustLockLegendaryLedger",
+      "source": "neverland-contracts",
+      "sourcePath": "src/tokens/DustLockLegendaryLedger.sol",
+      "artifact": "DustLockLegendaryLedger.sol/DustLockLegendaryLedger.json",
+      "group": "tokens",
+      "typeName": "DustLockLegendaryLedgerAbi",
+      "sha256": "f86f614d4a523357210b42336f117fe54711826902efd2632da488f552133418",
+      "entries": { "constructor": 1, "function": 15, "event": 6, "error": 12 }
+    },
+    {
+      "export": "dustLockTransferStrategyAbi",
+      "contract": "DustLockTransferStrategy",
+      "source": "neverland-contracts",
+      "sourcePath": "src/emissions/DustLockTransferStrategy.sol",
+      "artifact": "DustLockTransferStrategy.sol/DustLockTransferStrategy.json",
+      "group": "emissions",
+      "typeName": "DustLockTransferStrategyAbi",
+      "sha256": "29fdfd0d5787e0aae0a184c8da2448072543b15ab26198830d6e1f4a1881477a",
+      "entries": { "constructor": 1, "function": 10, "event": 2, "error": 12 }
+    },
+    {
+      "export": "dustRewardsControllerAbi",
+      "contract": "DustRewardsController",
+      "source": "neverland-contracts",
+      "sourcePath": "src/emissions/DustRewardsController.sol",
+      "artifact": "DustRewardsController.sol/DustRewardsController.json",
+      "group": "emissions",
+      "typeName": "DustRewardsControllerAbi",
+      "sha256": "a3654ff92ab757121c25be6cd03748aee6201527af28cb36ac31686d7ed8a63a",
+      "entries": { "constructor": 1, "function": 28, "event": 5, "error": 8 }
+    },
+    {
+      "export": "epochManagerAbi",
+      "contract": "EpochManager",
+      "source": "neverland-contracts",
+      "sourcePath": "src/leaderboard/EpochManager.sol",
+      "artifact": "EpochManager.sol/EpochManager.json",
+      "group": "leaderboard",
+      "typeName": "EpochManagerAbi",
+      "sha256": "8e36dee7f7de86849533237c7f1799b1b79d770587205c2f431bd7301fe03f83",
+      "entries": { "constructor": 1, "function": 16, "event": 4, "error": 4 }
+    },
+    {
+      "export": "erc20Abi",
+      "source": "contract-types-1.0.1",
+      "group": "standards",
+      "typeName": "Erc20Abi",
+      "sha256": "055cccbc5f4fe16fcd2e521fda5d663671a03be24c5c2df80776c31bcf248204",
+      "entries": { "constructor": 1, "function": 27, "event": 11, "error": 1 }
+    },
+    {
+      "export": "erc4626Abi",
+      "contract": "IERC4626",
+      "source": "openzeppelin-contracts-v5",
+      "sourcePath": "contracts/interfaces/IERC4626.sol",
+      "artifact": "IERC4626.sol/IERC4626.json",
+      "group": "standards",
+      "typeName": "Erc4626Abi",
+      "sha256": "21601214b2121bf13d962435b13e4fd8e5349b197afcd708c25f7704da316d6c",
+      "entries": { "constructor": 0, "function": 25, "event": 4, "error": 0 }
+    },
+    {
+      "export": "governedPriceOracleAbi",
+      "contract": "GovernedPriceOracle",
+      "source": "neverland-contracts",
+      "sourcePath": "src/oracles/GovernedPriceOracle.sol",
+      "artifact": "GovernedPriceOracle.sol/GovernedPriceOracle.json",
+      "group": "oracles",
+      "typeName": "GovernedPriceOracleAbi",
+      "sha256": "c47f6e32bd58499d53bd3c357a6cc1834535433358ce68714a0fecb662c4c169",
+      "entries": { "constructor": 1, "function": 16, "event": 5, "error": 3 }
+    },
+    {
+      "export": "hardcodedPriceOracleAbi",
+      "contract": "HardcodedPriceOracle",
+      "source": "neverland-contracts",
+      "sourcePath": "src/oracles/HardcodedPriceOracle.sol",
+      "artifact": "HardcodedPriceOracle.sol/HardcodedPriceOracle.json",
+      "group": "oracles",
+      "typeName": "HardcodedPriceOracleAbi",
+      "sha256": "7c0d1a4eb9291ee0759afc461f787569e0c61eb4d8fcc49a08207462ab7a68d1",
+      "entries": { "constructor": 1, "function": 10, "event": 2, "error": 1 }
+    },
+    {
+      "export": "leaderboardConfigAbi",
+      "contract": "LeaderboardConfig",
+      "source": "neverland-contracts",
+      "sourcePath": "src/leaderboard/LeaderboardConfig.sol",
+      "artifact": "LeaderboardConfig.sol/LeaderboardConfig.json",
+      "group": "leaderboard",
+      "typeName": "LeaderboardConfigAbi",
+      "sha256": "6f4da2b4b1744b8ac5faf7ecc8d9589e7e3a8d421b2774caaf82ec0743cf63bb",
+      "entries": { "constructor": 1, "function": 47, "event": 16, "error": 7 }
+    },
+    {
+      "export": "leaderboardKeeperAbi",
+      "contract": "LeaderboardKeeper",
+      "source": "neverland-contracts",
+      "sourcePath": "src/leaderboard/LeaderboardKeeper.sol",
+      "artifact": "LeaderboardKeeper.sol/LeaderboardKeeper.json",
+      "group": "leaderboard",
+      "typeName": "LeaderboardKeeperAbi",
+      "sha256": "5bc9010a30766441802b21faf84c31062261ffd07a6ca0d075eb9b014e5e87fa",
+      "entries": { "constructor": 1, "function": 20, "event": 10, "error": 5 }
+    },
+    {
+      "export": "marketHoursPriceAdapterAbi",
+      "contract": "MarketHoursPriceAdapter",
+      "source": "neverland-contracts",
+      "sourcePath": "src/oracles/MarketHoursPriceAdapter.sol",
+      "artifact": "MarketHoursPriceAdapter.sol/MarketHoursPriceAdapter.json",
+      "group": "oracles",
+      "typeName": "MarketHoursPriceAdapterAbi",
+      "sha256": "12daf9fa25382c84a64aa22859069c179e9c0fee3324fae779d2c2f29462b149",
+      "entries": { "constructor": 1, "function": 12, "event": 0, "error": 7 }
+    },
+    {
+      "export": "marketHoursSentinelAbi",
+      "contract": "MarketHoursSentinel",
+      "source": "neverland-contracts",
+      "sourcePath": "src/risk/MarketHoursSentinel.sol",
+      "artifact": "MarketHoursSentinel.sol/MarketHoursSentinel.json",
+      "group": "risk",
+      "typeName": "MarketHoursSentinelAbi",
+      "sha256": "f24245b700f850e01cf2deca7c62935655cc2df7f37b8ea45b9cbc1ea5e9b203",
+      "entries": { "constructor": 1, "function": 8, "event": 1, "error": 4 }
+    },
+    {
+      "export": "multicall3Abi",
+      "source": "contract-types-1.0.1",
+      "group": "standards",
+      "typeName": "Multicall3Abi",
+      "sha256": "2407bc7c0820a63c0b5221e3344b86d28de2f2166b78a098361cab65d5506c4e",
+      "entries": { "constructor": 0, "function": 16, "event": 0, "error": 0 }
+    },
+    {
+      "export": "neverlandAssetRedemptionAbi",
+      "contract": "NeverlandAssetRedemption",
+      "source": "neverland-contracts",
+      "sourcePath": "src/utils/NeverlandAssetRedemption.sol",
+      "artifact": "NeverlandAssetRedemption.sol/NeverlandAssetRedemption.json",
+      "group": "utils",
+      "typeName": "NeverlandAssetRedemptionAbi",
+      "sha256": "d5cc881cfd3275b0ff5531dcbebe473db12d229ca26ea84084b88db039117dc5",
+      "entries": { "constructor": 1, "function": 21, "event": 8, "error": 14 }
+    },
+    {
+      "export": "neverlandDustHelperAbi",
+      "contract": "NeverlandDustHelper",
+      "source": "neverland-contracts",
+      "sourcePath": "src/utils/NeverlandDustHelper.sol",
+      "artifact": "NeverlandDustHelper.sol/NeverlandDustHelper.json",
+      "group": "utils",
+      "typeName": "NeverlandDustHelperAbi",
+      "sha256": "152d4552fdd4e742988418eea39b960c0cee0d38c672d63f12112b85862ee110",
+      "entries": { "constructor": 1, "function": 63, "event": 15, "error": 13 }
+    },
+    {
+      "export": "neverlandNativeGatewayAbi",
+      "contract": "NeverlandNativeGateway",
+      "source": "neverland-contracts",
+      "sourcePath": "src/utils/NeverlandNativeGateway.sol",
+      "artifact": "NeverlandNativeGateway.sol/NeverlandNativeGateway.json",
+      "group": "utils",
+      "typeName": "NeverlandNativeGatewayAbi",
+      "sha256": "02f86c48c53199501a4d5bba423e24da9c98aa0aa674b2a6915c8c40fbf5b601",
+      "entries": { "constructor": 1, "function": 14, "event": 4, "error": 12 }
+    },
+    {
+      "export": "neverlandPendleLeveragerAbi",
+      "contract": "NeverlandPendleLeverager",
+      "source": "neverland-contracts",
+      "sourcePath": "src/utils/NeverlandPendleLeverager.sol",
+      "artifact": "NeverlandPendleLeverager.sol/NeverlandPendleLeverager.json",
+      "group": "utils",
+      "typeName": "NeverlandPendleLeveragerAbi",
+      "sha256": "64236e1f5134390113eb174e417039dc629aac5fbb8d669d3507079612d276b7",
+      "entries": { "constructor": 1, "function": 30, "event": 6, "error": 26 }
+    },
+    {
+      "export": "neverlandPendleMaturityGatewayAbi",
+      "contract": "NeverlandPendleMaturityGateway",
+      "source": "neverland-contracts",
+      "sourcePath": "src/utils/NeverlandPendleMaturityGateway.sol",
+      "artifact": "NeverlandPendleMaturityGateway.sol/NeverlandPendleMaturityGateway.json",
+      "group": "utils",
+      "typeName": "NeverlandPendleMaturityGatewayAbi",
+      "sha256": "59cc2a09223ccfdb4c4f68d2a73f8034d9215f8f76a221d30a65fac411c815f1",
+      "entries": { "constructor": 1, "function": 30, "event": 7, "error": 26 }
+    },
+    {
+      "export": "neverlandProfileItemsSellerAbi",
+      "contract": "NeverlandProfileItemsSeller",
+      "source": "neverland-contracts",
+      "sourcePath": "src/utils/NeverlandProfileItemsSeller.sol",
+      "artifact": "NeverlandProfileItemsSeller.sol/NeverlandProfileItemsSeller.json",
+      "group": "utils",
+      "typeName": "NeverlandProfileItemsSellerAbi",
+      "sha256": "c7621c850f6b214f9548f6d75b9f8e4d49b00815a163f9e3f47d845ae05c81d4",
+      "entries": { "constructor": 1, "function": 24, "event": 8, "error": 17 }
+    },
+    {
+      "export": "neverlandTimelockControllerAbi",
+      "contract": "NeverlandTimelockController",
+      "source": "neverland-contracts",
+      "sourcePath": "src/governance/NeverlandTimelockController.sol",
+      "artifact": "NeverlandTimelockController.sol/NeverlandTimelockController.json",
+      "group": "governance",
+      "typeName": "NeverlandTimelockControllerAbi",
+      "sha256": "8e68e4bdd6df16eca2ba7ea75fb1d462185bead4523a6a00b5c896ca39c656c0",
+      "entries": { "constructor": 1, "function": 29, "event": 8, "error": 9 }
+    },
+    {
+      "export": "neverlandUiProviderAbi",
+      "contract": "NeverlandUiProvider",
+      "source": "neverland-contracts",
+      "sourcePath": "src/utils/NeverlandUiProvider.sol",
+      "artifact": "NeverlandUiProvider.sol/NeverlandUiProvider.json",
+      "group": "utils",
+      "typeName": "NeverlandUiProviderAbi",
+      "sha256": "2f14ae8c3dc95fc579f9da56fdc57f934eea530c1e00de2f83ce140cc181d678",
+      "entries": { "constructor": 1, "function": 20, "event": 0, "error": 2 }
+    },
+    {
+      "export": "nftPartnershipRegistryAbi",
+      "contract": "NFTPartnershipRegistry",
+      "source": "neverland-contracts",
+      "sourcePath": "src/leaderboard/NFTPartnershipRegistry.sol",
+      "artifact": "NFTPartnershipRegistry.sol/NFTPartnershipRegistry.json",
+      "group": "leaderboard",
+      "typeName": "NftPartnershipRegistryAbi",
+      "sha256": "6b1a75594096e78698295be0bb320d646b910c373ad4df710e711c4ce2e64932",
+      "entries": { "constructor": 1, "function": 19, "event": 6, "error": 7 }
+    },
+    {
+      "export": "pendlePtDiscountOracleAdapterAbi",
+      "contract": "PendlePtDiscountOracleAdapter",
+      "source": "neverland-contracts",
+      "sourcePath": "src/oracles/PendlePtDiscountOracleAdapter.sol",
+      "artifact": "PendlePtDiscountOracleAdapter.sol/PendlePtDiscountOracleAdapter.json",
+      "group": "oracles",
+      "typeName": "PendlePtDiscountOracleAdapterAbi",
+      "sha256": "d2d8dff42e1049fa65978e5dd729df1fef459c77deeb7af2868ce9fdbfb327db",
+      "entries": { "constructor": 1, "function": 24, "event": 5, "error": 10 }
+    },
+    {
+      "export": "poolAbi",
+      "contract": "Pool",
+      "source": "neverland-lending",
+      "sourcePath": "contracts/protocol/pool/Pool.sol",
+      "artifact": "contracts/protocol/pool/Pool.sol/Pool.json",
+      "group": "lending",
+      "typeName": "PoolAbi",
+      "sha256": "3bc63868b8e762172d0cd95ef542dd6e190c8204a05f695b1a4591735ca54baf",
+      "entries": { "constructor": 1, "function": 48, "event": 16, "error": 0 }
+    },
+    {
+      "export": "poolAddressesProviderAbi",
+      "contract": "PoolAddressesProvider",
+      "source": "neverland-lending",
+      "sourcePath": "contracts/protocol/configuration/PoolAddressesProvider.sol",
+      "artifact": "contracts/protocol/configuration/PoolAddressesProvider.sol/PoolAddressesProvider.json",
+      "group": "lending",
+      "typeName": "PoolAddressesProviderAbi",
+      "sha256": "4f839bf46dd7cf369910e3ad0f60d1ff5a5e4643d7ed30a74c71c90412ef5266",
+      "entries": { "constructor": 1, "function": 22, "event": 12, "error": 0 }
+    },
+    {
+      "export": "poolAddressesProviderRegistryAbi",
+      "contract": "PoolAddressesProviderRegistry",
+      "source": "neverland-lending",
+      "sourcePath": "contracts/protocol/configuration/PoolAddressesProviderRegistry.sol",
+      "artifact": "contracts/protocol/configuration/PoolAddressesProviderRegistry.sol/PoolAddressesProviderRegistry.json",
+      "group": "lending",
+      "typeName": "PoolAddressesProviderRegistryAbi",
+      "sha256": "f6e1f1c8ee14e7968469e6a11e98449fcf5e14187cad220a4cba9c67df84fc05",
+      "entries": { "constructor": 1, "function": 8, "event": 3, "error": 0 }
+    },
+    {
+      "export": "poolConfiguratorAbi",
+      "contract": "PoolConfigurator",
+      "source": "neverland-lending",
+      "sourcePath": "contracts/protocol/pool/PoolConfigurator.sol",
+      "artifact": "contracts/protocol/pool/PoolConfigurator.sol/PoolConfigurator.json",
+      "group": "lending",
+      "typeName": "PoolConfiguratorAbi",
+      "sha256": "e2615a9a42b2feabebd991f80bcba45cfdbcd1a6873bf68a2b3e1063b0dcd4e1",
+      "entries": { "constructor": 0, "function": 29, "event": 26, "error": 0 }
+    },
+    {
+      "export": "ratioOracleAggregatorAbi",
+      "contract": "RatioOracleAggregator",
+      "source": "neverland-contracts",
+      "sourcePath": "src/oracles/RatioOracleAggregator.sol",
+      "artifact": "RatioOracleAggregator.sol/RatioOracleAggregator.json",
+      "group": "oracles",
+      "typeName": "RatioOracleAggregatorAbi",
+      "sha256": "337e471e29bfaecb297f8552c11fe115f1d2a7dc98ca4eae1e3704420dfe79a0",
+      "entries": { "constructor": 1, "function": 15, "event": 2, "error": 6 }
+    },
+    {
+      "export": "revenueRewardAbi",
+      "contract": "RevenueReward",
+      "source": "neverland-contracts",
+      "sourcePath": "src/rewards/RevenueReward.sol",
+      "artifact": "RevenueReward.sol/RevenueReward.json",
+      "group": "rewards",
+      "typeName": "RevenueRewardAbi",
+      "sha256": "76ccf50331855e541e3d5aa61841321ba521019c9f5afd5c0f7074eb060d87bb",
+      "entries": { "constructor": 1, "function": 45, "event": 6, "error": 12 }
+    },
+    {
+      "export": "sessionCalendarAbi",
+      "contract": "SessionCalendar",
+      "source": "neverland-contracts",
+      "sourcePath": "src/oracles/SessionCalendar.sol",
+      "artifact": "SessionCalendar.sol/SessionCalendar.json",
+      "group": "oracles",
+      "typeName": "SessionCalendarAbi",
+      "sha256": "d86fe1e1fe45dcbe485ba00f33fc3f0cfa7f59c2c2accd1c51a323eb373ff389",
+      "entries": { "constructor": 0, "function": 17, "event": 5, "error": 12 }
+    },
+    {
+      "export": "specialEditionRegistryAbi",
+      "contract": "SpecialEditionRegistry",
+      "source": "neverland-contracts",
+      "sourcePath": "src/leaderboard/SpecialEditionRegistry.sol",
+      "artifact": "SpecialEditionRegistry.sol/SpecialEditionRegistry.json",
+      "group": "leaderboard",
+      "typeName": "SpecialEditionRegistryAbi",
+      "sha256": "feda67374f263f37b172c8ab7a1afb8da375fed0df7af688b1908867b261a118",
+      "entries": { "constructor": 1, "function": 20, "event": 9, "error": 14 }
+    },
+    {
+      "export": "stableDebtTokenAbi",
+      "contract": "StableDebtToken",
+      "source": "neverland-lending",
+      "sourcePath": "contracts/protocol/tokenization/StableDebtToken.sol",
+      "artifact": "contracts/protocol/tokenization/StableDebtToken.sol/StableDebtToken.json",
+      "group": "lending",
+      "typeName": "StableDebtTokenAbi",
+      "sha256": "ca90069b8ded4fc0bd8b9e2ce2ab01a16354ad2f3f10892284f212c915b895ce",
+      "entries": { "constructor": 1, "function": 33, "event": 6, "error": 0 }
+    },
+    {
+      "export": "stataOracleAbi",
+      "contract": "StataOracle",
+      "source": "neverland-wrapped-tokens",
+      "sourcePath": "src/StataOracle.sol",
+      "artifact": "StataOracle.sol/StataOracle.json",
+      "group": "wrapped-tokens",
+      "typeName": "StataOracleAbi",
+      "sha256": "e26ad014dacd9eba0a743524221390af6bcf7e18c85aa01e2eccd1372092ec04",
+      "entries": { "constructor": 1, "function": 4, "event": 0, "error": 0 }
+    },
+    {
+      "export": "staticATokenFactoryAbi",
+      "contract": "StaticATokenFactory",
+      "source": "neverland-wrapped-tokens",
+      "sourcePath": "src/StaticATokenFactory.sol",
+      "artifact": "StaticATokenFactory.sol/StaticATokenFactory.json",
+      "group": "wrapped-tokens",
+      "typeName": "StaticATokenFactoryAbi",
+      "sha256": "f44d00beb6110ee126fb9b820966f88f50133bac22b1a6aa84e1feea43856aad",
+      "entries": { "constructor": 1, "function": 8, "event": 2, "error": 0 }
+    },
+    {
+      "export": "staticATokenLMAbi",
+      "contract": "StaticATokenLM",
+      "source": "neverland-wrapped-tokens",
+      "sourcePath": "src/StaticATokenLM.sol",
+      "artifact": "StaticATokenLM.sol/StaticATokenLM.json",
+      "group": "wrapped-tokens",
+      "typeName": "StaticATokenLMAbi",
+      "sha256": "f2f550d9f480e87fde685630b9c2f42486c6f785845b0a1b148f024fafa59efb",
+      "entries": { "constructor": 1, "function": 58, "event": 7, "error": 4 }
+    },
+    {
+      "export": "uiIncentiveDataProviderV3Abi",
+      "contract": "UiIncentiveDataProviderV3",
+      "source": "aave-v3-periphery",
+      "sourcePath": "contracts/misc/UiIncentiveDataProviderV3.sol",
+      "artifact": "UiIncentiveDataProviderV3.sol/UiIncentiveDataProviderV3.json",
+      "group": "periphery",
+      "typeName": "UiIncentiveDataProviderV3Abi",
+      "sha256": "70f3e51d2ee60998219a40bd183cb058d8404fbdc52ad7ecb14dc194d5594083",
+      "entries": { "constructor": 0, "function": 3, "event": 0, "error": 0 }
+    },
+    {
+      "export": "uiPoolDataProviderV3Abi",
+      "contract": "UiPoolDataProviderV3",
+      "source": "aave-v3-periphery",
+      "sourcePath": "contracts/misc/UiPoolDataProviderV3.sol",
+      "artifact": "UiPoolDataProviderV3.sol/UiPoolDataProviderV3.json",
+      "group": "periphery",
+      "typeName": "UiPoolDataProviderV3Abi",
+      "sha256": "38d2915a4691d60f07046c44dda4c47238fe084f5d29489ecaa393ac4cd4eeb8",
+      "entries": { "constructor": 1, "function": 8, "event": 0, "error": 0 }
+    },
+    {
+      "export": "userVaultAbi",
+      "contract": "UserVault",
+      "source": "neverland-contracts",
+      "sourcePath": "src/self-repaying-loans/UserVault.sol",
+      "artifact": "UserVault.sol/UserVault.json",
+      "group": "self-repaying-loans",
+      "typeName": "UserVaultAbi",
+      "sha256": "bd80cca19be19d43e568c9f78cf6679a0dac54c9c385ff1984c591ece57f5e03",
+      "entries": { "constructor": 1, "function": 12, "event": 2, "error": 12 }
+    },
+    {
+      "export": "userVaultFactoryAbi",
+      "contract": "UserVaultFactory",
+      "source": "neverland-contracts",
+      "sourcePath": "src/self-repaying-loans/UserVaultFactory.sol",
+      "artifact": "UserVaultFactory.sol/UserVaultFactory.json",
+      "group": "self-repaying-loans",
+      "typeName": "UserVaultFactoryAbi",
+      "sha256": "a3130c1aecf7ac4f0ac6246674dfdce55befbc7d24ed4b5c9bde046fb39a3bc2",
+      "entries": { "constructor": 0, "function": 6, "event": 2, "error": 1 }
+    },
+    {
+      "export": "userVaultRegistryAbi",
+      "contract": "UserVaultRegistry",
+      "source": "neverland-contracts",
+      "sourcePath": "src/self-repaying-loans/UserVaultRegistry.sol",
+      "artifact": "UserVaultRegistry.sol/UserVaultRegistry.json",
+      "group": "self-repaying-loans",
+      "typeName": "UserVaultRegistryAbi",
+      "sha256": "d6e7b31925d6fa6bde526dc5107e3c8634aa4a9c8d924b9597745c3c367f4f7e",
+      "entries": { "constructor": 0, "function": 11, "event": 5, "error": 1 }
+    },
+    {
+      "export": "variableDebtTokenAbi",
+      "contract": "VariableDebtToken",
+      "source": "neverland-lending",
+      "sourcePath": "contracts/protocol/tokenization/VariableDebtToken.sol",
+      "artifact": "contracts/protocol/tokenization/VariableDebtToken.sol/VariableDebtToken.json",
+      "group": "lending",
+      "typeName": "VariableDebtTokenAbi",
+      "sha256": "04e306d947e8d821a3d613d4681d81c812145274fa37d759ef278dd2a76fe88e",
+      "entries": { "constructor": 1, "function": 30, "event": 7, "error": 0 }
+    },
+    {
+      "export": "votingPowerMultiplierAbi",
+      "contract": "VotingPowerMultiplier",
+      "source": "neverland-contracts",
+      "sourcePath": "src/leaderboard/VotingPowerMultiplier.sol",
+      "artifact": "VotingPowerMultiplier.sol/VotingPowerMultiplier.json",
+      "group": "leaderboard",
+      "typeName": "VotingPowerMultiplierAbi",
+      "sha256": "6a5fe01c1f97e8901c4e36501ba69b64024b072631b744b04a32f39735fb940a",
+      "entries": { "constructor": 1, "function": 15, "event": 5, "error": 4 }
+    },
+    {
+      "export": "walletBalanceProviderAbi",
+      "contract": "WalletBalanceProvider",
+      "source": "aave-v3-periphery",
+      "sourcePath": "contracts/misc/WalletBalanceProvider.sol",
+      "artifact": "WalletBalanceProvider.sol/WalletBalanceProvider.json",
+      "group": "periphery",
+      "typeName": "WalletBalanceProviderAbi",
+      "sha256": "e974292571bbf2dd661f9529921cb80560bbd066311f8c511b5a3c4abe750bcc",
+      "entries": { "constructor": 0, "function": 3, "event": 0, "error": 0 }
+    },
+    {
+      "export": "wethGatewayLegacyAbi",
+      "source": "contract-types-1.0.1",
+      "group": "standards",
+      "typeName": "WethGatewayLegacyAbi",
+      "sha256": "000dcaf7e9f973054d1651c14bad2ca3779bf2f35931eb5ef440723d462b1fec",
+      "entries": { "constructor": 1, "function": 11, "event": 1, "error": 0 }
+    },
+    {
+      "export": "wrappedTokenGatewayV3Abi",
+      "contract": "WrappedTokenGatewayV3",
+      "source": "aave-v3-periphery",
+      "sourcePath": "contracts/misc/WrappedTokenGatewayV3.sol",
+      "artifact": "WrappedTokenGatewayV3.sol/WrappedTokenGatewayV3.json",
+      "group": "periphery",
+      "typeName": "WrappedTokenGatewayV3Abi",
+      "sha256": "777221e643d6dcda579da443913326e5811bd9c67af16a2fc0bc2d28b5cdbda2",
+      "entries": { "constructor": 1, "function": 11, "event": 1, "error": 0 }
+    },
+    {
+      "export": "yieldBearingOracleAdapterAbi",
+      "contract": "YieldBearingOracleAdapter",
+      "source": "neverland-contracts",
+      "sourcePath": "src/oracles/YieldBearingOracleAdapter.sol",
+      "artifact": "YieldBearingOracleAdapter.sol/YieldBearingOracleAdapter.json",
+      "group": "oracles",
+      "typeName": "YieldBearingOracleAdapterAbi",
+      "sha256": "bb58f10de00a00f1337dbd3a870858b0d8305fb7a9cb17d6f3d0c11cc3e6541c",
+      "entries": { "constructor": 1, "function": 36, "event": 9, "error": 16 }
+    }
+  ],
+  "aliases": {
+    "dustLockLegendaryGatewayAbi": "dustLockLegendaryLedgerAbi",
+    "staticATokenAbi": "staticATokenLMAbi"
+  }
+}

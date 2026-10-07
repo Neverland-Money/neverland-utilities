@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://storage.googleapis.com/coderabbit_public_assets/schema.v2.json
+
+reviews:
+  path_filters:
+    # Compiled ABI snapshots and generated types are verified by check:abis.
+    # Review abi-provenance.json, scripts/generate-abis.mjs, and tests instead.
+    - '!packages/contract-types/src/abis/*Abi.json'
+    - '!packages/contract-types/src/abis/*Abi.ts'
+    - '!packages/contract-types/src/abis/index.ts'
+    - '!packages/contract-types/src/types.ts'
+    # Package manager cache and generated metadata.
+    - '!.yarn/**'
+    # Build and test output.
+    - '!packages/*/dist/**'
+    - '!coverage/**'
+    - '!**/*.tsbuildinfo'

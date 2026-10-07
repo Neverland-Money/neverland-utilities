@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-types@1.0.1...@neverland-money/contract-types@1.1.0) (2026-10-07)
+
+### Features
+
+- **contract-types:** expand to 53 ABI families covering the lending Pool and infrastructure,
+  receipt and debt tokens, static wrappers and factory, lending data providers, all public Neverland
+  contracts, gateways, self-repaying loans, governance, leaderboard, oracles, and market safety.
+- **contract-types:** add `staticATokenAbi` and `dustLockLegendaryGatewayAbi` aliases for the
+  canonical `StaticATokenLM` and `DustLockLegendaryLedger` contracts.
+- **contract-types:** generate precise readonly ABI literal types from the JSON snapshots so viem
+  infers contract function names, arguments, returns, and events. Export ABI-derived function and
+  event type utilities. The existing nine runtime ABI values and export names are unchanged; invalid
+  TypeScript calls or assignments previously accepted by general `Abi` casts can now fail.
+- **contract-types:** publish per-family ABI provenance with source revisions, artifact paths,
+  compiler settings, entry counts, and hashes. Add reproducible artifact import and generated-output
+  checks to the build.
+- **contract-types:** cover the public catalog, calldata and tuple decoding, type inference and
+  rejected invalid calls, artifact import, and stale generated exports.
+
+### Bug Fixes
+
+- **contract-types:** require viem 2.57.3 or newer so fresh npm installations receive patched
+  WebSocket dependencies. Refresh abitype and tslib and run TypeScript checks directly.
+
 ## [1.0.1](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-types@1.0.0...@neverland-money/contract-types@1.0.1) (2026-10-07)
 
 ### Bug Fixes
