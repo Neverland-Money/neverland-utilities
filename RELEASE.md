@@ -1,8 +1,9 @@
 # Prepared releases: 2026-10-07
 
 Prepared on `release/contract-types-helpers-2.0.0`, following the merge of PR #3 at
-`7ba8a3665f2d089c713c357b527c3cba34104ca6`. No staging, commits, pushes, tags, or publication were
-performed by the release preparation agent.
+`7ba8a3665f2d089c713c357b527c3cba34104ca6`. Initial release preparation made no Git writes. The
+October 8 CodeRabbit follow-up fixes the root ethers v6 example, restores ESLint execution, and
+records the configured UI contract address when a bundle read fails. Nothing has been published.
 
 The three npm packages build and pass isolated consumption checks with zero production
 vulnerabilities. The workspace still has an unpatched tooling advisory and does **not** meet the
@@ -44,22 +45,25 @@ snapshots changed during this preparation.
 
 ## Validation
 
+Revalidated locally on October 8 after the CodeRabbit follow-up.
+
 Environment: Node 24.15.0, Yarn 4.3.1, npm 11.12.1, TypeScript 5.9.3, Linux x64.
 
-| Check                                     | Result                                       |
-| ----------------------------------------- | -------------------------------------------- |
-| `yarn install --immutable`                | Pass; existing nonfatal peer warnings        |
-| Clean `yarn build`                        | All three CJS/ESM builds pass, no cache hits |
-| `yarn check-types`                        | All three packages pass                      |
-| `yarn tsc -p tsconfig.test.json --noEmit` | Pass                                         |
-| `yarn test --runInBand`                   | 13 suites, 200 tests pass                    |
-| `yarn test:packages`                      | Pass, including zero production advisories   |
-| Isolated npm production audit             | Zero vulnerabilities                         |
-| Browser ESM bundle and execution          | All three ESM entrypoints and 55 ABI exports |
-| Prettier on all changed text files        | Pass                                         |
-| `git diff --check HEAD`                   | Pass                                         |
-| `yarn lint`                               | Existing ESLint configuration failure        |
-| Full workspace Yarn audit                 | One security advisory; four deprecations     |
+| Check                                     | Result                                              |
+| ----------------------------------------- | --------------------------------------------------- |
+| `yarn install --immutable`                | Pass; existing nonfatal peer warnings               |
+| Clean `yarn build`                        | All three CJS/ESM builds pass, no cache hits        |
+| `yarn check-types`                        | All three packages pass                             |
+| `yarn tsc -p tsconfig.test.json --noEmit` | Pass                                                |
+| `yarn test --runInBand`                   | 13 suites, 201 tests pass                           |
+| `yarn test:packages`                      | Pass, including zero production advisories          |
+| Isolated npm production audit             | Zero vulnerabilities                                |
+| Browser ESM bundle and execution          | All three ESM entrypoints and 55 ABI exports        |
+| Prettier on all changed text files        | Pass                                                |
+| `git diff --check HEAD`                   | Pass                                                |
+| ESLint configuration smoke checks         | Pass; JS, TS, JSON, Jest globals, generated ignores |
+| Full source ESLint scan                   | Runs; 601 errors, 6 warnings, zero fatal errors     |
+| Full workspace Yarn audit                 | One security advisory; four deprecations            |
 
 The package checker now verifies release metadata, tarball versions and contents, public CJS and
 native Node imports, Pool calldata, ethers v6 public numeric types, and strict declarations in Node,
@@ -68,6 +72,11 @@ and rejects any advisories. New migration coverage exercises gas estimation and 
 transaction population, static multicall timestamps, safe integer conversion, revenue aggregation,
 and the unchanged APR fallback. The bigint balance regression failed against ethers v5 before the
 migration and passes with ethers v6.
+
+The UI diagnostic regression uses a real ethers v6 contract and a rejected provider call. It failed
+with an undefined contract address before the fix and passes with `contract.target`. An isolated
+install of the new helper tarball also preserves the error, user address, and nullable return while
+logging the configured contract address.
 
 An additional isolated consumer executed actual ethers v6 balance reads against a mocked call,
 populated a gateway deposit, bundled every package through `dist/esm`, and retained all 55 ABI
@@ -86,9 +95,16 @@ requires a maintained replacement for the affected tooling dependency chain or a
 fix. No advisories or severity levels were ignored or excluded from the workspace audit. The
 elliptic and pinned WebSocket advisories from ethers v5 are no longer present.
 
-ESLint 9 expects `eslint.config.js`, while the repository still uses `.eslintrc.js`. `yarn lint`
-fails before linting sources; this configuration mismatch predates the release preparation. Build,
-type, unit, and package checks pass, but lint is not reported as passing.
+The legacy ESLint configuration failed before linting with an invalid `__esModule` property from the
+modern XO preset. The follow-up replaces it with `eslint.config.mjs`, retains XO and Prettier rules
+and the existing overrides, declares the imported `globals` dependency, and uses the existing test
+TypeScript project. Generated ABI and build files are ignored. Quoted workspace lint globs ensure
+ESLint visits root source files and nested tests. CodeRabbit's ESLint tool remains enabled.
+
+ESLint now completes source analysis, but the restored rules report 601 errors and 6 warnings across
+33 authored TypeScript files. `yarn lint` remains nonzero because of those source diagnostics, not a
+configuration or dependency failure. A passing lint gate requires separate source cleanup or a
+reviewed lint-policy change; neither is represented as completed here.
 
 ## Operator release steps
 
@@ -104,6 +120,7 @@ yarn check-types
 yarn tsc -p tsconfig.test.json --noEmit
 yarn test --runInBand
 yarn test:packages
+yarn lint
 yarn npm audit --all --recursive
 ```
 
@@ -122,13 +139,14 @@ After successful npm publication, create and push the corresponding release tags
 ## Prepared artifacts
 
 Tarballs, package inventories, the isolated consumer, production audit, and bundle metadata are
-retained in `/tmp/neverland-release-prep-GY7eA5`. Command logs are under
-`/tmp/neverland-release-*.log`; workspace audit evidence is `/tmp/neverland-ethers-v6-audit.jsonl`.
-These temporary artifacts are local evidence, not committed package contents. Repack and revalidate
-if a package manifest, README, changelog, or build changes.
+retained in `/tmp/neverland-rabbit-release-4-PVj24f` for the October 8 follow-up. Validation logs
+and workspace audit evidence are under its `validation` directory. The earlier artifacts in
+`/tmp/neverland-release-prep-GY7eA5` describe the original preparation and are superseded. These
+temporary artifacts are local evidence, not committed package contents. Repack and revalidate if a
+package manifest, README, changelog, or build changes.
 
 | Tarball                                      | Files | SHA-256                                                            |
 | -------------------------------------------- | ----- | ------------------------------------------------------------------ |
-| `neverland-money-contract-types-2.0.0.tgz`   | 558   | `8f681e93310fe8e62f9f3558fe86db2cf66deab00abe0f37ebf5a2952efb65eb` |
-| `neverland-money-contract-helpers-2.0.0.tgz` | 139   | `dad45ba5ab05e89e88a598a631f91cd68b0894f9c672b88ee7b03c9a71878679` |
-| `neverland-money-address-book-1.0.2.tgz`     | 19    | `a98e7091bc4381c152351e47c08bac210c82cc75709f1178341fabdd767e0614` |
+| `neverland-money-contract-types-2.0.0.tgz`   | 558   | `081f6d0976720fbdbf7b9e1ab0010ef39a919d3f7e1853303eca7514b6b9405b` |
+| `neverland-money-contract-helpers-2.0.0.tgz` | 139   | `7178d5c1fa5112f2c14c786cf35d06734eba40ce24ce9295f5fd2c22506ca890` |
+| `neverland-money-address-book-1.0.2.tgz`     | 19    | `dc94eaa72a107946b86045aaf8068de4cad2baf93d7424a00fa022adc2dea496` |

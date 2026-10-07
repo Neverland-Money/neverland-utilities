@@ -59,6 +59,19 @@ const pagedBy = <T>(pages: Record<number, T | Error>) =>
   });
 const ids = (values: bigint[]) => values.map(value => ethers.getNumber(value));
 describe('NeverlandUiService', () => {
+  it('logs the configured contract address when a bundle read fails', async () => {
+    const error = new Error('execution reverted');
+    jest.spyOn(provider, 'call').mockRejectedValue(error);
+    const log = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    const service = new NeverlandUiService(UI_PROVIDER, provider);
+
+    await expect(service.getUiFullBundleFromParts(USER)).resolves.toBeNull();
+    expect(log).toHaveBeenCalledWith('NeverlandUiProvider.getUiFullBundleFromParts failed:', {
+      error,
+      contractAddress: UI_PROVIDER,
+      userAddress: USER,
+    });
+  });
   it('rejects integer counts outside the safe JavaScript number range', async () => {
     const getUserTokenCount = jest.fn(async () => 9007199254740992n);
     await expect(serviceWith({ getUserTokenCount }).getUserTokenCount(USER)).rejects.toThrow();

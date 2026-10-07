@@ -18,7 +18,7 @@
   },
   "scripts": {
     "clean": "cd ../.. && npx rimraf packages/contract-types/dist packages/contract-types/*.log*",
-    "lint": "cd ../.. && eslint packages/contract-types/src/**/*.ts",
+    "lint": "cd ../.. && eslint \"packages/contract-types/src/**/*.ts\"",
     "check-types": "yarn check:abis && cd ../.. && tsc -p packages/contract-types/tsconfig.json --noEmit && tsc -p packages/contract-types/tsconfig.json --module commonjs --noEmit",
     "prebuild": "npm run clean",
     "generate:abis": "node scripts/generate-abis.mjs",

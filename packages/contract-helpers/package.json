@@ -17,7 +17,7 @@
   },
   "scripts": {
     "clean": "cd ../.. && npx rimraf packages/contract-helpers/dist packages/contract-helpers/*.log*",
-    "lint": "cd ../.. && eslint packages/contract-helpers/src/**/*.ts",
+    "lint": "cd ../.. && eslint \"packages/contract-helpers/src/**/*.ts\"",
     "check-types": "cd ../.. && tsc -p packages/contract-helpers/tsconfig.json --noEmit && tsc -p packages/contract-helpers/tsconfig.json --module commonjs --noEmit",
     "prebuild": "npm run clean",
     "build": "cd ../.. && tsc -p packages/contract-helpers/tsconfig.json && tsc -p packages/contract-helpers/tsconfig.json --module commonjs --outDir ./packages/contract-helpers/dist/cjs",

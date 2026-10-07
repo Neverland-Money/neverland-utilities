@@ -140,7 +140,7 @@ export class NeverlandUiService extends AbiBaseService<Abi> {
       // eslint-disable-next-line no-console
       console.error('NeverlandUiProvider.getUiFullBundleFromParts failed:', {
         error,
-        contractAddress: this.contract.address,
+        contractAddress: this.contract.target,
         userAddress,
       });
       return null;
