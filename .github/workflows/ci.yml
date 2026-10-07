@@ -40,3 +40,6 @@ jobs:
 
       - name: Test
         run: yarn test
+
+      - name: Validate npm packages
+        run: yarn test:packages

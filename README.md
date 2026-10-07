@@ -92,6 +92,11 @@ Yarn is configured with immutable installs, so a change to `yarn.lock` has to be
 cache under `.yarn/cache` is committed as well. Installing on a different operating system swaps
 platform-specific binaries in it, so check `git status` before committing.
 
+After building, run `yarn test:packages` to pack all three workspaces and install their tarballs in
+an isolated npm project with nested dependencies. It checks package contents, CommonJS and native
+Node imports, Pool calldata, and strict public declarations in Node, Bundler, and NodeNext modes. CI
+runs this check after the build and unit tests.
+
 Yarn does not run the `prebuild` clean hook, so stale files from deleted sources stay in `dist`.
 Delete the build output before building anything you intend to publish:
 

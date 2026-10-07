@@ -22,6 +22,11 @@ All notable changes to this project will be documented in this file. See
 - **contract-types:** cover the public catalog, calldata and tuple decoding, type inference and
   rejected invalid calls, artifact import, and stale generated exports.
 
+### Bug Fixes
+
+- **contract-types:** require viem 2.57.3 or newer so fresh npm installations receive patched
+  WebSocket dependencies. Refresh abitype and tslib and run TypeScript checks directly.
+
 ## [1.0.1](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-types@1.0.0...@neverland-money/contract-types@1.0.1) (2026-10-07)
 
 ### Bug Fixes

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/address-book@1.0.1...@neverland-money/address-book@1.0.2) (2026-10-07)
+
+### Bug Fixes
+
+- **address-book:** run TypeScript checks directly without forwarding an unsupported `--` option to
+  the compiler. Include the changelog in the published package and require the validated tslib
+  version. Address exports are unchanged.
+
 ## [1.0.1](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/address-book@1.0.0...@neverland-money/address-book@1.0.1) (2026-10-07)
 
 ### Bug Fixes

@@ -1,6 +1,6 @@
 {
   "name": "@neverland-money/address-book",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Address book for Neverland Lending protocol contract addresses",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -13,7 +13,7 @@
   "scripts": {
     "clean": "cd ../.. && npx rimraf packages/address-book/dist packages/address-book/*.log*",
     "lint": "cd ../.. && eslint packages/address-book/src/**/*.ts",
-    "check-types": "yarn build -- --noEmit",
+    "check-types": "cd ../.. && tsc -p packages/address-book/tsconfig.json --noEmit && tsc -p packages/address-book/tsconfig.json --module commonjs --noEmit",
     "prebuild": "npm run clean",
     "build": "cd ../.. && tsc -p packages/address-book/tsconfig.json && tsc -p packages/address-book/tsconfig.json --module commonjs --outDir ./packages/address-book/dist/cjs",
     "test": "cd ../.. && yarn test packages/address-book",
@@ -32,13 +32,14 @@
   ],
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Neverland-Money/neverland-utilities.git"
   },
   "dependencies": {
-    "tslib": "^2.4.0"
+    "tslib": "^2.8.1"
   }
 }

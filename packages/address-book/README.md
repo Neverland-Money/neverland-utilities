@@ -1,7 +1,7 @@
 # Neverland Address Book
 
 <p>
-  <a href="./README.md"><img src="https://img.shields.io/badge/Neverland%20Address%20Book-v1.0.1%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Address Book v1.0.1 - Monad mainnet (143) - MIT"/></a>
+  <a href="./README.md"><img src="https://img.shields.io/badge/Neverland%20Address%20Book-v1.0.2%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Address Book v1.0.2 - Monad mainnet (143) - MIT"/></a>
 </p>
 
 Deployed contract addresses for Neverland on Monad mainnet (chain 143). The values match the Smart
@@ -19,7 +19,7 @@ The published package includes:
 
 - `dist/esm/`: ES module build, used by bundlers through the `module` field.
 - `dist/cjs/`: CommonJS build, used by `require` through the `main` field.
-- `README.md`: this file.
+- `README.md` and `CHANGELOG.md`.
 
 Example import:
 
