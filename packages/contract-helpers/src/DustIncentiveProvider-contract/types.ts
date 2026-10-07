@@ -1,22 +1,18 @@
-import type { providers, BigNumber } from 'ethers';
-
+import { ethers } from 'ethers';
 export interface BaseContractHelperConfig {
-  provider: providers.Provider;
+  provider: ethers.Provider;
   contractAddress: string;
 }
-
 export interface RewardData {
-  index: BigNumber;
-  emissionPerSecond: BigNumber;
-  lastUpdateTimestamp: BigNumber;
-  distributionEnd: BigNumber;
+  index: bigint;
+  emissionPerSecond: bigint;
+  lastUpdateTimestamp: bigint;
+  distributionEnd: bigint;
 }
-
 export interface UserRewardsResult {
   rewardTokens: string[];
-  unclaimedAmounts: BigNumber[];
+  unclaimedAmounts: bigint[];
 }
-
 export interface DustIncentiveData {
   incentiveControllerAddress: string;
   rewardTokenAddress: string;
@@ -34,7 +30,6 @@ export interface DustIncentiveData {
   distributionEnd: number;
   incentiveAPR: string;
 }
-
 export interface AssetRewardBreakdown {
   assetAddress: string;
   assetSymbol: string;
@@ -42,7 +37,6 @@ export interface AssetRewardBreakdown {
   rewardAmount: string;
   rewardPercentage: number;
 }
-
 export interface UserRewardsData {
   rewardTokens: string[];
   unclaimedAmounts: string[];
@@ -50,14 +44,12 @@ export interface UserRewardsData {
   totalRewardsUSD: string;
   assetBreakdown?: AssetRewardBreakdown[];
 }
-
 export interface RewardDataHumanized {
   index: string;
   emissionPerSecond: string;
   lastUpdateTimestamp: number;
   distributionEnd: number;
 }
-
 export interface IncentiveDataHumanized {
   assetAddress: string;
   rewardTokenAddress: string;
@@ -68,4 +60,3 @@ export interface IncentiveDataHumanized {
   distributionEnd: number;
   incentiveAPR: string;
 }
-

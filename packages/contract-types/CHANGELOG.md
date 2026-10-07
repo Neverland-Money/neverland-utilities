@@ -3,7 +3,15 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [1.1.0](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-types@1.0.1...@neverland-money/contract-types@1.1.0) (2026-10-07)
+## [2.0.0](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-types@1.0.1...@neverland-money/contract-types@2.0.0) (2026-10-07)
+
+### Breaking Changes
+
+- **contract-types:** existing ABI constants and aliases now use exact readonly literal types
+  instead of general `Abi` types. Valid code that assigns a cloned or reconstructed array to an
+  alias such as `Erc20Abi` can stop compiling. Use `Abi` from abitype for those arrays and retain
+  the generated aliases for the exact exported snapshots. The original nine runtime arrays and
+  export names are unchanged.
 
 ### Features
 

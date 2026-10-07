@@ -23,7 +23,7 @@ npm install @neverland-money/address-book @neverland-money/contract-types @never
   tokenomics, leaderboard, oracles, and governance.
 - [`@neverland-money/contract-types`](packages/contract-types/README.md): contract ABIs as JSON,
   typed with [ABIType](https://abitype.dev) for use with viem, ethers v5, and ethers v6.
-- [`@neverland-money/contract-helpers`](packages/contract-helpers/README.md): ethers v5 helper
+- [`@neverland-money/contract-helpers`](packages/contract-helpers/README.md): ethers v6 helper
   classes that read from and build transactions for the Neverland contracts. Depends on
   `contract-types`.
 
@@ -33,11 +33,11 @@ CommonJS build in `dist/cjs`, which `require` uses through the `main` entry.
 Example, reading a user's veDUST locks and UI data:
 
 ```ts
-import { providers } from 'ethers';
+import { JsonRpcProvider } from 'ethers';
 import { NeverlandMonadMainnet } from '@neverland-money/address-book';
 import { DustLockHelper, NeverlandUiService } from '@neverland-money/contract-helpers';
 
-const provider = new providers.JsonRpcProvider('https://rpc.monad.xyz');
+const provider = new JsonRpcProvider('https://rpc.monad.xyz');
 const { DUST_LOCK_ADDRESS, DUST_TOKEN_ADDRESS, NEVERLAND_UI_PROVIDER } = NeverlandMonadMainnet;
 const user = '0x...';
 
@@ -121,19 +121,25 @@ yarn build
 
 ## Release
 
+The prepared release versions, migration notes, validation evidence, and remaining release holds are
+recorded in [`RELEASE.md`](./RELEASE.md). `VALIDATION.md` records the earlier validation of the
+merged ABI expansion; its candidate versions and ethers v5 hold have since been superseded.
+
 Set each package version and its changelog entry first, and update the version in the badge at the
 top of that package's `README.md`. Then publish the versions already in the manifests:
 
 ```bash
 rm -rf packages/*/dist
 yarn build
-yarn lerna publish from-package
+yarn release:prepared
 ```
 
 `from-package` does not create git tags, so tag each release afterwards as
 `@neverland-money/<package>@<version>`. The `release:latest` script runs
 `lerna publish --conventional-commits`, which derives new versions from commit messages and requests
 npm provenance, so it is meant for CI rather than for publishing versions that were set by hand.
+Both release configurations name `main` as the release branch. `release:prepared` publishes the
+manifest versions without another version increment and requires a clean working tree.
 
 ## License And Notices
 

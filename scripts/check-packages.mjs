@@ -26,10 +26,19 @@ try {
   for (const name of ['address-book', 'contract-types', 'contract-helpers']) {
     const directory = join(root, 'packages', name);
     const manifest = readJson(join(directory, 'package.json'));
+    assert.ok(
+      readFileSync(join(directory, 'README.md'), 'utf8').includes(`v${manifest.version}`),
+      `${name}: README version differs`,
+    );
+    const changelogVersion = readFileSync(join(directory, 'CHANGELOG.md'), 'utf8').match(
+      /^## \[([^\]]+)\]/m,
+    )?.[1];
+    assert.equal(changelogVersion, manifest.version, `${name}: latest changelog version differs`);
     const [packed] = JSON.parse(
       run('npm', ['pack', '--ignore-scripts', '--json', '--pack-destination', scratch], directory),
     );
     const files = new Set(packed.files.map(file => file.path));
+    assert.equal(packed.version, manifest.version, `${name}: packed version differs`);
     for (const entry of ['main', 'module', 'types']) {
       assert.ok(files.has(manifest[entry]), `${name}: missing ${entry} entrypoint`);
     }
@@ -79,6 +88,8 @@ try {
     '--no-audit',
     '--no-fund',
   ]);
+  const audit = JSON.parse(run('npm', ['audit', '--omit=dev', '--json']));
+  assert.equal(audit.metadata.vulnerabilities.total, 0, 'Published packages have vulnerabilities');
   const require = createRequire(join(scratch, 'package.json'));
   const abis = require('@neverland-money/contract-types');
   assert.deepEqual(Object.keys(abis).sort(), names.toSorted());
@@ -132,6 +143,15 @@ ${catalog.abis.map(entry => `const ${entry.export}Value: ${entry.typeName} = ${e
 const chain: 143 = NeverlandMonadMainnet.CHAIN_ID; void chain;
 declare const context: ConstructorParameters<typeof DustLockHelper>[0];
 new DustLockHelper(context).getCreateLockTxData({ amount: '1', lockDuration: 604800 });
+declare const balance: Awaited<ReturnType<DustLockHelper['getDustBalance']>>;
+const amount: bigint = balance; void amount;
+declare const dashboard: Awaited<ReturnType<NeverlandUiService['getUserDashboard']>>;
+const votingPower: bigint = dashboard.totalVotingPower; void votingPower;
+// @ts-expect-error ethers v5 BigNumber methods are no longer available.
+balance.toNumber();
+const clonedAbi = Array.from(erc20Abi);
+// @ts-expect-error Exact ABI aliases reject reconstructed arrays.
+const reconstructed: Erc20Abi = clonedAbi; void reconstructed;
 void ClaimRewardsHelper; void NeverlandUiService;
 // @ts-expect-error Unknown function names must fail.
 const invalidName: ContractFunctionName<PoolAbi> = 'missingFunction'; void invalidName;
@@ -166,7 +186,7 @@ const invalidIndex: number = reserve.liquidityIndex; void invalidIndex;
     run(process.execPath, [compiler, '-p', 'tsconfig.json']);
   }
   console.log(
-    `Validated three npm tarballs, ${catalog.abis.length} ABI families, ${Object.keys(catalog.aliases).length} aliases, CJS/ESM imports, Pool calldata, and strict declarations in three resolution modes.`,
+    `Validated three npm tarballs, ${catalog.abis.length} ABI families, ${Object.keys(catalog.aliases).length} aliases, CJS/ESM imports, Pool calldata, strict declarations in three resolution modes, and zero production vulnerabilities.`,
   );
 } finally {
   rmSync(scratch, { recursive: true, force: true });

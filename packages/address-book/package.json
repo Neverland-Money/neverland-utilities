@@ -12,7 +12,7 @@
   },
   "scripts": {
     "clean": "cd ../.. && npx rimraf packages/address-book/dist packages/address-book/*.log*",
-    "lint": "cd ../.. && eslint packages/address-book/src/**/*.ts",
+    "lint": "cd ../.. && eslint \"packages/address-book/src/**/*.ts\"",
     "check-types": "cd ../.. && tsc -p packages/address-book/tsconfig.json --noEmit && tsc -p packages/address-book/tsconfig.json --module commonjs --noEmit",
     "prebuild": "npm run clean",
     "build": "cd ../.. && tsc -p packages/address-book/tsconfig.json && tsc -p packages/address-book/tsconfig.json --module commonjs --outDir ./packages/address-book/dist/cjs",

@@ -1,24 +1,21 @@
-import { utils } from 'ethers';
+import { ethers } from 'ethers';
 import { decodeFunctionData, decodeFunctionResult, encodeFunctionData } from 'viem';
 import { poolAbi, type PoolAbi } from '@neverland-money/contract-types';
-
 const abi: PoolAbi = poolAbi;
 const asset = '0x1111111111111111111111111111111111111111';
 const user = '0x2222222222222222222222222222222222222222';
-
 describe('lending Pool ABI', () => {
   it('retains implementation getters and Neverland synchronization calls', () => {
-    const iface = new utils.Interface(JSON.stringify(abi));
-    expect(iface.getFunction('POOL_REVISION').outputs?.[0].type).toBe('uint256');
-    expect(iface.getFunction('ADDRESSES_PROVIDER').outputs?.[0].type).toBe('address');
-    expect(iface.getFunction('initialize').format()).toBe('initialize(address)');
-    expect(iface.getFunction('syncIndexesState').format()).toBe('syncIndexesState(address)');
-    expect(iface.getFunction('syncRatesState').format()).toBe('syncRatesState(address)');
-    expect(iface.getEvent('Supply').format()).toBe(
+    const iface = new ethers.Interface(JSON.stringify(abi));
+    expect(iface.getFunction('POOL_REVISION')!.outputs?.[0].type).toBe('uint256');
+    expect(iface.getFunction('ADDRESSES_PROVIDER')!.outputs?.[0].type).toBe('address');
+    expect(iface.getFunction('initialize')!.format()).toBe('initialize(address)');
+    expect(iface.getFunction('syncIndexesState')!.format()).toBe('syncIndexesState(address)');
+    expect(iface.getFunction('syncRatesState')!.format()).toBe('syncRatesState(address)');
+    expect(iface.getEvent('Supply')!.format()).toBe(
       'Supply(address,address,address,uint256,uint16)',
     );
   });
-
   it('encodes supply calldata and decodes it with viem and ethers', () => {
     const data = encodeFunctionData({
       abi,
@@ -37,16 +34,15 @@ describe('lending Pool ABI', () => {
       functionName: 'supply',
       args: [asset, BigInt(1000000), user, 7],
     });
-    const decoded = new utils.Interface(JSON.stringify(abi)).decodeFunctionData('supply', data);
+    const decoded = new ethers.Interface(JSON.stringify(abi)).decodeFunctionData('supply', data);
     expect(decoded.asset).toBe(asset);
     expect(decoded.amount.toString()).toBe('1000000');
     expect(decoded.onBehalfOf).toBe(user);
-    expect(decoded.referralCode).toBe(7);
+    expect(decoded.referralCode).toBe(7n);
   });
-
   it('decodes the full reserve tuple including its nested configuration', () => {
     // Encode an independent return fixture to catch missing, reordered, or renamed tuple fields.
-    const data = utils.defaultAbiCoder.encode(
+    const data = ethers.AbiCoder.defaultAbiCoder().encode(
       [
         'tuple(tuple(uint256) configuration,uint128 liquidityIndex,uint128 currentLiquidityRate,' +
           'uint128 variableBorrowIndex,uint128 currentVariableBorrowRate,uint128 currentStableBorrowRate,' +

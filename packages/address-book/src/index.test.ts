@@ -1,4 +1,4 @@
-import { constants, utils } from 'ethers';
+import { ZeroAddress, getAddress } from 'ethers';
 import * as addressBook from './index';
 import { NeverlandMonadMainnet } from './index';
 
@@ -30,7 +30,7 @@ const hexStrings = (value: unknown, path: string): Array<[string, string]> => {
 
 const isChecksummedAddress = (value: string): boolean => {
   try {
-    return utils.getAddress(value) === value;
+    return getAddress(value) === value;
   } catch {
     return false;
   }
@@ -64,7 +64,7 @@ describe('NeverlandMonadMainnet', () => {
     const entries = hexStrings(NeverlandMonadMainnet, 'NeverlandMonadMainnet');
     expect(entries.length).toBeGreaterThan(0);
     const invalid = entries
-      .filter(([, value]) => !isChecksummedAddress(value) || value === constants.AddressZero)
+      .filter(([, value]) => !isChecksummedAddress(value) || value === ZeroAddress)
       .map(([path, value]) => `${path} = ${value}`);
     expect(invalid).toEqual([]);
   });

@@ -3,16 +3,27 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [1.0.2](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-helpers@1.0.1...@neverland-money/contract-helpers@1.0.2) (2026-10-07)
+## [2.0.0](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-helpers@1.0.1...@neverland-money/contract-helpers@2.0.0) (2026-10-07)
+
+### Breaking Changes
+
+- **contract-helpers:** migrate to ethers 6.17.0. Provider and signer inputs use ethers v6 types;
+  raw contract integers, rewards, balances, UI values, and gas estimates use native `bigint` instead
+  of ethers v5 `BigNumber`. Populated transactions use `TransactionRequest`, utilities are imported
+  from the ethers root, and fee reads use `getFeeData`.
+- **contract-helpers:** update transaction population and static multicalls to the ethers v6 method
+  API. Callers must migrate their providers and replace BigNumber arithmetic with bigint operators.
+  Humanized strings and numbers retain their existing representations.
 
 ### Bug Fixes
 
 - **contract-helpers:** declare abitype directly because public declarations import it. Nested npm
   installations previously failed with `Cannot find module 'abitype'` even though hoisted installs
   worked. Remove stale generated git metadata from the source manifest.
-- **contract-helpers:** require contract-types 1.1.0 with its patched viem dependency, refresh the
-  ethers v5 and tslib minimum versions, and run TypeScript checks directly without forwarding an
-  unsupported `--` option. Helper behavior, including the known APR issue, is unchanged.
+- **contract-helpers:** require contract-types 2.0.0 with its patched viem dependency, refresh the
+  ethers v6 and tslib minimum versions, and run TypeScript checks directly without forwarding an
+  unsupported `--` option. The known APR issue remains separate; the calculator's reads and formula
+  are preserved while adapting its numeric operations to ethers v6.
 
 ## [1.0.1](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-helpers@1.0.0...@neverland-money/contract-helpers@1.0.1) (2026-10-07)
 
