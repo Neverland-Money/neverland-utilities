@@ -61,8 +61,9 @@ describe('ABI generation', () => {
   });
 
   it('rejects ABI JSON drift from its provenance', () => {
-    writeFileSync(join(directory, 'src/abis/tokenAbi.json'), '[]');
-    expect(() => run()).toThrow();
+    const drifted = [{ ...abi[0], name: 'balanceOfChanged' }];
+    writeFileSync(join(directory, 'src/abis/tokenAbi.json'), JSON.stringify(drifted));
+    expect(() => run()).toThrow('ABI differs from provenance: tokenAbi');
   });
 
   it('imports complete compiled artifacts and refreshes their provenance', () => {
