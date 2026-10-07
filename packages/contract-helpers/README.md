@@ -1,26 +1,42 @@
-# @neverland-money/contract-helpers
+# Neverland Contract Helpers
+
+<p>
+  <a href="./README.md"><img src="https://img.shields.io/badge/Neverland%20Contract%20Helpers-v1.0.1%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Contract Helpers v1.0.1 - Monad mainnet (143) - MIT"/></a>
+</p>
 
 Contract helper classes for interacting with Neverland protocol smart contracts. Provides a clean,
 typed API over raw contract calls.
 
-## Features
+## Package
 
-- 🎯 **Type-safe** - Full TypeScript support with proper typing
-- 🔧 **Easy to use** - Simple class-based API
-- 📦 **Modular** - Import only what you need
-- 🧪 **Testable** - Easily mock for testing
-- 🔒 **Safe** - Built-in validation and error handling
-
-## Installation
-
-This package is part of the Neverland utilities monorepo.
+The package is published as:
 
 ```bash
-yarn install
+npm install @neverland-money/contract-helpers
 ```
 
 The helpers use ethers v5 and load their ABIs from `@neverland-money/contract-types`. Contract
 addresses live in `@neverland-money/address-book`.
+
+The published package includes:
+
+- `dist/esm/`: ES module build, used by bundlers through the `module` field.
+- `dist/cjs/`: CommonJS build, used by `require` through the `main` field.
+- `README.md` and `CHANGELOG.md`.
+
+Example import:
+
+```typescript
+import { DustLockHelper } from '@neverland-money/contract-helpers';
+```
+
+## Features
+
+- Type-safe: full TypeScript support with proper typing.
+- Easy to use: simple class-based API.
+- Modular: import only what you need.
+- Testable: easily mock for testing.
+- Safe: built-in validation and error handling.
 
 ## Available Helpers
 
@@ -34,7 +50,7 @@ addresses live in `@neverland-money/address-book`.
 | `WETHGatewayLegacyAdapter` | Legacy `WrappedTokenGatewayV3` (with rate mode)    |
 | `DustAPRCalculator`        | Emission APR (known issue, see below)              |
 
-## Known issues
+## Known Issues
 
 `DustAPRCalculator.calculateMarketAPR` currently always returns the inactive result (`apr: 0`,
 `isActive: false`). It reads fields the rewards controller does not return, swallows the resulting
@@ -164,7 +180,7 @@ const { to, data } = claim.getClaimAllRewardsToSelfTxData({
 });
 ```
 
-### Raw contract access
+### Raw Contract Access
 
 Every helper extends `AbiBaseService`, so you can reach the underlying ethers contract and
 interface:
@@ -174,13 +190,39 @@ const contract = incentives.getContractInstance(controllerAddress);
 const calldata = incentives.encodeFunctionData('getRewardsList', []);
 ```
 
-## Building
+## Development
+
+Use Node `24` via the repository `.nvmrc`. Build and test from the repository root:
 
 ```bash
+yarn install
 yarn build
+yarn test packages/contract-helpers
 ```
+
+The tests mock every contract read, so they need neither a build nor an RPC endpoint.
+
+## Layout
+
+- `src/<Name>-contract/`: one folder per contract, with `index.ts` for the helper and `types.ts` for
+  its types.
+- `src/commons/`: shared `AbiBaseService` code.
+- `src/index.ts`: package exports.
+- `src/abiUsage.test.ts` and `src/**/index.test.ts`: tests for the helpers and their ABI usage.
+- `dist/`: generated build output, not committed.
 
 ## Related Packages
 
-- `@neverland-money/contract-types` - Typed ABIs used by these helpers
-- `@neverland-money/address-book` - Deployed contract addresses
+- `@neverland-money/contract-types`: typed ABIs used by these helpers.
+- `@neverland-money/address-book`: deployed contract addresses.
+
+## License And Notices
+
+See [LICENSE](../../LICENSE). Released under the MIT License.
+
+<p>
+  <a href="https://neverland.money"><img src="https://img.shields.io/badge/Website-neverland.money-480052?style=for-the-badge&logo=safari&logoColor=white" height="22" alt="Website"/></a>
+  <a href="https://app.neverland.money"><img src="https://img.shields.io/badge/App-app.neverland.money-192170?style=for-the-badge&logo=ethereum&logoColor=white" height="22" alt="App"/></a>
+  <a href="https://x.com/Neverland_Money"><img src="https://img.shields.io/badge/%F0%9D%95%8F-%40Neverland__Money-1DA1F2?style=for-the-badge" height="22" alt="X"/></a>
+  <a href="https://discord.com/invite/neverland"><img src="https://img.shields.io/badge/Discord-Join%20Server-5865F2?style=for-the-badge&logo=discord&logoColor=white" height="22" alt="Discord"/></a>
+</p>
