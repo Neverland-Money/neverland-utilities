@@ -1,8 +1,9 @@
 {
   "name": "@neverland-money/address-book",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Address book for Neverland Lending protocol contract addresses",
-  "main": "dist/esm/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "author": "Neverland Team",
   "license": "MIT",
@@ -36,5 +37,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Neverland-Money/neverland-utilities.git"
+  },
+  "dependencies": {
+    "tslib": "^2.4.0"
   }
 }

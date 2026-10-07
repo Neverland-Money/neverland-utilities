@@ -18,15 +18,17 @@ The packages are published as:
 npm install @neverland-money/address-book @neverland-money/contract-types @neverland-money/contract-helpers
 ```
 
-- `@neverland-money/address-book`: deployed addresses for Neverland on Monad mainnet (chain 143),
-  covering the main market, the isolated markets, tokenomics, leaderboard, oracles, and governance.
-- `@neverland-money/contract-types`: contract ABIs as JSON, typed with
-  [ABIType](https://abitype.dev) for use with viem, ethers v5, and ethers v6.
-- `@neverland-money/contract-helpers`: ethers v5 helper classes that read from and build
-  transactions for the Neverland contracts. Depends on `contract-types`.
+- [`@neverland-money/address-book`](packages/address-book/README.md): deployed addresses for
+  Neverland on Monad mainnet (chain 143), covering the main market, the isolated markets,
+  tokenomics, leaderboard, oracles, and governance.
+- [`@neverland-money/contract-types`](packages/contract-types/README.md): contract ABIs as JSON,
+  typed with [ABIType](https://abitype.dev) for use with viem, ethers v5, and ethers v6.
+- [`@neverland-money/contract-helpers`](packages/contract-helpers/README.md): ethers v5 helper
+  classes that read from and build transactions for the Neverland contracts. Depends on
+  `contract-types`.
 
-Each package ships an ESM build in `dist/esm` and a CommonJS build in `dist/cjs`. The `main` entry
-points at the ESM build.
+Each package ships an ESM build in `dist/esm`, which bundlers use through the `module` entry, and a
+CommonJS build in `dist/cjs`, which `require` uses through the `main` entry.
 
 Example, reading a user's veDUST locks and UI data:
 
@@ -97,10 +99,12 @@ yarn build
 
 ## Layout
 
-- `packages/address-book/`: deployed addresses, one file per deployment under `src/addresses/`.
-- `packages/contract-types/`: ABI JSON files and their typed exports under `src/abis/`.
-- `packages/contract-helpers/`: helper classes, one folder per contract under
-  `src/<Name>-contract/`, plus shared code in `src/commons/`.
+- [`packages/address-book/`](packages/address-book/): deployed addresses, one file per deployment
+  under `src/addresses/`.
+- [`packages/contract-types/`](packages/contract-types/): ABI JSON files and their typed exports
+  under `src/abis/`.
+- [`packages/contract-helpers/`](packages/contract-helpers/): helper classes, one folder per
+  contract under `src/<Name>-contract/`, plus shared code in `src/commons/`.
 - `lerna.json`: Lerna configuration with independent versioning.
 - `tsconfig.json`: TypeScript configuration shared by every package.
 - `jest.config.js` and `tsconfig.test.json`: Jest configuration for the `*.test.ts` suites.
@@ -109,8 +113,8 @@ yarn build
 
 ## Release
 
-Set each package version and its changelog entry first, then publish the versions already in the
-manifests:
+Set each package version and its changelog entry first, and update the version in the badge at the
+top of that package's `README.md`. Then publish the versions already in the manifests:
 
 ```bash
 rm -rf packages/*/dist
@@ -123,7 +127,7 @@ yarn lerna publish from-package
 `lerna publish --conventional-commits`, which derives new versions from commit messages and requests
 npm provenance, so it is meant for CI rather than for publishing versions that were set by hand.
 
-## License
+## License And Notices
 
 See [LICENSE](./LICENSE). Released under the MIT License.
 

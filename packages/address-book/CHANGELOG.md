@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/address-book@1.0.0...@neverland-money/address-book@1.0.1) (2026-10-07)
+
+### Bug Fixes
+
+- **address-book:** point `main` at the CommonJS build and add a `module` entry for the ESM build.
+  `main` used to point at the ESM build, so `require('@neverland-money/address-book')` failed in
+  Node. Bundlers still use the ESM build.
+- **address-book:** declare `tslib` as a dependency. The CommonJS build loads it, so requiring
+  `dist/cjs` failed with `Cannot find module 'tslib'` unless something else had installed it.
+
 # [1.0.0](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/address-book@0.2.0...@neverland-money/address-book@1.0.0) (2026-10-07)
 
 ### ⚠ BREAKING CHANGES
