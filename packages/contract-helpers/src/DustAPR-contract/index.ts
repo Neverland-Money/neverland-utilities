@@ -3,17 +3,15 @@ import { dustRewardsControllerAbi } from '@neverland-money/contract-types';
 import { AbiBaseService } from '../commons/BaseService';
 import type { MarketAPR, MarketConfig, PriceMap, DustRewardData } from './types';
 const getNetworkNowSec = (): number => Math.floor(Date.now() / 1000);
-
 export class DustAPRCalculator {
   private static readonly SECONDS_PER_YEAR = 31536000;
   private static readonly PRICE_PRECISION = 1e8;
   private static readonly APR_PRECISION = 10000;
-
   async calculateMarketAPR(
     asset: string,
     rewardToken: string,
     rewardsController: string,
-    provider: ethers.providers.Provider,
+    provider: ethers.Provider,
     tokenPrices: PriceMap,
   ): Promise<MarketAPR> {
     try {
@@ -22,41 +20,37 @@ export class DustAPRCalculator {
       const rewardData = await controller.getRewardsData(asset, rewardToken);
       const { emissionPerSecond, distributionEnd, totalSupply }: DustRewardData = {
         emissionPerSecond: rewardData.emissionPerSecond.toString(),
-        distributionEnd: rewardData.distributionEnd.toNumber(),
+        distributionEnd: ethers.getNumber(rewardData.distributionEnd),
         totalSupply: rewardData.totalSupply.toString?.() ?? rewardData.totalSupply,
       };
-
       const now = getNetworkNowSec();
       const isActive = distributionEnd > now;
-      if (!isActive || ethers.BigNumber.from(emissionPerSecond).eq(0)) {
+      if (!isActive || ethers.getBigInt(emissionPerSecond) === 0n) {
         return { apr: 0, isActive: false, emissionPerSecond, distributionEnd, totalSupply };
       }
-
-      const annualEmissions = ethers.BigNumber.from(emissionPerSecond).mul(
-        DustAPRCalculator.SECONDS_PER_YEAR,
-      );
+      const annualEmissions =
+        ethers.getBigInt(emissionPerSecond) * ethers.getBigInt(DustAPRCalculator.SECONDS_PER_YEAR);
       const dustPrice = tokenPrices[rewardToken.toLowerCase()] || 0;
       const assetPrice = tokenPrices[asset.toLowerCase()] || 1;
-
-      const dustPriceBN = ethers.BigNumber.from(
+      const dustPriceBN = ethers.getBigInt(
         Math.floor(dustPrice * DustAPRCalculator.PRICE_PRECISION),
       );
-      const assetPriceBN = ethers.BigNumber.from(
+      const assetPriceBN = ethers.getBigInt(
         Math.floor(assetPrice * DustAPRCalculator.PRICE_PRECISION),
       );
-
-      const annualRewardValue = annualEmissions
-        .mul(dustPriceBN)
-        .div(DustAPRCalculator.PRICE_PRECISION);
-      const totalSupplyValue = ethers.BigNumber.from(totalSupply)
-        .mul(assetPriceBN)
-        .div(DustAPRCalculator.PRICE_PRECISION);
-      const apr = totalSupplyValue.gt(0)
-        ? annualRewardValue.mul(DustAPRCalculator.APR_PRECISION).div(totalSupplyValue)
-        : ethers.BigNumber.from(0);
-
+      const annualRewardValue =
+        (annualEmissions * ethers.getBigInt(dustPriceBN)) /
+        ethers.getBigInt(DustAPRCalculator.PRICE_PRECISION);
+      const totalSupplyValue =
+        (ethers.getBigInt(totalSupply) * ethers.getBigInt(assetPriceBN)) /
+        ethers.getBigInt(DustAPRCalculator.PRICE_PRECISION);
+      const apr =
+        totalSupplyValue > 0n
+          ? (annualRewardValue * ethers.getBigInt(DustAPRCalculator.APR_PRECISION)) /
+            ethers.getBigInt(totalSupplyValue)
+          : 0n;
       return {
-        apr: apr.toNumber() / 100,
+        apr: ethers.getNumber(apr) / 100,
         isActive: true,
         emissionPerSecond,
         distributionEnd,
@@ -73,14 +67,17 @@ export class DustAPRCalculator {
       };
     }
   }
-
   async calculateBatchAPR(
     markets: MarketConfig[],
     rewardsController: string,
-    provider: ethers.providers.Provider,
+    provider: ethers.Provider,
     tokenPrices: PriceMap,
-  ): Promise<{ [marketId: string]: MarketAPR }> {
-    const results: { [marketId: string]: MarketAPR } = {};
+  ): Promise<{
+    [marketId: string]: MarketAPR;
+  }> {
+    const results: {
+      [marketId: string]: MarketAPR;
+    } = {};
     const aprPromises = markets.map(async market => {
       const apr = await this.calculateMarketAPR(
         market.asset,
@@ -105,19 +102,21 @@ export class DustAPRCalculator {
     });
     return results;
   }
-
   static validateMarketConfig(market: MarketConfig): boolean {
     return (
-      ethers.utils.isAddress(market.asset) &&
-      ethers.utils.isAddress(market.dustToken) &&
-      ethers.utils.isAddress(market.transferStrategy) &&
+      ethers.isAddress(market.asset) &&
+      ethers.isAddress(market.dustToken) &&
+      ethers.isAddress(market.transferStrategy) &&
       market.id.length > 0 &&
       market.symbol.length > 0
     );
   }
-
   static calculateWeightedAverageAPR(
-    markets: Array<{ apr: number; totalSupply: string; isActive: boolean }>,
+    markets: Array<{
+      apr: number;
+      totalSupply: string;
+      isActive: boolean;
+    }>,
   ): number {
     const activeMarkets = markets.filter(m => m.isActive && m.apr > 0);
     if (activeMarkets.length === 0) return 0;

@@ -1,7 +1,7 @@
 # Neverland Contract Types
 
 <p>
-  <a href="./README.md"><img src="https://img.shields.io/badge/Neverland%20Contract%20Types-v1.1.0%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Contract Types v1.1.0 - Monad mainnet (143) - MIT"/></a>
+  <a href="./README.md"><img src="https://img.shields.io/badge/Neverland%20Contract%20Types-v2.0.0%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Contract Types v2.0.0 - Monad mainnet (143) - MIT"/></a>
 </p>
 
 Compiled ABIs and precise TypeScript types for Neverland's public contracts, lending core, wrapped
@@ -244,10 +244,25 @@ ABI-derived types use wire values, including `bigint` for large Solidity integer
 models that format amounts or combine several reads belong in the consuming application or
 `contract-helpers`.
 
-Version 1.1.0 preserves the existing ABI JSON values and export names while making TypeScript
-inference more precise. Consumers may now get compiler errors for misspelled methods, invalid
-arguments, or incompatible manually assigned ABI types that the previous general `Abi` casts
-accepted.
+### Migrating From 1.0.1
+
+Version 2.0.0 preserves the existing ABI JSON values and export names. ABI constants and aliases now
+have exact readonly literal types, so callers get precise function, argument, and return inference.
+This also changes public type assignability: cloning an ABI with `Array.from` preserves its runtime
+entries but returns an array that cannot be assigned to a fixed tuple such as `Erc20Abi`. Use the
+general `Abi` type for cloned or reconstructed arrays:
+
+```typescript
+import { erc20Abi, type Erc20Abi } from '@neverland-money/contract-types';
+import type { Abi } from 'abitype';
+
+const exactSnapshot: Erc20Abi = erc20Abi;
+const clonedAbi: Abi = Array.from(erc20Abi);
+```
+
+Pass the exported ABI directly to viem when exact function and argument inference is needed.
+Misspelled methods and invalid arguments that the previous general `Abi` casts accepted now produce
+compiler errors.
 
 ## Benefits Over Typechain
 

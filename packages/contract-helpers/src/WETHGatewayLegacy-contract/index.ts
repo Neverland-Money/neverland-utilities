@@ -1,5 +1,5 @@
-import { InterestRate } from '../interestRate';
 import { ethers } from 'ethers';
+import { InterestRate } from '../interestRate';
 import { wethGatewayLegacyAbi } from '@neverland-money/contract-types';
 import { AbiBaseService } from '../commons/BaseService';
 import type { Abi } from 'abitype';
@@ -9,29 +9,26 @@ import {
   WETHDepositParamsType,
   WETHWithdrawParamsType,
 } from './types';
-
 /**
  * Simplified adapter for legacy WrappedTokenGatewayV3 contracts
  * that handles the ABI differences (extra interestRateMode parameters)
  */
 export class WETHGatewayLegacyAdapter extends AbiBaseService<Abi> {
   readonly wethGatewayAddress: string;
-  readonly provider: ethers.providers.Provider;
+  readonly provider: ethers.Provider;
   readonly contract: ethers.Contract;
-  readonly contractInterface: ethers.utils.Interface;
-
+  readonly contractInterface: ethers.Interface;
   constructor(
-    provider: ethers.providers.Provider,
+    provider: ethers.Provider,
     _erc20Service: unknown, // For compatibility
     wethGatewayAddress: string,
   ) {
     super(provider, wethGatewayLegacyAbi as any, wethGatewayAddress);
     this.provider = provider;
     this.wethGatewayAddress = wethGatewayAddress;
-    this.contractInterface = new ethers.utils.Interface(wethGatewayLegacyAbi as any);
+    this.contractInterface = new ethers.Interface(wethGatewayLegacyAbi as any);
     this.contract = this.getContractInstance(wethGatewayAddress);
   }
-
   /**
    * Deposit ETH - returns PopulatedTransaction
    */
@@ -41,15 +38,14 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<Abi> {
     amount,
     onBehalfOf,
     referralCode = '0',
-  }: WETHDepositParamsType): Promise<ethers.PopulatedTransaction> {
-    return this.contract.populateTransaction.depositETH!(
+  }: WETHDepositParamsType): Promise<ethers.TransactionRequest> {
+    return this.contract.depositETH.populateTransaction(
       lendingPool,
       onBehalfOf ?? user,
       referralCode,
       { value: amount },
     );
   }
-
   /**
    * Borrow ETH - legacy version with interestRateMode parameter
    */
@@ -58,10 +54,9 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<Abi> {
     amount,
     interestRateMode = InterestRate.Variable,
     referralCode = '0',
-  }: LegacyWETHBorrowParamsType): Promise<ethers.PopulatedTransaction> {
+  }: LegacyWETHBorrowParamsType): Promise<ethers.TransactionRequest> {
     const numericRateMode = interestRateMode === InterestRate.Stable ? 1 : 2;
-
-    const result = await this.contract.populateTransaction.borrowETH!(
+    const result = await this.contract.borrowETH.populateTransaction(
       lendingPool,
       amount,
       numericRateMode,
@@ -69,7 +64,6 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<Abi> {
     );
     return result;
   }
-
   /**
    * Repay ETH - legacy version with interestRateMode parameter
    */
@@ -79,10 +73,9 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<Abi> {
     amount,
     onBehalfOf,
     interestRateMode = InterestRate.Variable,
-  }: LegacyWETHRepayParamsType): Promise<ethers.PopulatedTransaction> {
+  }: LegacyWETHRepayParamsType): Promise<ethers.TransactionRequest> {
     const numericRateMode = interestRateMode === InterestRate.Stable ? 1 : 2;
-
-    return this.contract.populateTransaction.repayETH!(
+    return this.contract.repayETH.populateTransaction(
       lendingPool,
       amount,
       numericRateMode,
@@ -90,7 +83,6 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<Abi> {
       { value: amount },
     );
   }
-
   /**
    * Withdraw ETH - returns PopulatedTransaction
    */
@@ -99,17 +91,15 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<Abi> {
     user,
     amount,
     onBehalfOf,
-  }: WETHWithdrawParamsType): Promise<ethers.PopulatedTransaction> {
-    return this.contract.populateTransaction.withdrawETH!(lendingPool, amount, onBehalfOf ?? user);
+  }: WETHWithdrawParamsType): Promise<ethers.TransactionRequest> {
+    return this.contract.withdrawETH.populateTransaction(lendingPool, amount, onBehalfOf ?? user);
   }
-
   /**
    * Get the WETH/WMON token address
    */
   async getWETHAddress(): Promise<string> {
     return this.contract.getWETHAddress();
   }
-
   /**
    * Encode function data for legacy contract calls
    */
@@ -120,7 +110,6 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<Abi> {
       referralCode,
     ]);
   }
-
   encodeBorrowETH(
     lendingPool: string,
     amount: string,
@@ -134,7 +123,6 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<Abi> {
       referralCode,
     ]);
   }
-
   encodeRepayETH(
     lendingPool: string,
     amount: string,
@@ -148,7 +136,6 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<Abi> {
       onBehalfOf,
     ]);
   }
-
   encodeWithdrawETH(lendingPool: string, amount: string, to: string): string {
     return this.contractInterface.encodeFunctionData('withdrawETH', [lendingPool, amount, to]);
   }

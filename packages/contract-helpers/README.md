@@ -1,7 +1,7 @@
 # Neverland Contract Helpers
 
 <p>
-  <a href="./README.md"><img src="https://img.shields.io/badge/Neverland%20Contract%20Helpers-v1.0.2%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Contract Helpers v1.0.2 - Monad mainnet (143) - MIT"/></a>
+  <a href="./README.md"><img src="https://img.shields.io/badge/Neverland%20Contract%20Helpers-v2.0.0%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Contract Helpers v2.0.0 - Monad mainnet (143) - MIT"/></a>
 </p>
 
 Contract helper classes for interacting with Neverland protocol smart contracts. Provides a clean,
@@ -15,7 +15,7 @@ The package is published as:
 npm install @neverland-money/contract-helpers
 ```
 
-The helpers use ethers v5 and load their ABIs from `@neverland-money/contract-types`. Contract
+The helpers use ethers v6 and load their ABIs from `@neverland-money/contract-types`. Contract
 addresses live in `@neverland-money/address-book`.
 
 The published package includes:
@@ -29,6 +29,33 @@ Example import:
 ```typescript
 import { DustLockHelper } from '@neverland-money/contract-helpers';
 ```
+
+## Migrating From 1.0.1
+
+Version 2.0.0 requires ethers v6 and contract-types 2.0.0. Create providers with `JsonRpcProvider`
+or `BrowserProvider` from the ethers root and pass ethers v6 signers. Raw contract integers, reward
+amounts, balances, UI numeric fields, and gas estimates now use native `bigint`. Replace `.add`,
+`.mul`, and other BigNumber methods with bigint operators, and use `getNumber` when a checked
+conversion to a JavaScript number is needed. Humanized strings and numbers keep their existing
+representations.
+
+```typescript
+import { JsonRpcProvider, formatUnits, getNumber } from 'ethers';
+import { DustIncentiveProvider } from '@neverland-money/contract-helpers';
+
+const provider = new JsonRpcProvider('https://rpc.monad.xyz');
+const incentives = new DustIncentiveProvider({ provider, dustIncentiveProviderAddress });
+const reward = await incentives.getRewardsData(assetAddress, dustTokenAddress);
+const doubledEmission: bigint = reward.emissionPerSecond * 2n;
+const distributionEnd: number = getNumber(reward.distributionEnd);
+const formattedEmission = formatUnits(doubledEmission, 18);
+```
+
+Populated transactions use ethers v6 `TransactionRequest`. Raw contract access uses
+`contract.method.populateTransaction(...)` and `contract.method.staticCall(...)`; ethers v5 provider
+methods and `contract.populateTransaction.method(...)` are no longer supported. Use a JSON replacer
+such as `(_, value) => typeof value === 'bigint' ? value.toString() : value` when serializing raw
+results. The APR issue described below remains separate from this migration.
 
 ## Features
 
@@ -62,10 +89,10 @@ with your own TVL and price inputs until it is fixed.
 ### Emissions: DustIncentiveProvider
 
 ```typescript
-import { providers } from 'ethers';
+import { JsonRpcProvider, getNumber } from 'ethers';
 import { DustIncentiveProvider } from '@neverland-money/contract-helpers';
 
-const provider = new providers.JsonRpcProvider('https://rpc.monad.xyz');
+const provider = new JsonRpcProvider('https://rpc.monad.xyz');
 
 const incentives = new DustIncentiveProvider({
   provider,
@@ -75,7 +102,7 @@ const incentives = new DustIncentiveProvider({
 // Reward configuration for an asset
 const data = await incentives.getRewardsData(aTokenAddress, dustTokenAddress);
 console.log('Emission per second:', data.emissionPerSecond.toString());
-console.log('Distribution end:', data.distributionEnd.toNumber());
+console.log('Distribution end:', getNumber(data.distributionEnd));
 
 // Are emissions running right now?
 const active = await incentives.isEmissionsActive(aTokenAddress, dustTokenAddress);

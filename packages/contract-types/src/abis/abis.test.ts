@@ -1,19 +1,15 @@
+import { ethers } from 'ethers';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { utils } from 'ethers';
 import * as contractTypes from '../index';
-
 interface AbiItem {
   type: string;
 }
-
 const files = readdirSync(__dirname)
   .filter(file => file.endsWith('.json'))
   .sort();
-
 const readAbi = (file: string): AbiItem[] =>
   JSON.parse(readFileSync(join(__dirname, file), 'utf8')) as AbiItem[];
-
 describe('contract-types ABIs', () => {
   it('exposes the complete public contract catalog from the package entrypoint', () => {
     expect(Object.keys(contractTypes).sort()).toEqual(
@@ -76,33 +72,29 @@ describe('contract-types ABIs', () => {
       ].sort(),
     );
   });
-
   it('finds the ABI files', () => {
     expect(files.length).toBeGreaterThan(0);
   });
-
   it('includes ERC20 share-token methods in the standard ERC4626 interface', () => {
-    const iface = new utils.Interface(JSON.stringify(contractTypes.erc4626Abi));
-    expect(iface.getFunction('balanceOf').format()).toBe('balanceOf(address)');
-    expect(iface.getFunction('approve').format()).toBe('approve(address,uint256)');
-    expect(iface.getFunction('deposit').format()).toBe('deposit(uint256,address)');
+    const iface = new ethers.Interface(JSON.stringify(contractTypes.erc4626Abi));
+    expect(iface.getFunction('balanceOf')!.format()).toBe('balanceOf(address)');
+    expect(iface.getFunction('approve')!.format()).toBe('approve(address,uint256)');
+    expect(iface.getFunction('deposit')!.format()).toBe('deposit(uint256,address)');
   });
-
   it.each(files)('exports %s from the package entry unchanged', file => {
     const name = file.replace(/\.json$/, '');
     expect((contractTypes as unknown as Record<string, unknown>)[name]).toEqual(readAbi(file));
   });
-
   it.each(files)('parses %s with no duplicate signatures', file => {
     const abi = readAbi(file);
-    const iface = new utils.Interface(abi);
+    const iface = new ethers.Interface(abi);
     const declared = abi.filter(item => ['error', 'event', 'function'].includes(item.type)).length;
     // ethers keeps only the first fragment for a repeated signature, so a duplicate shows up as a
     // shortfall here.
-    const parsed = [iface.errors, iface.events, iface.functions].reduce(
-      (count, fragments) => count + Object.keys(fragments).length,
-      0,
-    );
+    let parsed = 0;
+    iface.forEachError(() => parsed++);
+    iface.forEachEvent(() => parsed++);
+    iface.forEachFunction(() => parsed++);
     expect(parsed).toBe(declared);
   });
 });

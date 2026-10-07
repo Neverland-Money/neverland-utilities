@@ -6,7 +6,6 @@ export interface VeDustNFTData {
   rewardAmountUSD: string;
   hasRewards: boolean;
 }
-
 export interface VeDustRevenueData {
   totalRevenueUSD: string;
   rewardTokens: string[];
@@ -18,10 +17,18 @@ export interface VeDustRevenueData {
   veNftCount: number;
   veNftIds: number[];
   veNftData?: VeDustNFTData[];
-  individualNftRewards: { [tokenId: number]: string[] };
-  individualNftVotingPower: { [tokenId: number]: string };
-  individualNftLockedAmounts: { [tokenId: number]: string };
-  individualNftEndTimes: { [tokenId: number]: number };
+  individualNftRewards: {
+    [tokenId: number]: string[];
+  };
+  individualNftVotingPower: {
+    [tokenId: number]: string;
+  };
+  individualNftLockedAmounts: {
+    [tokenId: number]: string;
+  };
+  individualNftEndTimes: {
+    [tokenId: number]: number;
+  };
   pendingRewardsUSD: string;
   nextEpochTimestamp: number;
   totalVeDustSupply: string;
@@ -32,12 +39,9 @@ export interface VeDustRevenueData {
   hasRewards: boolean;
   hasVeNfts: boolean;
 }
-
 export interface VeDustRevenueHelperContext {
-  provider: import('ethers').providers.Provider;
+  provider: import('ethers').Provider;
   chainId: number;
   revenueAddress: string;
   dustLockAddress: string;
 }
-
-

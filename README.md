@@ -121,19 +121,25 @@ yarn build
 
 ## Release
 
+The prepared release versions, migration notes, validation evidence, and remaining release holds are
+recorded in [`RELEASE.md`](./RELEASE.md). `VALIDATION.md` records the earlier validation of the
+merged ABI expansion; its candidate versions and ethers v5 hold have since been superseded.
+
 Set each package version and its changelog entry first, and update the version in the badge at the
 top of that package's `README.md`. Then publish the versions already in the manifests:
 
 ```bash
 rm -rf packages/*/dist
 yarn build
-yarn lerna publish from-package
+yarn release:prepared
 ```
 
 `from-package` does not create git tags, so tag each release afterwards as
 `@neverland-money/<package>@<version>`. The `release:latest` script runs
 `lerna publish --conventional-commits`, which derives new versions from commit messages and requests
 npm provenance, so it is meant for CI rather than for publishing versions that were set by hand.
+Both release configurations name `main` as the release branch. `release:prepared` publishes the
+manifest versions without another version increment and requires a clean working tree.
 
 ## License And Notices
 

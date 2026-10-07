@@ -1,155 +1,137 @@
-import type { BigNumber } from 'ethers';
-
 export interface PoolMarket {
   /** The market's pool address provider. Key on this, never on `marketId` or list position. */
   provider: string;
   /** Display-only label from the market's own `getMarketId()`, or '' if that read failed. */
   marketId: string;
 }
-
 export interface UserDashboardData {
   user: string;
-  tokenIds: BigNumber[];
+  tokenIds: bigint[];
   locks: LockInfo[];
   rewardSummaries: RewardSummary[];
-  totalVotingPower: BigNumber;
-  totalLockedAmount: BigNumber;
+  totalVotingPower: bigint;
+  totalLockedAmount: bigint;
   /** Raw `DustLock.balanceOf(user)` enumeration length at query time. */
-  rawTokenCount: BigNumber;
+  rawTokenCount: bigint;
   /** Raw offset to pass as the next call's `offset`. */
-  nextRawOffset: BigNumber;
+  nextRawOffset: bigint;
   /** True when the page left live entries or sparse raw slots unscanned. */
   hasMore: boolean;
 }
-
 export interface LockInfo {
-  tokenId: BigNumber;
-  amount: BigNumber;
-  end: BigNumber;
-  effectiveStart: BigNumber;
+  tokenId: bigint;
+  amount: bigint;
+  end: bigint;
+  effectiveStart: bigint;
   isPermanent: boolean;
-  votingPower: BigNumber;
+  votingPower: bigint;
   rewardReceiver: string;
   owner: string;
 }
-
 /** Emission rewards are per user, not per token: use `getUserEmissions` for those. */
 export interface RewardSummary {
-  tokenId: BigNumber;
-  revenueRewards: BigNumber[];
+  tokenId: bigint;
+  revenueRewards: bigint[];
   rewardTokens: string[];
 }
-
 export interface PriceData {
   tokens: string[];
   /** USD prices, 8 decimals. */
-  prices: BigNumber[];
-  lastUpdated: BigNumber[];
+  prices: bigint[];
+  lastUpdated: bigint[];
   /** Bit i set means row i resolved. Only the first 256 rows are representable. */
-  resolvedMask: BigNumber;
+  resolvedMask: bigint;
   /** True when the DUST price (row 0) came from the live oracle path. */
   dustPriceFromOracle: boolean;
-  asOfBlock: BigNumber;
-  asOfTimestamp: BigNumber;
+  asOfBlock: bigint;
+  asOfTimestamp: bigint;
 }
-
 export interface GlobalStats {
-  totalSupply: BigNumber;
-  totalVotingPower: BigNumber;
-  permanentLockBalance: BigNumber;
+  totalSupply: bigint;
+  totalVotingPower: bigint;
+  permanentLockBalance: bigint;
   rewardTokens: string[];
-  totalRewardsPerToken: BigNumber[];
-  epoch: BigNumber;
-  activeTokenCount: BigNumber;
+  totalRewardsPerToken: bigint[];
+  epoch: bigint;
+  activeTokenCount: bigint;
 }
-
 export interface MarketData {
   rewardTokens: string[];
-  rewardTokenBalances: BigNumber[];
-  distributionRates: BigNumber[];
-  nextEpochTimestamp: BigNumber;
-  currentEpoch: BigNumber;
-  epochRewards: BigNumber[];
-  nextEpochRewards: BigNumber[];
-  totalValueLockedUSD: BigNumber;
-  followingEpochRewards: BigNumber[];
+  rewardTokenBalances: bigint[];
+  distributionRates: bigint[];
+  nextEpochTimestamp: bigint;
+  currentEpoch: bigint;
+  epochRewards: bigint[];
+  nextEpochRewards: bigint[];
+  totalValueLockedUSD: bigint;
+  followingEpochRewards: bigint[];
   totalValueLockedUSDResolved: boolean;
-  asOfBlock: BigNumber;
-  asOfTimestamp: BigNumber;
+  asOfBlock: bigint;
+  asOfTimestamp: bigint;
 }
-
 export interface NetworkData {
-  currentBlock: BigNumber;
-  currentTimestamp: BigNumber;
-  gasPrice: BigNumber;
+  currentBlock: bigint;
+  currentTimestamp: bigint;
+  gasPrice: bigint;
 }
-
 export interface UnlockSchedule {
-  unlockTimes: BigNumber[];
-  amounts: BigNumber[];
-  tokenIds: BigNumber[];
+  unlockTimes: bigint[];
+  amounts: bigint[];
+  tokenIds: bigint[];
 }
-
 export interface ProtocolMeta {
   dustLock: string;
   revenueReward: string;
   dustRewardsController: string;
   dustOracle: string;
-  earlyWithdrawPenalty: BigNumber;
-  minLockAmount: BigNumber;
+  earlyWithdrawPenalty: bigint;
+  minLockAmount: bigint;
   rewardDistributor: string;
   revenueRewardTokens: string[];
   emissionRewardTokens: string[];
   emissionStrategies: string[];
 }
-
 export interface EmissionData {
   rewardTokens: string[];
-  totalRewards: BigNumber[];
+  totalRewards: bigint[];
   /** False only when the aggregate emissions read failed. */
   resolved: boolean;
-  asOfBlock: BigNumber;
-  asOfTimestamp: BigNumber;
+  asOfBlock: bigint;
+  asOfTimestamp: bigint;
 }
-
 export interface EssentialUserView {
   user: UserDashboardData;
   globalStats: GlobalStats;
   emissions: EmissionData;
   marketData: MarketData;
 }
-
 export interface ExtendedUserView {
   unlockSchedule: UnlockSchedule;
   allPrices: PriceData;
 }
-
 export interface UserRewardsSummary {
-  totalRevenue: BigNumber[];
-  totalEmissions: BigNumber[];
+  totalRevenue: bigint[];
+  totalEmissions: bigint[];
   /** Bit j set means `totalRevenue[j]` is trustworthy, aligned with the `rewardTokens` argument. */
-  revenueResolvedMask: BigNumber;
+  revenueResolvedMask: bigint;
   /** Bit j set means `totalEmissions[j]` is trustworthy, aligned with the `rewardTokens` argument. */
-  emissionsResolvedMask: BigNumber;
-  asOfBlock: BigNumber;
-  asOfTimestamp: BigNumber;
+  emissionsResolvedMask: bigint;
+  asOfBlock: bigint;
+  asOfTimestamp: bigint;
 }
-
 export interface UserEmissionAsset {
   asset: string;
-  amount: BigNumber;
+  amount: bigint;
   symbol: string;
   isDebt: boolean;
   /** False means `amount` defaulted to 0 because this asset's read failed. */
   resolved: boolean;
 }
-
 export interface UserEmissionBreakdown {
   breakdown: UserEmissionAsset[];
   /** False means at least one registered pool's asset list could not be enumerated. */
   enumerationResolved: boolean;
 }
-
 export interface UiBootstrap {
   meta: ProtocolMeta;
   globalStats: GlobalStats;
@@ -157,7 +139,6 @@ export interface UiBootstrap {
   allPrices: PriceData;
   network: NetworkData;
 }
-
 export interface UiFullBundle {
   meta: ProtocolMeta;
   essential: EssentialUserView;
