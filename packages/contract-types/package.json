@@ -1,6 +1,6 @@
 {
   "name": "@neverland-money/contract-types",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Typed ABIs for Neverland protocol contracts",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -10,7 +10,8 @@
   "files": [
     "dist",
     "README.md",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "abi-provenance.json"
   ],
   "publishConfig": {
     "access": "public"
@@ -20,7 +21,9 @@
     "lint": "cd ../.. && eslint packages/contract-types/src/**/*.ts",
     "check-types": "yarn build -- --noEmit",
     "prebuild": "npm run clean",
-    "build": "cd ../.. && tsc -p packages/contract-types/tsconfig.json && tsc -p packages/contract-types/tsconfig.json --module commonjs --outDir ./packages/contract-types/dist/cjs",
+    "generate:abis": "node scripts/generate-abis.mjs",
+    "check:abis": "node scripts/generate-abis.mjs --check",
+    "build": "yarn check:abis && cd ../.. && tsc -p packages/contract-types/tsconfig.json && tsc -p packages/contract-types/tsconfig.json --module commonjs --outDir ./packages/contract-types/dist/cjs",
     "test": "cd ../.. && yarn test packages/contract-types",
     "test:watch": "cd ../.. && yarn test --watch packages/contract-types",
     "cover": "cd ../.. && yarn cover packages/contract-types",
