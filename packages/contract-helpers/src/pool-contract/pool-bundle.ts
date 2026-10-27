@@ -25,7 +25,7 @@ import {
   type LPSignedSupplyParamsType,
   type LPSupplyParamsType,
 } from './pool-types';
-import { assertNonZeroAddress, legacyRateMode } from './validation';
+import { assertErc20Reserve, assertNonZeroAddress, legacyRateMode } from './validation';
 
 export type SupplyTxBuilder = {
   generateTxData: ({
@@ -146,6 +146,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
         signature,
         deadline,
       }: LPSignedSupplyParamsType): TransactionRequest => {
+        assertErc20Reserve(reserve, 'supplyWithPermit');
         const decomposedSignature: Signature = Signature.from(signature);
         const populatedTx: TransactionRequest = {};
         const onBehalfOfParam = onBehalfOf ?? user;
@@ -252,6 +253,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
         amount,
         interestRateMode,
       }) => {
+        assertErc20Reserve(reserve, 'repayWithPermit');
         const decomposedSignature: Signature = Signature.from(signature);
         const populatedTx: TransactionRequest = {};
         const numericRateMode = legacyRateMode(interestRateMode);

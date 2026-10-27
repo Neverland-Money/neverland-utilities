@@ -1,5 +1,6 @@
 import { getAddress, isAddress, ZeroAddress } from 'ethers';
 import { InterestRate } from '../commons/types';
+import { API_ETH_MOCK_ADDRESS } from '../commons/utils';
 
 export const UINT256_MAX = 2n ** 256n - 1n;
 
@@ -12,6 +13,12 @@ export function legacyRateMode(value: InterestRate | undefined): 1 | 2 {
 export function assertNonZeroAddress(value: string | undefined, name: string): void {
   if (typeof value === 'string' && value.toLowerCase() === ZeroAddress) {
     throw new TypeError(`${name} must not be the zero address`);
+  }
+}
+
+export function assertErc20Reserve(reserve: string, method: string): void {
+  if (reserve.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()) {
+    throw new TypeError(`${method} requires the wrapped token; the native sentinel is unsupported`);
   }
 }
 

@@ -270,6 +270,40 @@ describe('lending fund routing', () => {
     ).rejects.toThrow('repayWithPermit requires the wrapped token');
   });
 
+  describe.each(['supplyTxBuilder', 'repayTxBuilder'] as const)('PoolBundle.%s', builder => {
+    it.each([API_ETH_MOCK_ADDRESS, API_ETH_MOCK_ADDRESS.toLowerCase()])(
+      'rejects the native permit reserve %s',
+      reserve => {
+        const bundle = new PoolBundle(new OfflineProvider(), { POOL, WETH_GATEWAY: GATEWAY });
+        expect(() =>
+          bundle[builder].generateSignedTxData({
+            user: USER,
+            reserve,
+            amount: '1',
+            interestRateMode: InterestRate.Variable,
+            signature:
+              '0x532f8df4e2502bd869fb35e9301156f9b307380afdcc25cfbc87b2e939f16f7e47c326dc26eb918d327358797ee67ad7415d871ef7eaf0d4f6352d3ad021fbb41c',
+            deadline: '10000',
+          }),
+        ).toThrow('requires the wrapped token');
+      },
+    );
+
+    it('rejects a native reserve before parsing the permit signature', () => {
+      const bundle = new PoolBundle(new OfflineProvider(), { POOL, WETH_GATEWAY: GATEWAY });
+      expect(() =>
+        bundle[builder].generateSignedTxData({
+          user: USER,
+          reserve: API_ETH_MOCK_ADDRESS,
+          amount: '1',
+          interestRateMode: InterestRate.Variable,
+          signature: '0x',
+          deadline: '10000',
+        }),
+      ).toThrow('requires the wrapped token');
+    });
+  });
+
   it('estimates a raw approval with its own gas callback', async () => {
     jest.mocked(estimateGasByNetwork).mockResolvedValueOnce(90_000n);
     const pool = new Pool(new OfflineProvider(), { POOL });

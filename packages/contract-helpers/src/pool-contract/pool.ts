@@ -44,7 +44,13 @@ import type {
   PoolSupplyRawParams,
   PoolSupplyWithPermitRawParams,
 } from './pool-types';
-import { address, legacyRateMode, UINT256_MAX, unsignedDecimal } from './validation';
+import {
+  address,
+  assertErc20Reserve,
+  legacyRateMode,
+  UINT256_MAX,
+  unsignedDecimal,
+} from './validation';
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- Public interface retains consumer declaration merging.
 export interface PoolInterface {
@@ -122,12 +128,6 @@ function numericRateMode(value: PoolRepayRawParams['interestRateMode']): 1 | 2 {
 function finiteReferralCode(value: string | undefined): string {
   if (value === undefined) return '0';
   return unsignedDecimal(value, 'referralCode', 65_535n);
-}
-
-function assertErc20Reserve(reserve: string, method: string): void {
-  if (reserve.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()) {
-    throw new TypeError(`${method} requires the wrapped token; the native sentinel is unsupported`);
-  }
 }
 
 export class Pool extends AbiBaseService<typeof poolAbi> implements PoolInterface {

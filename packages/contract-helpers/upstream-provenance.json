@@ -2191,8 +2191,8 @@
     {
       "path": "v3-pool-contract-bundle/index.ts",
       "originalSha256": "c05f5272411af95478460022a5bc3ad7788675c98da8361ab0b4d1f703140d88",
-      "vendoredSha256": "5e0c55e897bb3b5bbdb87a2513546de14140904cbafac44a742dbf5fa476c877",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Omit fixed upstream gas limits from the synchronous builders; map InterestRate.None to variable debt; reject a zero onBehalfOf; document getApprovedAmount units."
+      "vendoredSha256": "87124d45229869b3eff75978b0ed387948e078e6aceab6dfb9e08d5372d89f1b",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Omit fixed upstream gas limits from the synchronous builders; map InterestRate.None to variable debt; reject a zero onBehalfOf; document getApprovedAmount units. Share the native-reserve guard with Pool and reject native sentinels before decoding signed supply and repay inputs."
     },
     {
       "path": "v3-pool-contract-bundle/pool-bundle.test.ts",
@@ -2202,7 +2202,7 @@
     {
       "path": "v3-pool-contract/index.ts",
       "originalSha256": "e740f1b87625475638159e157d3f376c04e89ccf36ac1895269929b2247a0cad",
-      "vendoredSha256": "e79ba5586d13fb18527283818b60ae38ff5485ff5c997fed15cdd2f6ce459f85",
+      "vendoredSha256": "a70eea681f39707490d727063b5cfbc2434626996046ad6c6fb1dd9b82028198",
       "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Map InterestRate.None to variable debt; accept referral code 0 in supplyWithPermit; require a boolean collateral flag; reject the native sentinel in permit and collateral methods; snapshot earlier approvals so raw approvals estimate their own gas."
     },
     {
@@ -2374,7 +2374,7 @@
     },
     {
       "path": "pool-contract/validation.ts",
-      "sha256": "ec72e7219fb75c23adbd5e9343e86439f2631beb73ffad51211ffb36ffe372dd"
+      "sha256": "c53717057428bd973523bab394a6f4de5e52c63cc4357fdddc9b28f0e34e8370"
     },
     {
       "path": "sdk-compatibility.test.ts",
@@ -2484,7 +2484,7 @@
     },
     {
       "path": "pool-contract/fund-routing.test.ts",
-      "sha256": "5346eb56959ad18e94116289dd134324d749bf244353cabc678dfa8498060e80"
+      "sha256": "adb369428117c3ec039c4855ff2f4eb049cd78bb074160f6d9e5b01fee802694"
     }
   ]
 }
