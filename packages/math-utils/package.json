@@ -1,0 +1,121 @@
+{
+  "name": "@neverland-money/math-utils",
+  "version": "1.0.0",
+  "description": "Owned math utilities for the Neverland lending protocol",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/cjs/index.d.ts",
+  "author": "Neverland Team; original Aave contributors",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "node -e \"const fs = require('node:fs'); for (const name of fs.readdirSync('.')) if (name === 'dist' || name.includes('.log')) fs.rmSync(name, { recursive: true, force: true });\"",
+    "lint": "cd ../.. && eslint \"packages/math-utils/src/**/*.ts\"",
+    "check-types": "cd ../.. && node ./node_modules/typescript/bin/tsc -p packages/math-utils/tsconfig.json --noEmit && node ./node_modules/typescript/bin/tsc -p packages/math-utils/tsconfig.json --module commonjs --noEmit",
+    "build": "cd ../.. && node scripts/build-sdk-package.mjs math-utils",
+    "test": "cd ../.. && yarn test packages/math-utils",
+    "test:watch": "cd ../.. && yarn test --watch packages/math-utils",
+    "cover": "cd ../.. && yarn cover packages/math-utils",
+    "commit": "cd ../.. && yarn commit",
+    "prepublishOnly": "yarn build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neverland-Money/neverland-utilities.git"
+  },
+  "keywords": [
+    "neverland",
+    "lending",
+    "defi",
+    "math"
+  ],
+  "dependencies": {
+    "bignumber.js": "^9.3.1",
+    "tslib": "^2.8.1"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      },
+      "default": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json",
+    "./dist/esm/*.json": "./dist/esm/*.json",
+    "./dist/esm/*.map": "./dist/esm/*.map",
+    "./dist/esm/*.d.ts": "./dist/esm/*.d.ts",
+    "./dist/esm/formatters/compounded-interest": {
+      "types": "./dist/esm/formatters/compounded-interest/index.d.ts",
+      "default": "./dist/esm/formatters/compounded-interest/index.js"
+    },
+    "./dist/esm/formatters/emode": {
+      "types": "./dist/esm/formatters/emode/index.d.ts",
+      "default": "./dist/esm/formatters/emode/index.js"
+    },
+    "./dist/esm/formatters/incentive": {
+      "types": "./dist/esm/formatters/incentive/index.d.ts",
+      "default": "./dist/esm/formatters/incentive/index.js"
+    },
+    "./dist/esm/formatters/reserve": {
+      "types": "./dist/esm/formatters/reserve/index.d.ts",
+      "default": "./dist/esm/formatters/reserve/index.js"
+    },
+    "./dist/esm/formatters/user": {
+      "types": "./dist/esm/formatters/user/index.d.ts",
+      "default": "./dist/esm/formatters/user/index.js"
+    },
+    "./dist/esm/*.js": {
+      "types": "./dist/esm/*.d.ts",
+      "default": "./dist/esm/*.js"
+    },
+    "./dist/esm/*": {
+      "types": "./dist/esm/*.d.ts",
+      "default": "./dist/esm/*.js"
+    },
+    "./dist/cjs/*.json": "./dist/cjs/*.json",
+    "./dist/cjs/*.map": "./dist/cjs/*.map",
+    "./dist/cjs/*.d.ts": "./dist/cjs/*.d.ts",
+    "./dist/cjs/formatters/compounded-interest": {
+      "types": "./dist/cjs/formatters/compounded-interest/index.d.ts",
+      "default": "./dist/cjs/formatters/compounded-interest/index.js"
+    },
+    "./dist/cjs/formatters/emode": {
+      "types": "./dist/cjs/formatters/emode/index.d.ts",
+      "default": "./dist/cjs/formatters/emode/index.js"
+    },
+    "./dist/cjs/formatters/incentive": {
+      "types": "./dist/cjs/formatters/incentive/index.d.ts",
+      "default": "./dist/cjs/formatters/incentive/index.js"
+    },
+    "./dist/cjs/formatters/reserve": {
+      "types": "./dist/cjs/formatters/reserve/index.d.ts",
+      "default": "./dist/cjs/formatters/reserve/index.js"
+    },
+    "./dist/cjs/formatters/user": {
+      "types": "./dist/cjs/formatters/user/index.d.ts",
+      "default": "./dist/cjs/formatters/user/index.js"
+    },
+    "./dist/cjs/*.js": {
+      "types": "./dist/cjs/*.d.ts",
+      "default": "./dist/cjs/*.js"
+    },
+    "./dist/cjs/*": {
+      "types": "./dist/cjs/*.d.ts",
+      "default": "./dist/cjs/*.js"
+    },
+    "./*": "./*"
+  }
+}

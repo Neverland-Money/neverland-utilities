@@ -5,16 +5,6 @@
     "rootDir": "src",
     "target": "es2020"
   },
-  "include": [
-    "src/DustIncentiveProvider-contract/**/*",
-    "src/v3-UiPoolDataProvider-contract/**/*",
-    "src/WETHGatewayLegacy-contract/**/*",
-    "src/VeDustRevenue-contract/**/*",
-    "src/NeverlandUiProvider-contract/**/*",
-    "src/DustAPR-contract/**/*",
-    "src/ClaimRewards-contract/**/*",
-    "src/commons/**/*",
-    "src/index.ts"
-  ],
-  "exclude": ["node_modules", "dist", "src/**/__tests__/**", "src/**/*.test.ts", "src/commons/**"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "src/**/__tests__/**", "src/**/*.test.ts", "src/**/mocks.ts"]
 }

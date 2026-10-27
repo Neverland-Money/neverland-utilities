@@ -41,7 +41,9 @@ describe('ABI generation', () => {
     );
   });
 
-  afterEach(() => rmSync(directory, { recursive: true, force: true }));
+  afterEach(() => {
+    rmSync(directory, { recursive: true, force: true });
+  });
 
   const run = (...args: string[]): string =>
     execFileSync(process.execPath, [script, '--root', directory, ...args], {
@@ -75,11 +77,17 @@ describe('ABI generation', () => {
     expect(JSON.parse(readFileSync(join(directory, 'src/abis/tokenAbi.json'), 'utf8'))).toEqual(
       updated,
     );
-    const provenance = JSON.parse(readFileSync(join(directory, 'abi-provenance.json'), 'utf8'));
-    expect(provenance.abis[0].sha256).toBe(
-      createHash('sha256').update(JSON.stringify(updated)).digest('hex'),
+    const provenance: unknown = JSON.parse(
+      readFileSync(join(directory, 'abi-provenance.json'), 'utf8'),
     );
-    expect(provenance.abis[0].entries.error).toBe(1);
+    expect(provenance).toMatchObject({
+      abis: [
+        {
+          sha256: createHash('sha256').update(JSON.stringify(updated)).digest('hex'),
+          entries: { error: 1 },
+        },
+      ],
+    });
     run('--check');
   });
 });

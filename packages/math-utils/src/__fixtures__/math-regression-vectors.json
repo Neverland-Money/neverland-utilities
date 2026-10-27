@@ -1,0 +1,1068 @@
+{
+  "schemaVersion": 1,
+  "upstream": {
+    "repository": "https://github.com/aave/aave-utilities",
+    "commit": "37dd3bab41c0bc4765b0254151cf6ed1d20b546f",
+    "package": "@aave/math-utils",
+    "version": "1.36.1",
+    "cjsTreeSha256": "74de33edbebf85c38c3055d8f3b45632cd8c5040a40343af5af05c604a13f57f",
+    "tarballSha256": "698341dacc7476cb50a41e8fcbe47b26e5091c405706c401713340a8562f5eab"
+  },
+  "lendingReference": {
+    "repository": "https://github.com/Neverland-Money/neverland-lending",
+    "package": "@neverland-money/lending-core",
+    "version": "1.1.0",
+    "commit": "a26582fcc24df718a57efd505d51d8cdeeed388d",
+    "sourceFiles": [
+      {
+        "path": "contracts/protocol/libraries/math/MathUtils.sol",
+        "sha256": "7f73c927e9801debfe0666e2a6364b92f62fd2d58d0c4b485ff04765fd4dc58d",
+        "sourceLines": [
+          "23-34",
+          "50-85"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/math/WadRayMath.sol",
+        "sha256": "d3dcae32d34a163087cfe6373f0fc97806a61a81941672c90d1dfceaf127b09e",
+        "sourceLines": [
+          "47-55",
+          "65-131"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/math/PercentageMath.sol",
+        "sha256": "38a5cc26b8067ac37156e69ddfccbdc1e597d990e9f76893ca3caaf55b053258",
+        "sourceLines": [
+          "66-76",
+          "122-134"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/helpers/TokenMath.sol",
+        "sha256": "7124571849db86872cd24956d2e9c7595918c098ba4dc938bbc0803e17248436",
+        "sourceLines": [
+          "14-60"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/logic/ReserveLogic.sol",
+        "sha256": "233a8f9fcf3b588e7faf933f7c3e856bdf17a664c2e63988b1f666e266529bd8",
+        "sourceLines": [
+          "46-84"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/logic/GenericLogic.sol",
+        "sha256": "1819e49cbab936ca09f6544cad5d01acca2044ff146beacd42b77a914ae4a27a",
+        "sourceLines": [
+          "86-175",
+          "195-207",
+          "221-270"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/logic/EModeLogic.sol",
+        "sha256": "451f1a6392b2c4c1e87f05423e6a58c73d29ae18e091a085ebd21552eb5ea3e7",
+        "sourceLines": [
+          "74-98"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/logic/PoolLogic.sol",
+        "sha256": "592dd04d3649d8c49b2069042fd55443cfe3cf03844e2b197507c47ee730756a",
+        "sourceLines": [
+          "199-212"
+        ]
+      }
+    ]
+  },
+  "rationale": "Complete upstream outputs with source-derived integer RAY rounding, debt ceilings, and Pool account tuples.",
+  "cases": [
+    {
+      "name": "normalize",
+      "args": [
+        "123456789",
+        6
+      ],
+      "expected": "123.456789",
+      "rationale": [
+        "Exact upstream operation result."
+      ]
+    },
+    {
+      "name": "normalizeBN",
+      "args": [
+        "123456789",
+        6
+      ],
+      "expected": "123.456789",
+      "rationale": [
+        "Exact upstream operation result."
+      ]
+    },
+    {
+      "name": "valueToBigNumber",
+      "args": [
+        "123456789012345678901234.0000001"
+      ],
+      "expected": "1.234567890123456789012340000001e+23",
+      "rationale": [
+        "Exact upstream operation result."
+      ]
+    },
+    {
+      "name": "nativeToUSD",
+      "args": [
+        {
+          "amount": "1234567",
+          "currencyDecimals": 6,
+          "priceInMarketReferenceCurrency": "123456789",
+          "marketReferenceCurrencyDecimals": 8,
+          "normalizedMarketReferencePriceInUsd": "1"
+        }
+      ],
+      "expected": "1.52415677625363",
+      "rationale": [
+        "Exact upstream operation result."
+      ]
+    },
+    {
+      "name": "calculateHealthFactorFromBalancesBigUnits",
+      "args": [
+        {
+          "collateralBalanceMarketReferenceCurrency": "200.000001",
+          "borrowBalanceMarketReferenceCurrency": "10.000003",
+          "currentLiquidationThreshold": "0.6"
+        }
+      ],
+      "expected": "11.999996460001061999",
+      "rationale": [
+        "GenericLogic wadDiv and integer /10000; public HF has 18 decimal places."
+      ]
+    },
+    {
+      "name": "calculateHealthFactorFromBalancesBigUnits",
+      "args": [
+        {
+          "collateralBalanceMarketReferenceCurrency": "200",
+          "borrowBalanceMarketReferenceCurrency": "0",
+          "currentLiquidationThreshold": "0.6"
+        }
+      ],
+      "expected": "-1",
+      "rationale": [
+        "Exact upstream operation result."
+      ]
+    },
+    {
+      "name": "formatReserves",
+      "args": [
+        {
+          "reserves": [
+            {
+              "originalId": 1,
+              "id": "0x0",
+              "symbol": "TEST",
+              "name": "TEST",
+              "decimals": 6,
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "usageAsCollateralEnabled": true,
+              "reserveFactor": "0",
+              "baseLTVasCollateral": "5000",
+              "liquidityIndex": "1e+27",
+              "reserveLiquidationThreshold": "6000",
+              "reserveLiquidationBonus": "0",
+              "variableBorrowIndex": "1e+27",
+              "variableBorrowRate": "70000000000000000000000000",
+              "availableLiquidity": "1500000001",
+              "liquidityRate": "30000000000000000000000000",
+              "totalScaledVariableDebt": "500000003",
+              "lastUpdateTimestamp": 1,
+              "borrowCap": "0",
+              "supplyCap": "0",
+              "debtCeiling": "0",
+              "debtCeilingDecimals": 2,
+              "isolationModeTotalDebt": "0",
+              "unbacked": "0",
+              "virtualAccActive": false,
+              "virtualUnderlyingBalance": "0",
+              "priceInMarketReferenceCurrency": "100000000"
+            }
+          ],
+          "currentTimestamp": 601,
+          "marketReferenceCurrencyDecimals": 8,
+          "marketReferencePriceInUsd": "100000000"
+        }
+      ],
+      "expected": [
+        {
+          "originalId": 1,
+          "id": "0x0",
+          "symbol": "TEST",
+          "name": "TEST",
+          "decimals": 6,
+          "underlyingAsset": "0x0000000000000000000000000000000000000000",
+          "usageAsCollateralEnabled": true,
+          "reserveFactor": "0",
+          "baseLTVasCollateral": "5000",
+          "liquidityIndex": "1e+27",
+          "reserveLiquidationThreshold": "6000",
+          "reserveLiquidationBonus": "0",
+          "variableBorrowIndex": "1e+27",
+          "variableBorrowRate": "70000000000000000000000000",
+          "availableLiquidity": "1500000001",
+          "liquidityRate": "30000000000000000000000000",
+          "totalScaledVariableDebt": "500.000003",
+          "lastUpdateTimestamp": 1,
+          "borrowCap": "0",
+          "supplyCap": "0",
+          "debtCeiling": "0",
+          "debtCeilingDecimals": 2,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "virtualAccActive": false,
+          "virtualUnderlyingBalance": "0",
+          "priceInMarketReferenceCurrency": "100000000",
+          "totalDebt": "500.000669",
+          "totalVariableDebt": "500.000669",
+          "totalLiquidity": "2000.00067",
+          "borrowUsageRatio": "0.25000025074991599878",
+          "supplyUsageRatio": "0.25000025074991599878",
+          "formattedReserveLiquidationBonus": "-1",
+          "supplyAPY": "0.03045453393881288111",
+          "variableBorrowAPY": "0.07250818117089440143",
+          "formattedAvailableLiquidity": "1500.000001",
+          "unborrowedLiquidity": "1500.000001",
+          "formattedBaseLTVasCollateral": "0.5",
+          "supplyAPR": "0.03",
+          "variableBorrowAPR": "0.07",
+          "formattedReserveLiquidationThreshold": "0.6",
+          "debtCeilingUSD": "0",
+          "isolationModeTotalDebtUSD": "0",
+          "availableDebtCeilingUSD": "0",
+          "isIsolated": false,
+          "eModes": [],
+          "totalLiquidityUSD": "2000.00067",
+          "availableLiquidityUSD": "1500.000001",
+          "totalDebtUSD": "500.000669",
+          "totalVariableDebtUSD": "500.000669",
+          "formattedPriceInMarketReferenceCurrency": "1",
+          "priceInUSD": "1",
+          "borrowCapUSD": "0",
+          "supplyCapUSD": "0",
+          "unbackedUSD": "0"
+        }
+      ],
+      "rationale": [
+        "Exact upstream operation result."
+      ]
+    },
+    {
+      "name": "formatReservesAndIncentives",
+      "args": [
+        {
+          "reserves": [
+            {
+              "originalId": 1,
+              "id": "0x0",
+              "symbol": "TEST",
+              "name": "TEST",
+              "decimals": 6,
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "usageAsCollateralEnabled": true,
+              "reserveFactor": "0",
+              "baseLTVasCollateral": "5000",
+              "liquidityIndex": "1e+27",
+              "reserveLiquidationThreshold": "6000",
+              "reserveLiquidationBonus": "0",
+              "variableBorrowIndex": "1e+27",
+              "variableBorrowRate": "70000000000000000000000000",
+              "availableLiquidity": "1500000001",
+              "liquidityRate": "30000000000000000000000000",
+              "totalScaledVariableDebt": "500000003",
+              "lastUpdateTimestamp": 1,
+              "borrowCap": "0",
+              "supplyCap": "0",
+              "debtCeiling": "0",
+              "debtCeilingDecimals": 2,
+              "isolationModeTotalDebt": "0",
+              "unbacked": "0",
+              "virtualAccActive": false,
+              "virtualUnderlyingBalance": "0",
+              "priceInMarketReferenceCurrency": "100000000"
+            }
+          ],
+          "currentTimestamp": 601,
+          "marketReferenceCurrencyDecimals": 8,
+          "marketReferencePriceInUsd": "100000000",
+          "reserveIncentives": [
+            {
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "aIncentiveData": {
+                "tokenAddress": "0x0000000000000000000000000000000000000000",
+                "incentiveControllerAddress": "0x0000000000000000000000000000000000000000",
+                "rewardsTokenInformation": [
+                  {
+                    "rewardTokenSymbol": "Test",
+                    "emissionPerSecond": "1000000000000000000",
+                    "incentivesLastUpdateTimestamp": 1,
+                    "tokenIncentivesIndex": "1e+27",
+                    "emissionEndTimestamp": 2,
+                    "rewardTokenAddress": "0x0000000000000000000000000000000000000000",
+                    "rewardTokenDecimals": 18,
+                    "precision": 18,
+                    "rewardPriceFeed": "1000000000",
+                    "priceFeedDecimals": 8,
+                    "rewardOracleAddress": "0x0000000000000000000000000000000000000000"
+                  }
+                ]
+              },
+              "vIncentiveData": {
+                "tokenAddress": "0x0000000000000000000000000000000000000000",
+                "incentiveControllerAddress": "0x0000000000000000000000000000000000000000",
+                "rewardsTokenInformation": [
+                  {
+                    "rewardTokenSymbol": "Test",
+                    "emissionPerSecond": "1000000000000000000",
+                    "incentivesLastUpdateTimestamp": 1,
+                    "tokenIncentivesIndex": "1e+27",
+                    "emissionEndTimestamp": 2,
+                    "rewardTokenAddress": "0x0000000000000000000000000000000000000000",
+                    "rewardTokenDecimals": 18,
+                    "precision": 18,
+                    "rewardPriceFeed": "1000000000",
+                    "priceFeedDecimals": 8,
+                    "rewardOracleAddress": "0x0000000000000000000000000000000000000000"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "expected": [
+        {
+          "originalId": 1,
+          "id": "0x0",
+          "symbol": "TEST",
+          "name": "TEST",
+          "decimals": 6,
+          "underlyingAsset": "0x0000000000000000000000000000000000000000",
+          "usageAsCollateralEnabled": true,
+          "reserveFactor": "0",
+          "baseLTVasCollateral": "5000",
+          "liquidityIndex": "1e+27",
+          "reserveLiquidationThreshold": "6000",
+          "reserveLiquidationBonus": "0",
+          "variableBorrowIndex": "1e+27",
+          "variableBorrowRate": "70000000000000000000000000",
+          "availableLiquidity": "1500000001",
+          "liquidityRate": "30000000000000000000000000",
+          "totalScaledVariableDebt": "500.000003",
+          "lastUpdateTimestamp": 1,
+          "borrowCap": "0",
+          "supplyCap": "0",
+          "debtCeiling": "0",
+          "debtCeilingDecimals": 2,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "virtualAccActive": false,
+          "virtualUnderlyingBalance": "0",
+          "priceInMarketReferenceCurrency": "100000000",
+          "totalDebt": "500.000669",
+          "totalVariableDebt": "500.000669",
+          "totalLiquidity": "2000.00067",
+          "borrowUsageRatio": "0.25000025074991599878",
+          "supplyUsageRatio": "0.25000025074991599878",
+          "formattedReserveLiquidationBonus": "-1",
+          "supplyAPY": "0.03045453393881288111",
+          "variableBorrowAPY": "0.07250818117089440143",
+          "formattedAvailableLiquidity": "1500.000001",
+          "unborrowedLiquidity": "1500.000001",
+          "formattedBaseLTVasCollateral": "0.5",
+          "supplyAPR": "0.03",
+          "variableBorrowAPR": "0.07",
+          "formattedReserveLiquidationThreshold": "0.6",
+          "debtCeilingUSD": "0",
+          "isolationModeTotalDebtUSD": "0",
+          "availableDebtCeilingUSD": "0",
+          "isIsolated": false,
+          "eModes": [],
+          "totalLiquidityUSD": "2000.00067",
+          "availableLiquidityUSD": "1500.000001",
+          "totalDebtUSD": "500.000669",
+          "totalVariableDebtUSD": "500.000669",
+          "formattedPriceInMarketReferenceCurrency": "1",
+          "priceInUSD": "1",
+          "borrowCapUSD": "0",
+          "supplyCapUSD": "0",
+          "unbackedUSD": "0",
+          "aIncentivesData": [
+            {
+              "incentiveAPR": "157679.94717721769563207196",
+              "rewardTokenAddress": "0x0000000000000000000000000000000000000000",
+              "rewardTokenSymbol": "Test"
+            }
+          ],
+          "vIncentivesData": [
+            {
+              "incentiveAPR": "630719.15609776914118488909",
+              "rewardTokenAddress": "0x0000000000000000000000000000000000000000",
+              "rewardTokenSymbol": "Test"
+            }
+          ]
+        }
+      ],
+      "rationale": [
+        "Exact upstream operation result."
+      ]
+    },
+    {
+      "name": "formatUserSummary",
+      "args": [
+        {
+          "userReserves": [
+            {
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "scaledATokenBalance": "200000001",
+              "usageAsCollateralEnabledOnUser": true,
+              "scaledVariableDebt": "10000003"
+            }
+          ],
+          "formattedReserves": [
+            {
+              "originalId": 1,
+              "id": "0x0",
+              "symbol": "TEST",
+              "name": "TEST",
+              "decimals": 6,
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "usageAsCollateralEnabled": true,
+              "reserveFactor": "0",
+              "baseLTVasCollateral": "5000",
+              "liquidityIndex": "1e+27",
+              "reserveLiquidationThreshold": "6000",
+              "reserveLiquidationBonus": "0",
+              "variableBorrowIndex": "1e+27",
+              "variableBorrowRate": "70000000000000000000000000",
+              "availableLiquidity": "1500000001",
+              "liquidityRate": "30000000000000000000000000",
+              "totalScaledVariableDebt": "500.000003",
+              "lastUpdateTimestamp": 1,
+              "borrowCap": "0",
+              "supplyCap": "0",
+              "debtCeiling": "0",
+              "debtCeilingDecimals": 2,
+              "isolationModeTotalDebt": "0",
+              "unbacked": "0",
+              "virtualAccActive": false,
+              "virtualUnderlyingBalance": "0",
+              "priceInMarketReferenceCurrency": "100000000",
+              "totalDebt": "500.000669",
+              "totalVariableDebt": "500.000669",
+              "totalLiquidity": "2000.00067",
+              "borrowUsageRatio": "0.25000025074991599878",
+              "supplyUsageRatio": "0.25000025074991599878",
+              "formattedReserveLiquidationBonus": "-1",
+              "supplyAPY": "0.03045453393881288111",
+              "variableBorrowAPY": "0.07250818117089440143",
+              "formattedAvailableLiquidity": "1500.000001",
+              "unborrowedLiquidity": "1500.000001",
+              "formattedBaseLTVasCollateral": "0.5",
+              "supplyAPR": "0.03",
+              "variableBorrowAPR": "0.07",
+              "formattedReserveLiquidationThreshold": "0.6",
+              "debtCeilingUSD": "0",
+              "isolationModeTotalDebtUSD": "0",
+              "availableDebtCeilingUSD": "0",
+              "isIsolated": false,
+              "eModes": [],
+              "totalLiquidityUSD": "2000.00067",
+              "availableLiquidityUSD": "1500.000001",
+              "totalDebtUSD": "500.000669",
+              "totalVariableDebtUSD": "500.000669",
+              "formattedPriceInMarketReferenceCurrency": "1",
+              "priceInUSD": "1",
+              "borrowCapUSD": "0",
+              "supplyCapUSD": "0",
+              "unbackedUSD": "0"
+            }
+          ],
+          "currentTimestamp": 601,
+          "marketReferenceCurrencyDecimals": 8,
+          "marketReferencePriceInUsd": "100000000",
+          "userEmodeCategoryId": 0
+        }
+      ],
+      "expected": {
+        "userReservesData": [
+          {
+            "underlyingAsset": "0x0000000000000000000000000000000000000000",
+            "scaledATokenBalance": "200000001",
+            "usageAsCollateralEnabledOnUser": true,
+            "scaledVariableDebt": "10000003",
+            "reserve": {
+              "originalId": 1,
+              "id": "0x0",
+              "symbol": "TEST",
+              "name": "TEST",
+              "decimals": 6,
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "usageAsCollateralEnabled": true,
+              "reserveFactor": "0",
+              "baseLTVasCollateral": "5000",
+              "liquidityIndex": "1e+27",
+              "reserveLiquidationThreshold": "6000",
+              "reserveLiquidationBonus": "0",
+              "variableBorrowIndex": "1e+27",
+              "variableBorrowRate": "70000000000000000000000000",
+              "availableLiquidity": "1500000001",
+              "liquidityRate": "30000000000000000000000000",
+              "totalScaledVariableDebt": "500.000003",
+              "lastUpdateTimestamp": 1,
+              "borrowCap": "0",
+              "supplyCap": "0",
+              "debtCeiling": "0",
+              "debtCeilingDecimals": 2,
+              "isolationModeTotalDebt": "0",
+              "unbacked": "0",
+              "virtualAccActive": false,
+              "virtualUnderlyingBalance": "0",
+              "priceInMarketReferenceCurrency": "100000000",
+              "totalDebt": "500.000669",
+              "totalVariableDebt": "500.000669",
+              "totalLiquidity": "2000.00067",
+              "borrowUsageRatio": "0.25000025074991599878",
+              "supplyUsageRatio": "0.25000025074991599878",
+              "formattedReserveLiquidationBonus": "-1",
+              "supplyAPY": "0.03045453393881288111",
+              "variableBorrowAPY": "0.07250818117089440143",
+              "formattedAvailableLiquidity": "1500.000001",
+              "unborrowedLiquidity": "1500.000001",
+              "formattedBaseLTVasCollateral": "0.5",
+              "supplyAPR": "0.03",
+              "variableBorrowAPR": "0.07",
+              "formattedReserveLiquidationThreshold": "0.6",
+              "debtCeilingUSD": "0",
+              "isolationModeTotalDebtUSD": "0",
+              "availableDebtCeilingUSD": "0",
+              "isIsolated": false,
+              "eModes": [],
+              "totalLiquidityUSD": "2000.00067",
+              "availableLiquidityUSD": "1500.000001",
+              "totalDebtUSD": "500.000669",
+              "totalVariableDebtUSD": "500.000669",
+              "formattedPriceInMarketReferenceCurrency": "1",
+              "priceInUSD": "1",
+              "borrowCapUSD": "0",
+              "supplyCapUSD": "0",
+              "unbackedUSD": "0"
+            },
+            "underlyingBalance": "200.000115",
+            "underlyingBalanceMarketReferenceCurrency": "200.000115",
+            "underlyingBalanceUSD": "200.000115",
+            "variableBorrows": "10.000017",
+            "variableBorrowsMarketReferenceCurrency": "10.000017",
+            "variableBorrowsUSD": "10.000017",
+            "totalBorrows": "10.000017",
+            "totalBorrowsMarketReferenceCurrency": "10.000017",
+            "totalBorrowsUSD": "10.000017",
+            "normalizedIncome": "1000000570776255707762557077",
+            "normalizedVariableDebt": "1000001331812148700990261081"
+          }
+        ],
+        "totalLiquidityMarketReferenceCurrency": "200.000115",
+        "totalLiquidityUSD": "200.000115",
+        "totalCollateralMarketReferenceCurrency": "200.000115",
+        "totalCollateralUSD": "200.000115",
+        "totalBorrowsMarketReferenceCurrency": "10.000017",
+        "totalBorrowsUSD": "10.000017",
+        "netWorthUSD": "190.000098",
+        "availableBorrowsMarketReferenceCurrency": "90.0000405",
+        "availableBorrowsUSD": "90.0000405",
+        "currentLoanToValue": "0.5",
+        "currentLiquidationThreshold": "0.6",
+        "healthFactor": "11.99998650002294996",
+        "userEmodeCategoryId": 0,
+        "isInIsolationMode": false,
+        "poolAccountData": {
+          "totalCollateralBase": "20000011500",
+          "totalDebtBase": "1000001700",
+          "availableBorrowsBase": "9000004050",
+          "currentLiquidationThreshold": "6000",
+          "ltv": "5000",
+          "healthFactor": "11999986500022949960"
+        }
+      },
+      "rationale": [
+        "Add exact uncapped raw Pool account tuple, including uint256.max no-debt HF.",
+        "Exact MathUtils linear interest and half-up normalized index at timestamp 601.",
+        "Exact MathUtils compounded interest and half-up normalized index at timestamp 601.",
+        "Direct ceiled variable debt; integer per-reserve debt valuation.",
+        "Totals derived from integer collateral/debt values and weighted GenericLogic risk arithmetic."
+      ]
+    },
+    {
+      "name": "formatUserSummaryAndIncentives",
+      "args": [
+        {
+          "userReserves": [
+            {
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "scaledATokenBalance": "200000001",
+              "usageAsCollateralEnabledOnUser": true,
+              "scaledVariableDebt": "10000003"
+            }
+          ],
+          "formattedReserves": [
+            {
+              "originalId": 1,
+              "id": "0x0",
+              "symbol": "TEST",
+              "name": "TEST",
+              "decimals": 6,
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "usageAsCollateralEnabled": true,
+              "reserveFactor": "0",
+              "baseLTVasCollateral": "5000",
+              "liquidityIndex": "1e+27",
+              "reserveLiquidationThreshold": "6000",
+              "reserveLiquidationBonus": "0",
+              "variableBorrowIndex": "1e+27",
+              "variableBorrowRate": "70000000000000000000000000",
+              "availableLiquidity": "1500000001",
+              "liquidityRate": "30000000000000000000000000",
+              "totalScaledVariableDebt": "500.000003",
+              "lastUpdateTimestamp": 1,
+              "borrowCap": "0",
+              "supplyCap": "0",
+              "debtCeiling": "0",
+              "debtCeilingDecimals": 2,
+              "isolationModeTotalDebt": "0",
+              "unbacked": "0",
+              "virtualAccActive": false,
+              "virtualUnderlyingBalance": "0",
+              "priceInMarketReferenceCurrency": "100000000",
+              "totalDebt": "500.000669",
+              "totalVariableDebt": "500.000669",
+              "totalLiquidity": "2000.00067",
+              "borrowUsageRatio": "0.25000025074991599878",
+              "supplyUsageRatio": "0.25000025074991599878",
+              "formattedReserveLiquidationBonus": "-1",
+              "supplyAPY": "0.03045453393881288111",
+              "variableBorrowAPY": "0.07250818117089440143",
+              "formattedAvailableLiquidity": "1500.000001",
+              "unborrowedLiquidity": "1500.000001",
+              "formattedBaseLTVasCollateral": "0.5",
+              "supplyAPR": "0.03",
+              "variableBorrowAPR": "0.07",
+              "formattedReserveLiquidationThreshold": "0.6",
+              "debtCeilingUSD": "0",
+              "isolationModeTotalDebtUSD": "0",
+              "availableDebtCeilingUSD": "0",
+              "isIsolated": false,
+              "eModes": [],
+              "totalLiquidityUSD": "2000.00067",
+              "availableLiquidityUSD": "1500.000001",
+              "totalDebtUSD": "500.000669",
+              "totalVariableDebtUSD": "500.000669",
+              "formattedPriceInMarketReferenceCurrency": "1",
+              "priceInUSD": "1",
+              "borrowCapUSD": "0",
+              "supplyCapUSD": "0",
+              "unbackedUSD": "0"
+            }
+          ],
+          "currentTimestamp": 601,
+          "marketReferenceCurrencyDecimals": 8,
+          "marketReferencePriceInUsd": "100000000",
+          "userEmodeCategoryId": 0,
+          "reserveIncentives": [
+            {
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "aIncentiveData": {
+                "tokenAddress": "0x0000000000000000000000000000000000000000",
+                "incentiveControllerAddress": "0x0000000000000000000000000000000000000000",
+                "rewardsTokenInformation": [
+                  {
+                    "rewardTokenSymbol": "Test",
+                    "emissionPerSecond": "1000000000000000000",
+                    "incentivesLastUpdateTimestamp": 1,
+                    "tokenIncentivesIndex": "1e+27",
+                    "emissionEndTimestamp": 2,
+                    "rewardTokenAddress": "0x0000000000000000000000000000000000000000",
+                    "rewardTokenDecimals": 18,
+                    "precision": 18,
+                    "rewardPriceFeed": "1000000000",
+                    "priceFeedDecimals": 8,
+                    "rewardOracleAddress": "0x0000000000000000000000000000000000000000"
+                  }
+                ]
+              },
+              "vIncentiveData": {
+                "tokenAddress": "0x0000000000000000000000000000000000000000",
+                "incentiveControllerAddress": "0x0000000000000000000000000000000000000000",
+                "rewardsTokenInformation": [
+                  {
+                    "rewardTokenSymbol": "Test",
+                    "emissionPerSecond": "1000000000000000000",
+                    "incentivesLastUpdateTimestamp": 1,
+                    "tokenIncentivesIndex": "1e+27",
+                    "emissionEndTimestamp": 2,
+                    "rewardTokenAddress": "0x0000000000000000000000000000000000000000",
+                    "rewardTokenDecimals": 18,
+                    "precision": 18,
+                    "rewardPriceFeed": "1000000000",
+                    "priceFeedDecimals": 8,
+                    "rewardOracleAddress": "0x0000000000000000000000000000000000000000"
+                  }
+                ]
+              }
+            }
+          ],
+          "userIncentives": [
+            {
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "aTokenIncentivesUserData": {
+                "tokenAddress": "0x0000000000000000000000000000000000000000",
+                "incentiveControllerAddress": "0x0000000000000000000000000000000000000000",
+                "userRewardsInformation": [
+                  {
+                    "tokenIncentivesUserIndex": "0",
+                    "userUnclaimedRewards": "1",
+                    "rewardTokenAddress": "0x0000000000000000000000000000000000000000",
+                    "rewardTokenDecimals": 18,
+                    "rewardPriceFeed": "10000000000000000000",
+                    "priceFeedDecimals": 8,
+                    "rewardOracleAddress": "0x0",
+                    "rewardTokenSymbol": "Test"
+                  }
+                ]
+              },
+              "vTokenIncentivesUserData": {
+                "tokenAddress": "0x0000000000000000000000000000000000000000",
+                "incentiveControllerAddress": "0x0000000000000000000000000000000000000000",
+                "userRewardsInformation": [
+                  {
+                    "tokenIncentivesUserIndex": "0",
+                    "userUnclaimedRewards": "1",
+                    "rewardTokenAddress": "0x0000000000000000000000000000000000000000",
+                    "rewardTokenDecimals": 18,
+                    "rewardPriceFeed": "10000000000000000000",
+                    "priceFeedDecimals": 8,
+                    "rewardOracleAddress": "0x0",
+                    "rewardTokenSymbol": "Test"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "userReservesData": [
+          {
+            "underlyingAsset": "0x0000000000000000000000000000000000000000",
+            "scaledATokenBalance": "200000001",
+            "usageAsCollateralEnabledOnUser": true,
+            "scaledVariableDebt": "10000003",
+            "reserve": {
+              "originalId": 1,
+              "id": "0x0",
+              "symbol": "TEST",
+              "name": "TEST",
+              "decimals": 6,
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "usageAsCollateralEnabled": true,
+              "reserveFactor": "0",
+              "baseLTVasCollateral": "5000",
+              "liquidityIndex": "1e+27",
+              "reserveLiquidationThreshold": "6000",
+              "reserveLiquidationBonus": "0",
+              "variableBorrowIndex": "1e+27",
+              "variableBorrowRate": "70000000000000000000000000",
+              "availableLiquidity": "1500000001",
+              "liquidityRate": "30000000000000000000000000",
+              "totalScaledVariableDebt": "500.000003",
+              "lastUpdateTimestamp": 1,
+              "borrowCap": "0",
+              "supplyCap": "0",
+              "debtCeiling": "0",
+              "debtCeilingDecimals": 2,
+              "isolationModeTotalDebt": "0",
+              "unbacked": "0",
+              "virtualAccActive": false,
+              "virtualUnderlyingBalance": "0",
+              "priceInMarketReferenceCurrency": "100000000",
+              "totalDebt": "500.000669",
+              "totalVariableDebt": "500.000669",
+              "totalLiquidity": "2000.00067",
+              "borrowUsageRatio": "0.25000025074991599878",
+              "supplyUsageRatio": "0.25000025074991599878",
+              "formattedReserveLiquidationBonus": "-1",
+              "supplyAPY": "0.03045453393881288111",
+              "variableBorrowAPY": "0.07250818117089440143",
+              "formattedAvailableLiquidity": "1500.000001",
+              "unborrowedLiquidity": "1500.000001",
+              "formattedBaseLTVasCollateral": "0.5",
+              "supplyAPR": "0.03",
+              "variableBorrowAPR": "0.07",
+              "formattedReserveLiquidationThreshold": "0.6",
+              "debtCeilingUSD": "0",
+              "isolationModeTotalDebtUSD": "0",
+              "availableDebtCeilingUSD": "0",
+              "isIsolated": false,
+              "eModes": [],
+              "totalLiquidityUSD": "2000.00067",
+              "availableLiquidityUSD": "1500.000001",
+              "totalDebtUSD": "500.000669",
+              "totalVariableDebtUSD": "500.000669",
+              "formattedPriceInMarketReferenceCurrency": "1",
+              "priceInUSD": "1",
+              "borrowCapUSD": "0",
+              "supplyCapUSD": "0",
+              "unbackedUSD": "0"
+            },
+            "underlyingBalance": "200.000115",
+            "underlyingBalanceMarketReferenceCurrency": "200.000115",
+            "underlyingBalanceUSD": "200.000115",
+            "variableBorrows": "10.000017",
+            "variableBorrowsMarketReferenceCurrency": "10.000017",
+            "variableBorrowsUSD": "10.000017",
+            "totalBorrows": "10.000017",
+            "totalBorrowsMarketReferenceCurrency": "10.000017",
+            "totalBorrowsUSD": "10.000017",
+            "normalizedIncome": "1000000570776255707762557077",
+            "normalizedVariableDebt": "1000001331812148700990261081"
+          }
+        ],
+        "totalLiquidityMarketReferenceCurrency": "200.000115",
+        "totalLiquidityUSD": "200.000115",
+        "totalCollateralMarketReferenceCurrency": "200.000115",
+        "totalCollateralUSD": "200.000115",
+        "totalBorrowsMarketReferenceCurrency": "10.000017",
+        "totalBorrowsUSD": "10.000017",
+        "netWorthUSD": "190.000098",
+        "availableBorrowsMarketReferenceCurrency": "90.0000405",
+        "availableBorrowsUSD": "90.0000405",
+        "currentLoanToValue": "0.5",
+        "currentLiquidationThreshold": "0.6",
+        "healthFactor": "11.99998650002294996",
+        "userEmodeCategoryId": 0,
+        "isInIsolationMode": false,
+        "calculatedUserIncentives": {
+          "0x0000000000000000000000000000000000000000": {
+            "assets": [
+              "0x0000000000000000000000000000000000000000",
+              "0x0000000000000000000000000000000000000000"
+            ],
+            "rewardTokenSymbol": "Test",
+            "claimableRewards": "329999976880011020.71629678792064568930327622708418036237",
+            "incentiveControllerAddress": "0x0000000000000000000000000000000000000000",
+            "rewardTokenDecimals": 18,
+            "rewardPriceFeed": "100000000000"
+          }
+        },
+        "poolAccountData": {
+          "totalCollateralBase": "20000011500",
+          "totalDebtBase": "1000001700",
+          "availableBorrowsBase": "9000004050",
+          "currentLiquidationThreshold": "6000",
+          "ltv": "5000",
+          "healthFactor": "11999986500022949960"
+        }
+      },
+      "rationale": [
+        "Add exact uncapped raw Pool account tuple, including uint256.max no-debt HF.",
+        "Exact MathUtils linear interest and half-up normalized index at timestamp 601.",
+        "Exact MathUtils compounded interest and half-up normalized index at timestamp 601.",
+        "Direct ceiled variable debt; integer per-reserve debt valuation.",
+        "Totals derived from integer collateral/debt values and weighted GenericLogic risk arithmetic."
+      ]
+    },
+    {
+      "name": "formatUserSummary",
+      "args": [
+        {
+          "userReserves": [
+            {
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "scaledATokenBalance": "200000001",
+              "usageAsCollateralEnabledOnUser": true,
+              "scaledVariableDebt": "0"
+            }
+          ],
+          "formattedReserves": [
+            {
+              "originalId": 1,
+              "id": "0x0",
+              "symbol": "TEST",
+              "name": "TEST",
+              "decimals": 6,
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "usageAsCollateralEnabled": true,
+              "reserveFactor": "0",
+              "baseLTVasCollateral": "5000",
+              "liquidityIndex": "1e+27",
+              "reserveLiquidationThreshold": "6000",
+              "reserveLiquidationBonus": "0",
+              "variableBorrowIndex": "1e+27",
+              "variableBorrowRate": "70000000000000000000000000",
+              "availableLiquidity": "1500000001",
+              "liquidityRate": "30000000000000000000000000",
+              "totalScaledVariableDebt": "500.000003",
+              "lastUpdateTimestamp": 1,
+              "borrowCap": "0",
+              "supplyCap": "0",
+              "debtCeiling": "0",
+              "debtCeilingDecimals": 2,
+              "isolationModeTotalDebt": "0",
+              "unbacked": "0",
+              "virtualAccActive": false,
+              "virtualUnderlyingBalance": "0",
+              "priceInMarketReferenceCurrency": "100000000",
+              "totalDebt": "500.000669",
+              "totalVariableDebt": "500.000669",
+              "totalLiquidity": "2000.00067",
+              "borrowUsageRatio": "0.25000025074991599878",
+              "supplyUsageRatio": "0.25000025074991599878",
+              "formattedReserveLiquidationBonus": "-1",
+              "supplyAPY": "0.03045453393881288111",
+              "variableBorrowAPY": "0.07250818117089440143",
+              "formattedAvailableLiquidity": "1500.000001",
+              "unborrowedLiquidity": "1500.000001",
+              "formattedBaseLTVasCollateral": "0.5",
+              "supplyAPR": "0.03",
+              "variableBorrowAPR": "0.07",
+              "formattedReserveLiquidationThreshold": "0.6",
+              "debtCeilingUSD": "0",
+              "isolationModeTotalDebtUSD": "0",
+              "availableDebtCeilingUSD": "0",
+              "isIsolated": false,
+              "eModes": [],
+              "totalLiquidityUSD": "2000.00067",
+              "availableLiquidityUSD": "1500.000001",
+              "totalDebtUSD": "500.000669",
+              "totalVariableDebtUSD": "500.000669",
+              "formattedPriceInMarketReferenceCurrency": "1",
+              "priceInUSD": "1",
+              "borrowCapUSD": "0",
+              "supplyCapUSD": "0",
+              "unbackedUSD": "0"
+            }
+          ],
+          "currentTimestamp": 601,
+          "marketReferenceCurrencyDecimals": 8,
+          "marketReferencePriceInUsd": "100000000",
+          "userEmodeCategoryId": 0
+        }
+      ],
+      "expected": {
+        "userReservesData": [
+          {
+            "underlyingAsset": "0x0000000000000000000000000000000000000000",
+            "scaledATokenBalance": "200000001",
+            "usageAsCollateralEnabledOnUser": true,
+            "scaledVariableDebt": "0",
+            "reserve": {
+              "originalId": 1,
+              "id": "0x0",
+              "symbol": "TEST",
+              "name": "TEST",
+              "decimals": 6,
+              "underlyingAsset": "0x0000000000000000000000000000000000000000",
+              "usageAsCollateralEnabled": true,
+              "reserveFactor": "0",
+              "baseLTVasCollateral": "5000",
+              "liquidityIndex": "1e+27",
+              "reserveLiquidationThreshold": "6000",
+              "reserveLiquidationBonus": "0",
+              "variableBorrowIndex": "1e+27",
+              "variableBorrowRate": "70000000000000000000000000",
+              "availableLiquidity": "1500000001",
+              "liquidityRate": "30000000000000000000000000",
+              "totalScaledVariableDebt": "500.000003",
+              "lastUpdateTimestamp": 1,
+              "borrowCap": "0",
+              "supplyCap": "0",
+              "debtCeiling": "0",
+              "debtCeilingDecimals": 2,
+              "isolationModeTotalDebt": "0",
+              "unbacked": "0",
+              "virtualAccActive": false,
+              "virtualUnderlyingBalance": "0",
+              "priceInMarketReferenceCurrency": "100000000",
+              "totalDebt": "500.000669",
+              "totalVariableDebt": "500.000669",
+              "totalLiquidity": "2000.00067",
+              "borrowUsageRatio": "0.25000025074991599878",
+              "supplyUsageRatio": "0.25000025074991599878",
+              "formattedReserveLiquidationBonus": "-1",
+              "supplyAPY": "0.03045453393881288111",
+              "variableBorrowAPY": "0.07250818117089440143",
+              "formattedAvailableLiquidity": "1500.000001",
+              "unborrowedLiquidity": "1500.000001",
+              "formattedBaseLTVasCollateral": "0.5",
+              "supplyAPR": "0.03",
+              "variableBorrowAPR": "0.07",
+              "formattedReserveLiquidationThreshold": "0.6",
+              "debtCeilingUSD": "0",
+              "isolationModeTotalDebtUSD": "0",
+              "availableDebtCeilingUSD": "0",
+              "isIsolated": false,
+              "eModes": [],
+              "totalLiquidityUSD": "2000.00067",
+              "availableLiquidityUSD": "1500.000001",
+              "totalDebtUSD": "500.000669",
+              "totalVariableDebtUSD": "500.000669",
+              "formattedPriceInMarketReferenceCurrency": "1",
+              "priceInUSD": "1",
+              "borrowCapUSD": "0",
+              "supplyCapUSD": "0",
+              "unbackedUSD": "0"
+            },
+            "underlyingBalance": "200.000115",
+            "underlyingBalanceMarketReferenceCurrency": "200.000115",
+            "underlyingBalanceUSD": "200.000115",
+            "variableBorrows": "0",
+            "variableBorrowsMarketReferenceCurrency": "0",
+            "variableBorrowsUSD": "0",
+            "totalBorrows": "0",
+            "totalBorrowsMarketReferenceCurrency": "0",
+            "totalBorrowsUSD": "0",
+            "normalizedIncome": "1000000570776255707762557077",
+            "normalizedVariableDebt": "1000001331812148700990261081"
+          }
+        ],
+        "totalLiquidityMarketReferenceCurrency": "200.000115",
+        "totalLiquidityUSD": "200.000115",
+        "totalCollateralMarketReferenceCurrency": "200.000115",
+        "totalCollateralUSD": "200.000115",
+        "totalBorrowsMarketReferenceCurrency": "0",
+        "totalBorrowsUSD": "0",
+        "netWorthUSD": "200.000115",
+        "availableBorrowsMarketReferenceCurrency": "100.0000575",
+        "availableBorrowsUSD": "100.0000575",
+        "currentLoanToValue": "0.5",
+        "currentLiquidationThreshold": "0.6",
+        "healthFactor": "-1",
+        "userEmodeCategoryId": 0,
+        "isInIsolationMode": false,
+        "poolAccountData": {
+          "totalCollateralBase": "20000011500",
+          "totalDebtBase": "0",
+          "availableBorrowsBase": "10000005750",
+          "currentLiquidationThreshold": "6000",
+          "ltv": "5000",
+          "healthFactor": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+        }
+      },
+      "rationale": [
+        "Add exact uncapped raw Pool account tuple, including uint256.max no-debt HF.",
+        "Exact MathUtils linear interest and half-up normalized index at timestamp 601.",
+        "Exact MathUtils compounded interest and half-up normalized index at timestamp 601."
+      ]
+    }
+  ]
+}

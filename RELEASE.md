@@ -1,152 +1,134 @@
-# Prepared releases: 2026-10-07
+# Releasing Neverland Utilities
 
-Prepared on `release/contract-types-helpers-2.0.0`, following the merge of PR #3 at
-`7ba8a3665f2d089c713c357b527c3cba34104ca6`. Initial release preparation made no Git writes. The
-October 8 CodeRabbit follow-up fixes the root ethers v6 example, restores ESLint execution, and
-records the configured UI contract address when a bundle read fails. Nothing has been published.
+The four packages are versioned independently with Lerna. Package manifests define each version,
+entrypoint and dependency requirement. Review the corresponding changelog and README whenever a
+version changes; breaking public exports, module paths, types or behavior require a major release.
 
-The three npm packages build and pass isolated consumption checks with zero production
-vulnerabilities. The workspace still has an unpatched tooling advisory and does **not** meet the
-requested zero-vulnerability policy. Publication remains on hold until that issue is resolved.
+## Prepare and validate
 
-## Versions
-
-| Package                             | Published baseline | Prepared version | Change                                      |
-| ----------------------------------- | ------------------ | ---------------- | ------------------------------------------- |
-| `@neverland-money/contract-types`   | 1.0.1              | 2.0.0            | Exact ABI types change public assignability |
-| `@neverland-money/contract-helpers` | 1.0.1              | 2.0.0            | ethers v6 providers and bigint values       |
-| `@neverland-money/address-book`     | 1.0.1              | 1.0.2            | Packaging and dependency fixes              |
-
-The unpublished contract-types 1.1.0 and helper 1.0.2 candidates are superseded. The private root
-package stays at 0.1.0; Lerna uses independent package versions. Manifest versions, changelog
-headings, README badges, and packed versions agree. Helpers require contract-types `^2.0.0` and
-ethers `^6.17.0`; neither dependency uses a local workspace path in the published manifest.
-
-## Consumer migration
-
-Contract-types retains all 53 ABI families, two aliases, and the original nine runtime ABI values.
-Existing constants and aliases now have exact readonly literal types. For example,
-`const copy: Erc20Abi = Array.from(erc20Abi)` compiles with the published 1.0.1 declarations but
-fails with the new tuple type. Use the general `Abi` type from a directly declared abitype
-dependency for reconstructed arrays, or use the exact exported snapshot for viem inference. See
-`packages/contract-types/README.md` for the migration example and ABI provenance.
-
-Helpers now accept ethers v6 providers and signers and return native bigint values for raw contract
-integers, rewards, balances, UI numeric fields, and gas estimates. Humanized strings and numbers
-keep their existing representations. Populated transactions use ethers v6 `TransactionRequest`,
-static multicalls use `method.staticCall`, and fee reads use `getFeeData`. Update provider imports,
-BigNumber arithmetic, and raw-result JSON serialization as described in
-`packages/contract-helpers/README.md` and the
-[ethers migration guide](https://docs.ethers.org/v6/migrating/).
-
-The known DustAPRCalculator issue remains separate. Its calls, formula, and inactive fallback are
-preserved while its numeric operations are adapted to ethers v6. No address values or ABI JSON
-snapshots changed during this preparation.
-
-## Validation
-
-Revalidated locally on October 8 after the CodeRabbit follow-up.
-
-Environment: Node 24.15.0, Yarn 4.3.1, npm 11.12.1, TypeScript 5.9.3, Linux x64.
-
-| Check                                     | Result                                              |
-| ----------------------------------------- | --------------------------------------------------- |
-| `yarn install --immutable`                | Pass; existing nonfatal peer warnings               |
-| Clean `yarn build`                        | All three CJS/ESM builds pass, no cache hits        |
-| `yarn check-types`                        | All three packages pass                             |
-| `yarn tsc -p tsconfig.test.json --noEmit` | Pass                                                |
-| `yarn test --runInBand`                   | 13 suites, 201 tests pass                           |
-| `yarn test:packages`                      | Pass, including zero production advisories          |
-| Isolated npm production audit             | Zero vulnerabilities                                |
-| Browser ESM bundle and execution          | All three ESM entrypoints and 55 ABI exports        |
-| Prettier on all changed text files        | Pass                                                |
-| `git diff --check HEAD`                   | Pass                                                |
-| ESLint configuration smoke checks         | Pass; JS, TS, JSON, Jest globals, generated ignores |
-| Full source ESLint scan                   | Runs; 601 errors, 6 warnings, zero fatal errors     |
-| Full workspace Yarn audit                 | One security advisory; four deprecations            |
-
-The package checker now verifies release metadata, tarball versions and contents, public CJS and
-native Node imports, Pool calldata, ethers v6 public numeric types, and strict declarations in Node,
-Bundler, and NodeNext resolution modes. It audits the nested npm consumer's production dependencies
-and rejects any advisories. New migration coverage exercises gas estimation and fee data, gateway
-transaction population, static multicall timestamps, safe integer conversion, revenue aggregation,
-and the unchanged APR fallback. The bigint balance regression failed against ethers v5 before the
-migration and passes with ethers v6.
-
-The UI diagnostic regression uses a real ethers v6 contract and a rejected provider call. It failed
-with an undefined contract address before the fix and passes with `contract.target`. An isolated
-install of the new helper tarball also preserves the error, user address, and nullable return while
-logging the configured contract address.
-
-An additional isolated consumer executed actual ethers v6 balance reads against a mocked call,
-populated a gateway deposit, bundled every package through `dist/esm`, and retained all 55 ABI
-values. This is local build and consumer evidence; no live RPC, deployment, publication, or new
-GitHub CI results are claimed. Solidity artifacts were not recompiled in this preparation.
-
-`VALIDATION.md` remains the historical validation of the merged ABI expansion. Its candidate
-versions and ethers v5 release hold have been superseded by this document.
-
-## Remaining release holds
-
-The full workspace audit reports braces 3.0.3 through micromatch 4.0.8:
-[GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm), high severity. Both are
-still the latest npm releases, and the advisory lists no patched braces version. Removing this
-requires a maintained replacement for the affected tooling dependency chain or a reviewed upstream
-fix. No advisories or severity levels were ignored or excluded from the workspace audit. The
-elliptic and pinned WebSocket advisories from ethers v5 are no longer present.
-
-The legacy ESLint configuration failed before linting with an invalid `__esModule` property from the
-modern XO preset. The follow-up replaces it with `eslint.config.mjs`, retains XO and Prettier rules
-and the existing overrides, declares the imported `globals` dependency, and uses the existing test
-TypeScript project. Generated ABI and build files are ignored. Quoted workspace lint globs ensure
-ESLint visits root source files and nested tests. CodeRabbit's ESLint tool remains enabled.
-
-ESLint now completes source analysis, but the restored rules report 601 errors and 6 warnings across
-33 authored TypeScript files. `yarn lint` remains nonzero because of those source diagnostics, not a
-configuration or dependency failure. A passing lint gate requires separate source cleanup or a
-reviewed lint-policy change; neither is represented as completed here.
-
-## Operator release steps
-
-Resolve the workspace security hold, complete the follow-up PR and its CI checks, and merge the
-release preparation into `main`. Restage the final edits before committing if files were staged
-while preparation was still running. Before publication, rebuild from a clean output directory:
+Use Node 24 and the Yarn version pinned by the root manifest. Install the committed dependency
+resolutions, then rebuild from source:
 
 ```bash
-yarn install --immutable
-yarn exec rimraf packages/address-book/dist packages/contract-types/dist packages/contract-helpers/dist
+HUSKY=0 YARN_ENABLE_SCRIPTS=false yarn install --immutable --mode=skip-build
+yarn clean
 yarn build
 yarn check-types
-yarn tsc -p tsconfig.test.json --noEmit
-yarn test --runInBand
-yarn test:packages
+yarn check-types:fixtures
+node ./node_modules/typescript/bin/tsc -p tsconfig.test.json --noEmit
 yarn lint
-yarn npm audit --all --recursive
+yarn format:check
+yarn test --runInBand
+yarn test:validation
+yarn test:sdk-fixtures
+yarn check:sdk-provenance
+yarn test:packages
 ```
 
-After the release holds are resolved and the working tree is clean, Catalyst can publish the
-manifest versions with `yarn release:prepared`. This runs `lerna publish from-package` without
-another version increment. Both release configurations now name `main`. The existing
-`release:latest` script derives new versions and should not be used for these prepared versions.
-Contract-types must be available before helpers because helpers depend on its new major version.
+Every package build removes its own `dist` first, so renamed or deleted modules cannot ship stale
+output; `yarn clean` also removes the root coverage output and stays in the sequence. Validate the
+intended public source in a fresh copy with no previous `dist` or `node_modules`, using the
+committed manifest and lockfile. Its workspace dependencies must resolve inside that copy. Follow
+[CONTRIBUTING.md](CONTRIBUTING.md) when changing generated ABIs, complete regression vectors or
+source provenance.
 
-After successful npm publication, create and push the corresponding release tags:
+`yarn test:packages` creates and installs four npm tarballs, checks runtime and dependency identity,
+executes CommonJS/ESM/deep imports and a browser bundle, verifies eight strict declaration modes,
+and requires zero production dependency advisories. Set `NEVERLAND_PACKAGE_CHECK_DIR` to a chosen
+output directory to retain tarballs, consumer projects, compiler results, browser metadata and the
+dependency audit. The generated `artifacts.json` records tarball versions and hashes.
 
-- `@neverland-money/contract-types@2.0.0`
-- `@neverland-money/contract-helpers@2.0.0`
-- `@neverland-money/address-book@1.0.2`
+Review each tarball's contents: runtime builds, declarations, package documentation and license
+notices are included; repository tests, fixtures and source-provenance manifests (including
+`abi-provenance.json`) stay in source control. Preserve the MIT notices in both upstream-derived SDK
+packages.
 
-## Prepared artifacts
+The pull request workflow in `.github/workflows/ci.yml` runs the same gates in the same order:
+install, build, `check-types`, `check-types:fixtures` and the test-project type check, lint, format
+check, tests, `test:validation`, `test:sdk-fixtures`, `check:sdk-provenance` and `test:packages`. It
+differs from the sequence above in two ways: it skips `yarn clean`, because a fresh checkout has
+nothing to clean, and it runs `yarn test` without `--runInBand`. Treat a green pull request as a
+precondition for a release, and still run the full sequence on the release commit.
 
-Tarballs, package inventories, the isolated consumer, production audit, and bundle metadata are
-retained in `/tmp/neverland-rabbit-release-4-PVj24f` for the October 8 follow-up. Validation logs
-and workspace audit evidence are under its `validation` directory. The earlier artifacts in
-`/tmp/neverland-release-prep-GY7eA5` describe the original preparation and are superseded. These
-temporary artifacts are local evidence, not committed package contents. Repack and revalidate if a
-package manifest, README, changelog, or build changes.
+## Finalize
 
-| Tarball                                      | Files | SHA-256                                                            |
-| -------------------------------------------- | ----- | ------------------------------------------------------------------ |
-| `neverland-money-contract-types-2.0.0.tgz`   | 558   | `081f6d0976720fbdbf7b9e1ab0010ef39a919d3f7e1853303eca7514b6b9405b` |
-| `neverland-money-contract-helpers-2.0.0.tgz` | 139   | `7178d5c1fa5112f2c14c786cf35d06734eba40ce24ce9295f5fd2c22506ca890` |
-| `neverland-money-address-book-1.0.2.tgz`     | 19    | `dc94eaa72a107946b86045aaf8068de4cad2baf93d7424a00fa022adc2dea496` |
+Before publishing, set the date in the heading of each changelog entry you are releasing to the
+release date, for example `## [3.0.0](...) (2026-10-27)`, and merge that change. The package check
+requires the first changelog heading to equal the manifest version, but it does not check the date.
+Confirm that every `README.md` still contains `v<version>` for its package version, then rerun
+`yarn format:check` and `yarn test:packages`.
+
+## Publish prepared versions
+
+Publish from `main` only, and release from an up-to-date `main`:
+
+```bash
+git switch main
+git pull --ff-only
+git status --short
+git rev-parse HEAD origin/main
+```
+
+`lerna publish from-package` does not enforce the `allowBranch` setting in `lerna.json`, so nothing
+stops a release from another branch or from a stale checkout. Confirm that the working tree is clean
+and that `HEAD` is the validated commit on `origin/main`. Also confirm the target registry account,
+package access, prepared versions and release artifacts, then publish the versions already prepared
+in manifests:
+
+```bash
+yarn release:check
+yarn release:prepared
+```
+
+`release:prepared` runs `lerna publish from-package`. Contract helpers require the matching exact
+contract-types and math-utils versions, so publish those dependencies first or let Lerna order the
+selected packages. Address-book is independent. `lerna.json` sets `exact: true`, so a versioning
+release writes exact internal dependency versions. Use `release:latest` only for an intentional
+conventional-commit versioning release; it can update versions, create tags and create GitHub
+releases. Canary publication is a separate release channel.
+
+## Tag the release
+
+`from-package` publishes without creating git tags, so tag each published package yourself. Use the
+form `@neverland-money/<package>@<version>`, which is also what the compare links in each changelog
+expect, and push the tags:
+
+```bash
+git tag @neverland-money/contract-types@3.0.0
+git push origin @neverland-money/contract-types@3.0.0
+```
+
+Repeat for every package that was published, with its own version. Tag the commit that was
+published.
+
+## Verify the publication
+
+Lerna repacks each package during publish and runs its `prepublishOnly` build, so the registry's
+`dist.integrity` will not match the hashes in `artifacts.json`. Do not compare hashes. Verify the
+published file list and contents instead:
+
+```bash
+npm pack @neverland-money/contract-types@3.0.0
+tar -tzf neverland-money-contract-types-3.0.0.tgz
+```
+
+Extract each registry tarball and compare its file list and file contents with the validated
+tarball, for example with `diff -r`. You can also rerun the consumer checks against the registry
+tarballs. Then verify the registry versions and dist-tags, install the published packages into a new
+consumer, and rerun relevant import, declaration and transaction-encoding checks. Create release
+notes describing user-facing changes and supported migration steps. Keep package versions, release
+tags and release artifacts aligned.
+
+## Consumer compatibility
+
+Contract helpers and math-utils select separate ESM and CommonJS graphs through root `import` and
+`require`, and their `dist/esm` deep paths work in native Node ESM. Address-book and contract-types
+expose `module` for ESM bundlers and `main` for CommonJS; native Node root imports load their
+CommonJS entrypoint, and their `dist/esm` builds are bundler-only (extensionless specifiers, and
+JSON imports without import attributes in contract-types). Deep paths must use the matching
+`dist/esm` or `dist/cjs` graph so provider and constructor identities stay consistent. The
+[helper guide](packages/contract-helpers/README.md#breaking-migration-to-300) documents breaking
+module/type changes, ethers 6 signatures, exact allowance units and finite raw transactions.
+
+SDK validation proves the tested source and package behavior. Verify consuming applications and
+contract deployments separately before their release.

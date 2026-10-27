@@ -1,0 +1,2490 @@
+{
+  "upstream": {
+    "repository": "https://github.com/aave/aave-utilities",
+    "commit": "37dd3bab41c0bc4765b0254151cf6ed1d20b546f",
+    "package": "@aave/contract-helpers",
+    "version": "1.36.1",
+    "npm": {
+      "shasum": "729735e6be4f8a1872e1e3400591485fc2198b76",
+      "tarball": "https://registry.npmjs.org/@aave/contract-helpers/-/contract-helpers-1.36.1.tgz",
+      "fileCount": 1317,
+      "integrity": "sha512-Ppoz11WRA3bjkZqnRA0a/txjfb67fVWh+ucgtN/RR45WI9oDsEmtYsqAwiNR3egvigSeyJASFeei0ijGGoFifw==",
+      "signatures": [
+        {
+          "sig": "MEUCID0eJM7S3DfzgAJTqwZbZ1lzxlJ60vypCdFidsw/SO0pAiEAwkiCUt0Sa6+5PyLKsNUFDZoZU7cmKqFen7szU6gjHs0=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 9367856
+    },
+    "sourceArchive": "https://codeload.github.com/aave/aave-utilities/tar.gz/37dd3bab41c0bc4765b0254151cf6ed1d20b546f",
+    "sourceArchiveSha256": "72ceafae1aafdae11058384da971b3c9cda859250618a0a91ca1cf87c4ee2690",
+    "license": "MIT",
+    "copyright": "Copyright (c) 2021 Aave"
+  },
+  "source": {
+    "upstreamDirectory": "packages/contract-helpers/src",
+    "vendoredDirectory": "src",
+    "originalTreeSha256": "dccef910aeb5ad06c2fb14cbfd2c0591527fd5c491276b099645096505ae910d",
+    "originalFiles": [
+      {
+        "path": "V3-uiStakeDataProvider-contract/_mocks.ts",
+        "sha256": "2b2d89793bcae8a2815ad27d03cd4ac59b9cf94191286a18068bd75d28d91fc0",
+        "bytes": 4313
+      },
+      {
+        "path": "V3-uiStakeDataProvider-contract/index.ts",
+        "sha256": "eeaa78bf6c4f6d329e315b18854553635317c5ba1fdcf8eb8d3ecebbc7f6c34d",
+        "bytes": 3778
+      },
+      {
+        "path": "V3-uiStakeDataProvider-contract/typechain/Abi.ts",
+        "sha256": "375aa165ba272948cd206090ed4c558425150f6ed11f7567b5641ec97e98e7a2",
+        "bytes": 10718
+      },
+      {
+        "path": "V3-uiStakeDataProvider-contract/typechain/common.ts",
+        "sha256": "272ba69a74dde5eab11096c0f956831d9e0b571fe6a2fc44e5d3ee34fa95719a",
+        "bytes": 1131
+      },
+      {
+        "path": "V3-uiStakeDataProvider-contract/typechain/factories/Abi__factory.ts",
+        "sha256": "c22d7f846017dde487a564fc8a537399e3feca4e20a1a6d25d9a5a0054f23425",
+        "bytes": 11724
+      },
+      {
+        "path": "V3-uiStakeDataProvider-contract/typechain/index.ts",
+        "sha256": "3cb8f414081d0ea83700391980d1ecfe3a59da7653701c4e738a5307a26a0032",
+        "bytes": 191
+      },
+      {
+        "path": "V3-uiStakeDataProvider-contract/types.ts",
+        "sha256": "b86b1860829936194d3426367b12e49b3a5d48a3221520134c0533641846414c",
+        "bytes": 1544
+      },
+      {
+        "path": "V3-uiStakeDataProvider-contract/uiStakeDataProviderv3.test.ts",
+        "sha256": "262597718ae1928e27bfae385d9972cb834823c93a3968ac1feb9dd9e4d9721e",
+        "bytes": 2471
+      },
+      {
+        "path": "abpt-migration/abptMigration.test.ts",
+        "sha256": "3e1a66158ab6d1629ecfa82df4ebb31c77e378f3184e76f01fa014fe58b5827f",
+        "bytes": 2325
+      },
+      {
+        "path": "abpt-migration/index.ts",
+        "sha256": "b05792822b98cf38238728143dc46f1a26015f8b3e7d00736a757159229b18aa",
+        "bytes": 1906
+      },
+      {
+        "path": "abpt-migration/typechain/StkABPTMigrator.d.ts",
+        "sha256": "62df5c216b439543083c0ac89013bb59bb56e8251e59b1caeecf53c678da3f45",
+        "bytes": 10045
+      },
+      {
+        "path": "abpt-migration/typechain/StkABPTMigrator__factory.ts",
+        "sha256": "865d739f3efb1382b759f26c6071b6d1d9aeec83260ad727da3a3b1d080b304a",
+        "bytes": 18230
+      },
+      {
+        "path": "baseDebtToken-contract/baseDebtToken.test.ts",
+        "sha256": "6d11abc50db7cb30c59ddfa92ff7f63a9c6aab4c5211450690dbf8500611bdb8",
+        "bytes": 13255
+      },
+      {
+        "path": "baseDebtToken-contract/index.ts",
+        "sha256": "843eea5767ad65fd85d9a79c457afa925ca16602a37619b65226ecc33276918b",
+        "bytes": 5093
+      },
+      {
+        "path": "baseDebtToken-contract/typechain/IDebtTokenBase.d.ts",
+        "sha256": "c6a1a0ec4f357082c2f8d033b4121e7f69d6b83f3eee14f12f7d70d4d12366e5",
+        "bytes": 4656
+      },
+      {
+        "path": "baseDebtToken-contract/typechain/IDebtTokenBase__factory.ts",
+        "sha256": "d0a412b9b5641bffc84205c9009f6f66d0b720fdea7512ca58b3ef4d984b6039",
+        "bytes": 1382
+      },
+      {
+        "path": "cl-feed-registry/cl-feed-registry.test.ts",
+        "sha256": "2f586a7d5c717f3a43445f025011d7de5725d614b80498b29045a1c132d42e62",
+        "bytes": 3919
+      },
+      {
+        "path": "cl-feed-registry/index.ts",
+        "sha256": "a65c3729e81161eea1eb7c8b7137f7a8415331c464e6c2a3b54e0820706f7250",
+        "bytes": 2403
+      },
+      {
+        "path": "cl-feed-registry/typechain/FeedRegistryInterface.d.ts",
+        "sha256": "e5edbbe72956ee03d8e3387bb0f1ea9a7d0ae8573726874c22f5918553174aeb",
+        "bytes": 7309
+      },
+      {
+        "path": "cl-feed-registry/typechain/FeedRegistryInterface__factory.ts",
+        "sha256": "d61ee0346068585686be9b7f2144e356a386ef7ee17ff5cf0497b9abaed1b621",
+        "bytes": 2259
+      },
+      {
+        "path": "cl-feed-registry/types/ChainlinkFeedsRegistryTypes.ts",
+        "sha256": "eafea095baacace0886a0d25a6d4e555ad4413cc3ae4f1d0c53c8b3283ce9430",
+        "bytes": 574
+      },
+      {
+        "path": "commons/BaseService.test.ts",
+        "sha256": "656fbf22f7b18932d337dd887360446ccf58639692c0dc13913df63d65596037",
+        "bytes": 9976
+      },
+      {
+        "path": "commons/BaseService.ts",
+        "sha256": "e20c1ef37aac35ed31dd147775d87c10b64ef61afcfac082121b55cbf2fbb8a8",
+        "bytes": 4084
+      },
+      {
+        "path": "commons/gasStation.test.ts",
+        "sha256": "2db531bef0f37631565c3c59932aae3bb53dcf2acc65110d558f865c6b0cabe2",
+        "bytes": 2681
+      },
+      {
+        "path": "commons/gasStation.ts",
+        "sha256": "8e5eefe4fa21b891c32f8174904732a535c3f0773ceb4eb29b6d75c612011ed9",
+        "bytes": 1515
+      },
+      {
+        "path": "commons/ipfs.test.ts",
+        "sha256": "452ac5f41ccb4b22aad019710d4ab28e4b80f0ff0b4e4cb1518999a16c2a162d",
+        "bytes": 9406
+      },
+      {
+        "path": "commons/ipfs.ts",
+        "sha256": "ea821bec197d6ba3410a15fb3e7e8681488c8d6dc5f892d99781b7c62d98ef3d",
+        "bytes": 2082
+      },
+      {
+        "path": "commons/types.ts",
+        "sha256": "09f69ec1f9bc7c09406f6ecddd20b844358ca2e999e4f347224fc8959178eb97",
+        "bytes": 11754
+      },
+      {
+        "path": "commons/utils.test.ts",
+        "sha256": "ad709c943920de31ad3c18af5264fae8e390518d9c4c8d585984314566c176ea",
+        "bytes": 5582
+      },
+      {
+        "path": "commons/utils.ts",
+        "sha256": "6418d2d68a7a0038f02bbf97b7a974c63e6e81fbb8765a8eb2f3895600af958f",
+        "bytes": 9931
+      },
+      {
+        "path": "commons/validators/methodValidators.ts",
+        "sha256": "59e2b459236be3e6d9b6cf6e189c3ad74ad41a3294ffee59d03f97801bdeea06",
+        "bytes": 17902
+      },
+      {
+        "path": "commons/validators/paramValidators.ts",
+        "sha256": "43b591af6853804a0cd3c8a4e7ce673bb88f500904c5106436850f4aea7d14c3",
+        "bytes": 5554
+      },
+      {
+        "path": "commons/validators/validations.ts",
+        "sha256": "59521ec0661f138f67d3f7c5bfcd8afc0f3ddb3501bac332e85bfed7a303a5e3",
+        "bytes": 11480
+      },
+      {
+        "path": "commons/validators/validators.test.ts",
+        "sha256": "8e82c58fddc19f50c21557871437041c5d78f40ebebf0e64177e22bfeed8b838",
+        "bytes": 39666
+      },
+      {
+        "path": "erc20-2612/erc20_2612.test.ts",
+        "sha256": "23d5b2dda29ae38beab41d62b8fc21032b9a8ad15828c7619b4bf0365f5696e6",
+        "bytes": 3275
+      },
+      {
+        "path": "erc20-2612/index.ts",
+        "sha256": "41393750af422d8bd35b1cdef03020edd8f72d7b61cc0bac988983875cdb1f7f",
+        "bytes": 1440
+      },
+      {
+        "path": "erc20-2612/typechain/IERC202612.d.ts",
+        "sha256": "59a91088ebcd3ec2e10f34be90e77426e067e949b8f9898ce88158571fa76d21",
+        "bytes": 3911
+      },
+      {
+        "path": "erc20-2612/typechain/IERC202612__factory.ts",
+        "sha256": "bfab061cdf7b1274183f80ac46cb1af1cd3f9b931e70b0277e7ef02c53ec20a9",
+        "bytes": 1247
+      },
+      {
+        "path": "erc20-contract/erc20.test.ts",
+        "sha256": "8888b12aa0753ed48d88997a92f96997b62530b620604a01d81cc851e9e45ab1",
+        "bytes": 21914
+      },
+      {
+        "path": "erc20-contract/index.ts",
+        "sha256": "5c3ffd25d86610ec5a17acbcf16746cd7b19cf6e31fb995f1612ee35265dc834",
+        "bytes": 8903
+      },
+      {
+        "path": "erc20-contract/typechain/IERC20Detailed.d.ts",
+        "sha256": "13361fcaf31550a85bcad634787c91ce484c9b95bc1e225f428f7691a42f4a95",
+        "bytes": 6923
+      },
+      {
+        "path": "erc20-contract/typechain/IERC20Detailed__factory.ts",
+        "sha256": "0696702219bb4671196e7d519195f2a215243d5f6cdbb067c0a31bd9f74aff19",
+        "bytes": 2079
+      },
+      {
+        "path": "faucet-contract/faucet.test.ts",
+        "sha256": "6217148882fbe7056c4e82980ba1686c4589ac34b27eaf3a1f93d2e5535f2c94",
+        "bytes": 4676
+      },
+      {
+        "path": "faucet-contract/index.ts",
+        "sha256": "1ef34848c27eb8370046b34fbf707b2324afd49b9bc95bab6028c6d2a3fa8063",
+        "bytes": 2049
+      },
+      {
+        "path": "faucet-contract/typechain/IFaucet.d.ts",
+        "sha256": "f76760a6cbd11df2607a3c7c6399ba1a6cace0b2c13edbc2c42a27571c010401",
+        "bytes": 4041
+      },
+      {
+        "path": "faucet-contract/typechain/IFaucet__factory.ts",
+        "sha256": "4be2adb6478d9f6491554befa970f3ce769e04bbba07b3b16129942695651b5e",
+        "bytes": 1165
+      },
+      {
+        "path": "governance-contract/governance.test.ts",
+        "sha256": "f909e0f18e95fd53b7bc8d3c3ba006c2a53331d0ff372c7144b6f9f151a69b90",
+        "bytes": 21247
+      },
+      {
+        "path": "governance-contract/index.ts",
+        "sha256": "36337b8a520fe6b47b66828899a91d2e3e86d9ff37ac91852678625be60bbae1",
+        "bytes": 8374
+      },
+      {
+        "path": "governance-contract/typechain/IAaveGovernanceV2.d.ts",
+        "sha256": "96a7641da48d451e63cbbc34d507ca808ca858c369f071fd07f38e8d324475b9",
+        "bytes": 37393
+      },
+      {
+        "path": "governance-contract/typechain/IAaveGovernanceV2__factory.ts",
+        "sha256": "02959719ae16bebaee75fc2ea31a3c45cfc7e5fc03f998041495899b8ccdf9df",
+        "bytes": 13392
+      },
+      {
+        "path": "governance-contract/typechain/IGovernanceStrategy.d.ts",
+        "sha256": "af1f89b92aa2fe28dd22fc28c0645af8e278fae897e37bc52cf704742f9c6122",
+        "bytes": 9774
+      },
+      {
+        "path": "governance-contract/typechain/IGovernanceStrategy__factory.ts",
+        "sha256": "6127c2784ce04199705334aba2d755e9dfee0af616ba7e5c889f34af767db4eb",
+        "bytes": 2449
+      },
+      {
+        "path": "governance-contract/typechain/IGovernanceV2Helper.d.ts",
+        "sha256": "fbfca7b32283e05a4721a537697225094e3c64cba6446c3cbe4a66fe6a0f3785",
+        "bytes": 21110
+      },
+      {
+        "path": "governance-contract/typechain/IGovernanceV2Helper__factory.ts",
+        "sha256": "8ef1132813b94c9f04e8a8d2d393d3d515135423a205a6b6e217e1d929f47399",
+        "bytes": 11286
+      },
+      {
+        "path": "governance-contract/types.ts",
+        "sha256": "000b19fbff3939ca5f605284d0715e75f94596f719952dcbe1a49546df4a5c32",
+        "bytes": 4618
+      },
+      {
+        "path": "governance-power-delegation-contract/governance-power-delegation-contract.test.ts",
+        "sha256": "91110a0d8483748c61fab2dc30c13370b4eca280c43b7f8e2e9669aca3c83540",
+        "bytes": 7072
+      },
+      {
+        "path": "governance-power-delegation-contract/index.ts",
+        "sha256": "656b730bed2a8f2ac4a94a5d3da51724e36d6b298d2d84a7530fad810ab6691f",
+        "bytes": 12620
+      },
+      {
+        "path": "governance-power-delegation-contract/typechain/IGovernancePowerDelegationToken.d.ts",
+        "sha256": "4a728eee66e84832da93929a5ab3b4f1473716a150733272ff7fe9567cddf1ad",
+        "bytes": 19426
+      },
+      {
+        "path": "governance-power-delegation-contract/typechain/IGovernancePowerDelegationToken__factory.ts",
+        "sha256": "4d97662a4eecd75951524f1e2de48e21b793d71abe3ebae5525c69f104a50c94",
+        "bytes": 5965
+      },
+      {
+        "path": "governance-v3/aave-token-v3/index.ts",
+        "sha256": "2bb9a4211c9388459c76cac0ca0d21b5b3c92e3b97dc25cf306dd81a220fac48",
+        "bytes": 2110
+      },
+      {
+        "path": "governance-v3/delegate-helper/index.ts",
+        "sha256": "1e82b8e474b6eeef6bb3a70962e931ecc72d2738418ec374c97086b326ad9b4b",
+        "bytes": 3958
+      },
+      {
+        "path": "governance-v3/governance-core/index.ts",
+        "sha256": "c659261d509201957b61e2f2240080128555b2c2a881c1b9740455514040bb24",
+        "bytes": 1831
+      },
+      {
+        "path": "governance-v3/governance-data-helper/index.ts",
+        "sha256": "4332c813fe0ec63cf1e859b4bdd08ccb5918bfe07602e49da4ef81167b475261",
+        "bytes": 6614
+      },
+      {
+        "path": "governance-v3/payloads-data-helper/index.ts",
+        "sha256": "6a784a08263ace75217d1c4bfbc15949de050b506b20092d95cbfff8d91aab32",
+        "bytes": 2427
+      },
+      {
+        "path": "governance-v3/typechain/AaveTokenV3.d.ts",
+        "sha256": "10bba0b42fb9999da0dd3ad3fd7fd1b8d7f984ddb3df139e7903a68f66e16e65",
+        "bytes": 29993
+      },
+      {
+        "path": "governance-v3/typechain/GovernanceCore.d.ts",
+        "sha256": "8eebaa9cc5f4be9a592a2c71854140c379419298570ca101c580c610e670d43e",
+        "bytes": 49410
+      },
+      {
+        "path": "governance-v3/typechain/GovernanceDataHelper.d.ts",
+        "sha256": "ef2e639da4699e30907e3e3edec4673f317678a17197c35893636048d852a46d",
+        "bytes": 9597
+      },
+      {
+        "path": "governance-v3/typechain/MetaDelegateHelper.d.ts",
+        "sha256": "3caab399ffd34d70e94177c177d76b72211bc8977f03f15735ea24cec1158e42",
+        "bytes": 3476
+      },
+      {
+        "path": "governance-v3/typechain/PayloadsControllerDataHelper.d.ts",
+        "sha256": "837f0ce04effbdcae70f0e058a9efef6f5a2352312084431da2d011d43d74b81",
+        "bytes": 6400
+      },
+      {
+        "path": "governance-v3/typechain/VotingMachine.ts",
+        "sha256": "b5742b53796ec25498959934c03ee340f6b9b35b8ee5e413618993803e81adb2",
+        "bytes": 44857
+      },
+      {
+        "path": "governance-v3/typechain/VotingMachineDataHelper.d.ts",
+        "sha256": "acf8f4db972f665d2ed59f4ab061046887448ec2ff879d5057740c5b50f50758",
+        "bytes": 5749
+      },
+      {
+        "path": "governance-v3/typechain/common.ts",
+        "sha256": "272ba69a74dde5eab11096c0f956831d9e0b571fe6a2fc44e5d3ee34fa95719a",
+        "bytes": 1131
+      },
+      {
+        "path": "governance-v3/typechain/factories/AaveTokenV3__factory.ts",
+        "sha256": "ccf136aeddb62306cefc1026a9ea8c7d3bd51dab4b86621af79c4a66ea6eefd0",
+        "bytes": 33185
+      },
+      {
+        "path": "governance-v3/typechain/factories/GovernanceCore__factory.ts",
+        "sha256": "ee0237dc8ba2cae4f8bfbdf33719fcdc1da46ae9b37a150f48791656dd3c56e1",
+        "bytes": 23557
+      },
+      {
+        "path": "governance-v3/typechain/factories/GovernanceDataHelper__factory.ts",
+        "sha256": "e47df02867f90a3b1e141e9e66bf1ffeac08e9b096ea7ac60b0e85aa08e93e94",
+        "bytes": 8627
+      },
+      {
+        "path": "governance-v3/typechain/factories/MetaDelegateHelper__factory.ts",
+        "sha256": "ab5769f4773c2e1295278128e8d1b3997fb74198cc7b150019ce1bc859dda626",
+        "bytes": 6537
+      },
+      {
+        "path": "governance-v3/typechain/factories/PayloadsControllerDataHelper__factory.ts",
+        "sha256": "ae449bbd31bdfda3f7f2a1ad2e26557693cc7f02e03f116da04982420abe1dc5",
+        "bytes": 5584
+      },
+      {
+        "path": "governance-v3/typechain/factories/VotingMachineDataHelper__factory.ts",
+        "sha256": "dbf4f98eb64638ed1544b848298747b6ed6526a4a2df75a4b5989cf3c7311dde",
+        "bytes": 4938
+      },
+      {
+        "path": "governance-v3/typechain/factories/VotingMachine__factory.ts",
+        "sha256": "ac00cdeb763bdd5d63d27a1738cd0dc6563c6684a0649310ac609d42abb38dbf",
+        "bytes": 22978
+      },
+      {
+        "path": "governance-v3/typechain/factories/index.ts",
+        "sha256": "0acb486210b543d6ab94348c797afbb8ba4c4161d132c9d32e0d222d3f3340e2",
+        "bytes": 284
+      },
+      {
+        "path": "governance-v3/typechain/index.ts",
+        "sha256": "48bcb87a3f812e4333a56fb04e195c42511b1e51b421485ca55714fee7a58c97",
+        "bytes": 509
+      },
+      {
+        "path": "governance-v3/voting-machine-data-helper/index.ts",
+        "sha256": "6075416a6c1342919505036e1f70c523c81dff06e79a84a11c2440eecbaf3866",
+        "bytes": 3244
+      },
+      {
+        "path": "incentive-controller/incentive-controller.test.ts",
+        "sha256": "ef6a4b23c1d492a6c44463a8c0fccba5a227c1a768eec048a3083ebbaacb5e23",
+        "bytes": 7164
+      },
+      {
+        "path": "incentive-controller/index.ts",
+        "sha256": "4a2b462e260301ee91eb8eb79060d13af9416484105f216f5d0d8236811c884d",
+        "bytes": 1964
+      },
+      {
+        "path": "incentive-controller/typechain/IAaveIncentivesController.d.ts",
+        "sha256": "d7934da925b5bd7334de38ca9b4383893eb00a7bb372a18bb11c62a2a9e93c81",
+        "bytes": 3203
+      },
+      {
+        "path": "incentive-controller/typechain/IAaveIncentivesController__factory.ts",
+        "sha256": "711181e2be65a966f500ce9e276429e858c5bb904453ef2119cd3367ce395553",
+        "bytes": 1071
+      },
+      {
+        "path": "incentive-controller-v2/incentive-controller-v2.test.ts",
+        "sha256": "9b3da21cb1dd65a2ae24f847734b1b795945ef1b7342e1d3b97b20b48048d8a2",
+        "bytes": 13844
+      },
+      {
+        "path": "incentive-controller-v2/index.ts",
+        "sha256": "e474a20a80bb5deb4b78aa3981a2efa2ed53d4fcc4a7e8b87a8eedbf7cb66e05",
+        "bytes": 3221
+      },
+      {
+        "path": "incentive-controller-v2/typechain/IAaveIncentivesControllerV2.d.ts",
+        "sha256": "1917235bb15e57c4cb2720d471d758cd62e29709805921c512c78168594c6efe",
+        "bytes": 35394
+      },
+      {
+        "path": "incentive-controller-v2/typechain/IAaveIncentivesControllerV2__factory.ts",
+        "sha256": "2725b40e236d9b3bb4f5ad52a7b7839a11bdfc4602fc44b5d8b61e53b599905d",
+        "bytes": 16479
+      },
+      {
+        "path": "index.ts",
+        "sha256": "b6a534fff31cd5a75108abafe1f0a7e52396ef4cecc9b6b4adcc5f35bf548854",
+        "bytes": 2054
+      },
+      {
+        "path": "lendingPool-contract/index.ts",
+        "sha256": "bd11401a800593f146ad3adcdd370e700828be272c06ef1e18c411d28c2aa9a6",
+        "bytes": 32395
+      },
+      {
+        "path": "lendingPool-contract/lendingPool.test.ts",
+        "sha256": "69f75d5c40ab1bb3659bc98ba5cdf635e514226e3013b49883d360e74047d1e6",
+        "bytes": 179732
+      },
+      {
+        "path": "lendingPool-contract/lendingPoolTypes.ts",
+        "sha256": "b72ba38481b2343dc3d546b807ea462407aae6e0ea145b0fff3f79fe5b298f1c",
+        "bytes": 3701
+      },
+      {
+        "path": "lendingPool-contract/typechain/ILendingPool.d.ts",
+        "sha256": "b3f7de13dbe5524ca09113b12f3bae752d1da148c868fb6e66d08cf0167a0d51",
+        "bytes": 21090
+      },
+      {
+        "path": "lendingPool-contract/typechain/ILendingPool__factory.ts",
+        "sha256": "669e802ffcea0a23a3710ecf1abe9826e0bdb971463b9d9b2ea1bf1b3cf7161a",
+        "bytes": 5111
+      },
+      {
+        "path": "lendingPool-contract-bundle/index.ts",
+        "sha256": "4e226b0817e8fef5a89a1a7ff08b386cbe41fb40fe95950b6bcecba100346a27",
+        "bytes": 7035
+      },
+      {
+        "path": "lendingPool-contract-bundle/lendingPoolBundle.test.ts",
+        "sha256": "86c3d20cfae8ba264ddd0640316615a761c37675bfb30a2e20c700a2042b810d",
+        "bytes": 13344
+      },
+      {
+        "path": "paraswap-debtSwitch-contract/debtSwitch.test.ts",
+        "sha256": "75112fa4b1195770b623cdd682591681492f1cecd3f80c7854ad156b09c4e751",
+        "bytes": 14153
+      },
+      {
+        "path": "paraswap-debtSwitch-contract/index.ts",
+        "sha256": "dac81ece81eb793f3ad3788f3e82a3b95b6d08444097b4f3ae7bd2a615dbbf48",
+        "bytes": 3259
+      },
+      {
+        "path": "paraswap-debtSwitch-contract/typechain/ParaSwapDebtSwitchAdapter.d.ts",
+        "sha256": "e1a43f044427e31d1f71323cc8e644ec8cad634451a648fbc095ee1879327e72",
+        "bytes": 16636
+      },
+      {
+        "path": "paraswap-debtSwitch-contract/typechain/ParaSwapDebtSwitchAdapter__factory.ts",
+        "sha256": "e731a6ae859dad6bdab4245a9edd0e219f02a98af7c1aa93ac3946ccb32081f6",
+        "bytes": 38582
+      },
+      {
+        "path": "paraswap-liquiditySwapAdapter-contract/index.ts",
+        "sha256": "d4947f2f4adb4b7d6126991d2fea7b856b27a4fc55fa47ac5740299e99c777c2",
+        "bytes": 5266
+      },
+      {
+        "path": "paraswap-liquiditySwapAdapter-contract/paraswapLiquiditySwapAdapter.test.ts",
+        "sha256": "7489c26dfed99c7d1c6804c74d5d9a721b00b695e74098cdf54986b5c2df0316",
+        "bytes": 28362
+      },
+      {
+        "path": "paraswap-liquiditySwapAdapter-contract/typechain/IParaSwapLiquiditySwapAdapter.d.ts",
+        "sha256": "65032a1fe09e7584d087aac3d3fa420358267967235fd24a272883f10277d72e",
+        "bytes": 7026
+      },
+      {
+        "path": "paraswap-liquiditySwapAdapter-contract/typechain/IParaSwapLiquiditySwapAdapter__factory.ts",
+        "sha256": "1c1d7e663b0fecaee154f15e09da1c998a613940e106ede279b4e52ed87cd58e",
+        "bytes": 2202
+      },
+      {
+        "path": "paraswap-repayWithCollateralAdapter-contract/index.ts",
+        "sha256": "cb8cea3960e59854d685e7f5208b52717c1ac80b20572471c1f1f9d33ef73ee5",
+        "bytes": 3285
+      },
+      {
+        "path": "paraswap-repayWithCollateralAdapter-contract/paraswapRepayWithCollateralAdapter.test.ts",
+        "sha256": "dd02ce8eb897b311ef34739a74612c51e7c6315c13e94faf3ad622a568120b50",
+        "bytes": 26509
+      },
+      {
+        "path": "paraswap-repayWithCollateralAdapter-contract/typechain/ParaSwapRepayAdapter.d.ts",
+        "sha256": "7a2608aaca016f910cb30d8fa2e779e1bf96bca4505e4088de28eb1e681c3a29",
+        "bytes": 16157
+      },
+      {
+        "path": "paraswap-repayWithCollateralAdapter-contract/typechain/ParaSwapRepayAdapter__factory.ts",
+        "sha256": "541c7f04a988a6b69bc9208822dfe3be65e8a450771309a4fcffd94ef02bd762",
+        "bytes": 34302
+      },
+      {
+        "path": "paraswap-withdrawAndSwitchAdapter-contract/index.ts",
+        "sha256": "0cfe55837ee6dd030f1d1c83f18a5b1da884abd05ac99937cd8c8cd8823e5d70",
+        "bytes": 2942
+      },
+      {
+        "path": "paraswap-withdrawAndSwitchAdapter-contract/paraswapWithdrawAndSwitchAdapter.test.ts",
+        "sha256": "4099dfea68edfbc1f3c912fb49b5e08cdf587dc5e9f180a8271c91e62fe61900",
+        "bytes": 13126
+      },
+      {
+        "path": "paraswap-withdrawAndSwitchAdapter-contract/typechain/ParaSwapWithdrawSwapAdapter.d.ts",
+        "sha256": "2ca0c2abc6fecfc2aa5a4d07e5cc29fb2421c68fcf7a1e98c675dc9a8c2461d4",
+        "bytes": 16132
+      },
+      {
+        "path": "paraswap-withdrawAndSwitchAdapter-contract/typechain/ParaSwapWithdrawSwapAdapter__factory.ts",
+        "sha256": "ad4afa7ca8853fd2c17bb5a9f37e55882584d87400c76533c2cf0d39488aac99",
+        "bytes": 30265
+      },
+      {
+        "path": "permissions-manager/_mocks.ts",
+        "sha256": "c103f47d97c77e5810d215464d584b27048c896f4344c3761838e08368e306d5",
+        "bytes": 964
+      },
+      {
+        "path": "permissions-manager/index.ts",
+        "sha256": "d486976abe13edf7e789445c4308629b67ab63ecaa770a2e99bc55fc1ae215c8",
+        "bytes": 1885
+      },
+      {
+        "path": "permissions-manager/permissions-manager.test.ts",
+        "sha256": "7a8238bc20d8b19f79300fb47f5edac5d23052666de1ab36bd1f353f1ce6851c",
+        "bytes": 2091
+      },
+      {
+        "path": "permissions-manager/typechain/PermissionManager.d.ts",
+        "sha256": "63cf4c3f399cf7f5b0ca42eb9a2d0bd64feb8f9df7f8aa75c4865f91fc3d4e88",
+        "bytes": 18933
+      },
+      {
+        "path": "permissions-manager/typechain/PermissionManagerFactory.ts",
+        "sha256": "9bb73ac9bbf533da464145f0e73e86b580ceee3e5bee90945668325f0dbfb673",
+        "bytes": 14540
+      },
+      {
+        "path": "permissions-manager/types/PermissionManagerTypes.ts",
+        "sha256": "5582d92f88969c513e1937fed90df2a626a7d54b12a43b40c62cb77401d5879d",
+        "bytes": 494
+      },
+      {
+        "path": "repayWithCollateralAdapter-contract/index.ts",
+        "sha256": "eb1de25f27e50bc83020b932bab660cd8eb5a9577e2ca6898bd5fe6af22e600e",
+        "bytes": 2888
+      },
+      {
+        "path": "repayWithCollateralAdapter-contract/repayWithCollateralAdapter.test.ts",
+        "sha256": "f6e8b9e5027e41e1b1c191576af3da38275935c02f641770c8eb217b0609665b",
+        "bytes": 14760
+      },
+      {
+        "path": "repayWithCollateralAdapter-contract/typechain/IRepayWithCollateral.d.ts",
+        "sha256": "b7cc3246aacb8f2a85ad3c5394b3e4e382eec81f16db911d7fbf583cffc803a9",
+        "bytes": 6545
+      },
+      {
+        "path": "repayWithCollateralAdapter-contract/typechain/IRepayWithCollateral__factory.ts",
+        "sha256": "7d6ba74d89c537e9152e9c520f58881b2bf20a3508411373269608a7467b660b",
+        "bytes": 2033
+      },
+      {
+        "path": "staking-contract/index.ts",
+        "sha256": "45d30726a447a3a6e8addd7d546d69cd2c183b35776e6afe7d539fbf9523d96f",
+        "bytes": 11705
+      },
+      {
+        "path": "staking-contract/staking.test.ts",
+        "sha256": "1a9dc55a53881e9d70b2bc62b0517fd715159a3079151591d3ce1b9a1b64466f",
+        "bytes": 31180
+      },
+      {
+        "path": "staking-contract/typechain/IAaveStakingHelper.d.ts",
+        "sha256": "21a01015aed8e4f89bb491f694a198cba0ce8a5bf8e2f245f987f7f56df1baf7",
+        "bytes": 3559
+      },
+      {
+        "path": "staking-contract/typechain/IAaveStakingHelper__factory.ts",
+        "sha256": "cf214ee166c27c2d97ca50be24e9f11a1cf14e475abb93509bcfa49ba2a4b706",
+        "bytes": 1083
+      },
+      {
+        "path": "staking-contract/typechain/IStakedAaveV3.d.ts",
+        "sha256": "b285b15b2cd1017228bef06c859f4bd5a8bbe14abdfa2e443ebaea7d98d626b0",
+        "bytes": 82254
+      },
+      {
+        "path": "staking-contract/typechain/IStakedAaveV3__factory.ts",
+        "sha256": "933c26a02c68494f6b1b75ae3ae28e1441251be3be8ce32fb5dad9512cf6f24c",
+        "bytes": 29254
+      },
+      {
+        "path": "synthetix-contract/index.ts",
+        "sha256": "c2c945c578195f7870bf55a579f759dd9e3684dc30abbbbde7fa62aa2c517f00",
+        "bytes": 1802
+      },
+      {
+        "path": "synthetix-contract/synthetix.test.ts",
+        "sha256": "38ac0fab1854f154bdbc13094acf834ca0f15f3b91204fff09065852016e73f7",
+        "bytes": 3914
+      },
+      {
+        "path": "synthetix-contract/typechain/ISynthetix.d.ts",
+        "sha256": "9fef21b9126b5e5bdcf5fc93883f31a466782efb3b3646ac855157baabbe42da",
+        "bytes": 2749
+      },
+      {
+        "path": "synthetix-contract/typechain/ISynthetix__factory.ts",
+        "sha256": "1458c822406e27ac68f5c9c8d6953b563b7094cc2741ded063c1dd559dd4dbaf",
+        "bytes": 789
+      },
+      {
+        "path": "token-wrapper/index.ts",
+        "sha256": "b534d712307e9863af71bc6e6dcff292707bc3d55b4158e59bc9aed884b88fd0",
+        "bytes": 3950
+      },
+      {
+        "path": "token-wrapper/token-wrapper.test.ts",
+        "sha256": "977429de57e1a9438a4af67b9c9bf7bf80a80c8ee79e7a80899ff58fd9f7a3bc",
+        "bytes": 4618
+      },
+      {
+        "path": "token-wrapper/typechain/TokenWrapper.d.ts",
+        "sha256": "dd77accd6409986af2dcfbfa6adf9d575f022c2eb3024ae35f7398c2c88149ae",
+        "bytes": 15640
+      },
+      {
+        "path": "token-wrapper/typechain/TokenWrapper_factory.ts",
+        "sha256": "2f9d50c3ae38790b5ceb59f84552c02e5d0928399b088cf0b72a6505532f5a5d",
+        "bytes": 6849
+      },
+      {
+        "path": "uiStakeDataProvider-contract/_mocks.ts",
+        "sha256": "dcb691eb5a680488107f7fe35fd87f5f5df42423d4f394108cd5936368cb8721",
+        "bytes": 9292
+      },
+      {
+        "path": "uiStakeDataProvider-contract/index.ts",
+        "sha256": "ce026b1d69c2536c694a99e529b4bcd4cbcb66ceb28bb7fd69225575a3a9de4c",
+        "bytes": 6453
+      },
+      {
+        "path": "uiStakeDataProvider-contract/typechain/StakedTokenDataProvider.d.ts",
+        "sha256": "2c161ebd9084f08e5bf2fbf3a5cec894ddd23742ef7a898e9ea6d6f21da3ed88",
+        "bytes": 88111
+      },
+      {
+        "path": "uiStakeDataProvider-contract/typechain/StakedTokenDataProviderFactory.ts",
+        "sha256": "aab8776a9442a97572d93580db495667818190748422b101bb4620680d6c746f",
+        "bytes": 30592
+      },
+      {
+        "path": "uiStakeDataProvider-contract/types.ts",
+        "sha256": "ff6ddf091ae93121f8e617a1c4298a90c0164f84899f8eb64c675ddfa7a7a775",
+        "bytes": 2583
+      },
+      {
+        "path": "uiStakeDataProvider-contract/uiStakeDataProvider.test.ts",
+        "sha256": "3e7ccf7a022ece29272f34c612b36db80a2f136b4d44fc1dc89688e477adbb59",
+        "bytes": 3872
+      },
+      {
+        "path": "umbrella/RewardsDistributor.test.ts",
+        "sha256": "377b151fb82dea328f9c09aa581c15a04accb1c5be5b1b7b744fb4a9ebea5a21",
+        "bytes": 3319
+      },
+      {
+        "path": "umbrella/RewardsDistributor.ts",
+        "sha256": "8b0b120e1f400011398e141421ead8630827eea0c553b81caacf0cb1b9672778",
+        "bytes": 2671
+      },
+      {
+        "path": "umbrella/StakeDataProvider.test.ts",
+        "sha256": "cead55a2153f2c27554487a5755aff764e5dfb8eb242d49599e96ae1982a08aa",
+        "bytes": 5568
+      },
+      {
+        "path": "umbrella/StakeDataProvider.ts",
+        "sha256": "b0220bc571b6f4d3442b1e209c7ecd1fdfad2caa352838c3ed3a7fcd4c94897a",
+        "bytes": 4793
+      },
+      {
+        "path": "umbrella/StakeToken.test.ts",
+        "sha256": "f69833f159fd611baa430a9b10da2294d3d0ae3bb43a6959489d47e9d1bfb3ac",
+        "bytes": 4577
+      },
+      {
+        "path": "umbrella/StakeToken.ts",
+        "sha256": "853e1507d603c057c0f48e5b4d7163404268ba1114a3b4c43e1265565d9a7504",
+        "bytes": 2985
+      },
+      {
+        "path": "umbrella/UmbrellaBatchHelper.test.ts",
+        "sha256": "1ec8a4e5287ed05d722c9ee5a7990398614924547b1e76edea443e92ebafe87b",
+        "bytes": 7374
+      },
+      {
+        "path": "umbrella/UmbrellaBatchHelper.ts",
+        "sha256": "5791e30137b153fb721e2e9bcd91b54eb009b28174f169d50b186768841ecf00",
+        "bytes": 4485
+      },
+      {
+        "path": "umbrella/index.ts",
+        "sha256": "f954e7ae5ca15d1be19c9aab6f85e1beeb79c874d6acee0993f3d8164c26b4ac",
+        "bytes": 221
+      },
+      {
+        "path": "umbrella/typechain/IRewardsDistributor.ts",
+        "sha256": "858e9a0383811425e65bea55d2e8cab3c56c116b36a0f984c2ecb1fa00426c14",
+        "bytes": 20559
+      },
+      {
+        "path": "umbrella/typechain/IRewardsDistributor__factory.ts",
+        "sha256": "6a1c91f2977cb11efb60c920f6c953f52d5118fb7a6e9506b54cce40fd98d988",
+        "bytes": 10228
+      },
+      {
+        "path": "umbrella/typechain/StakeDataProvider.ts",
+        "sha256": "faa5fa1ccc392b7573a457524453de7d431f8bcf496ff292b2fa87b2b3211207",
+        "bytes": 9160
+      },
+      {
+        "path": "umbrella/typechain/StakeDataProvider__factory.ts",
+        "sha256": "e3ce8154296738c86582054341e2a25f475c3d590881bf509c82aeb91f5caaab",
+        "bytes": 38166
+      },
+      {
+        "path": "umbrella/typechain/StakeToken.ts",
+        "sha256": "7a5ea80ae57d7ea68bb8fc12a995209ae550181b95531af5f513debe4e7b1be4",
+        "bytes": 43317
+      },
+      {
+        "path": "umbrella/typechain/StakeToken__factory.ts",
+        "sha256": "e7c5d7263a28da40bdba0459d89908f742e534a5bda4080330ba371f23edac53",
+        "bytes": 20258
+      },
+      {
+        "path": "umbrella/typechain/UmbrellaBatchHelper.ts",
+        "sha256": "89211acee61398863462adeee0a21fd083486a2aca3faab238816263397b0e4d",
+        "bytes": 21783
+      },
+      {
+        "path": "umbrella/typechain/UmbrellaBatchHelper__factory.ts",
+        "sha256": "583213e27ff4dacd36f95540fe890280e14a8d00a5c86a67b058db623c816242",
+        "bytes": 43621
+      },
+      {
+        "path": "umbrella/typechain/common.ts",
+        "sha256": "272ba69a74dde5eab11096c0f956831d9e0b571fe6a2fc44e5d3ee34fa95719a",
+        "bytes": 1131
+      },
+      {
+        "path": "v3-UiIncentiveDataProvider-contract/_mocks.ts",
+        "sha256": "2f481433076411330893cdd1c9617930ed7551f917be897330ee116304bfde68",
+        "bytes": 4470
+      },
+      {
+        "path": "v3-UiIncentiveDataProvider-contract/index.ts",
+        "sha256": "69cde8212933823af3adee17b91db6ef860f9156203cced932bed894314135bf",
+        "bytes": 7774
+      },
+      {
+        "path": "v3-UiIncentiveDataProvider-contract/typechain/IUiIncentiveDataProviderV3.d.ts",
+        "sha256": "54db2a4a2bca35ca17c5a14c83896f26be13bec1f327d1b328d9d89b3e982f86",
+        "bytes": 9577
+      },
+      {
+        "path": "v3-UiIncentiveDataProvider-contract/typechain/IUiIncentiveDataProviderV3__factory.ts",
+        "sha256": "61b74e8c7be19a22ddabf07b5bc48bbec43d8ae2b36c285fc8c7bd9a88b8f85a",
+        "bytes": 22149
+      },
+      {
+        "path": "v3-UiIncentiveDataProvider-contract/types.ts",
+        "sha256": "04d837cdb511a946b3b39fcd1481d0878f6e4c8b2725c825c6c988d9cb301230",
+        "bytes": 2853
+      },
+      {
+        "path": "v3-UiIncentiveDataProvider-contract/uiIncentiveDataProviderV3.test.ts",
+        "sha256": "871fecbd82e92f6844c8719028f5b8601c3f62cf43302b1598cfc2ba7ce50f3e",
+        "bytes": 16263
+      },
+      {
+        "path": "v3-UiPoolDataProvider-contract/_mocks.ts",
+        "sha256": "e741e5c3d3582cf01cab3f314fa717ad8ef84c5ff520f23573ed9464d89b4caf",
+        "bytes": 7652
+      },
+      {
+        "path": "v3-UiPoolDataProvider-contract/index.ts",
+        "sha256": "763341fb611ec5c4d6cb5cbe6fa46539ec989c488328e92e2d3dc559d40eced6",
+        "bytes": 10613
+      },
+      {
+        "path": "v3-UiPoolDataProvider-contract/typechain/IUiPoolDataProviderV3.d.ts",
+        "sha256": "3aaa8083badd1afd96a79522b51cd33c83ce3a79c498f5078d1e329fc0426ce5",
+        "bytes": 14765
+      },
+      {
+        "path": "v3-UiPoolDataProvider-contract/typechain/IUiPoolDataProviderV3__factory.ts",
+        "sha256": "fbf26394e3b59543f6e4cee67bf96779f1ffdac1422342071ae15e1ee9247c5c",
+        "bytes": 11906
+      },
+      {
+        "path": "v3-UiPoolDataProvider-contract/types.ts",
+        "sha256": "c69ea52740a1b173f68d17f496f559b8a6908d602df7ba5529b4096a9698f33d",
+        "bytes": 4168
+      },
+      {
+        "path": "v3-UiPoolDataProvider-contract/uiPoolDataProvider.test.ts",
+        "sha256": "7ff5aff0b8f2ea2718866678a5c78db668f65a82e5dad4e220067fa202290606",
+        "bytes": 11365
+      },
+      {
+        "path": "v3-UiPoolDataProvider-legacy-contract/_mocks.ts",
+        "sha256": "77e28a9c8805b55dc6a5a7e1c12f19b4a41dcb09bf52e13507b425ee05c66dd5",
+        "bytes": 9153
+      },
+      {
+        "path": "v3-UiPoolDataProvider-legacy-contract/index.ts",
+        "sha256": "0028e26170f3e7bf9830eafc070f7389fc006849eee261fb956388ea34c29b57",
+        "bytes": 10825
+      },
+      {
+        "path": "v3-UiPoolDataProvider-legacy-contract/legacyUiPoolDataProvider.test.ts",
+        "sha256": "79a8445b8ae7eaf8adae89f9d8e38c09550490c2e70a3165c98dd0ae10d1409a",
+        "bytes": 13141
+      },
+      {
+        "path": "v3-UiPoolDataProvider-legacy-contract/typechain/IUiPoolDataProviderV3.d.ts",
+        "sha256": "db04ab6e0b3f223f31b4f6ba04806e6c1237c3a83268e73bd3723382347fd922",
+        "bytes": 16924
+      },
+      {
+        "path": "v3-UiPoolDataProvider-legacy-contract/typechain/IUiPoolDataProviderV3__factory.ts",
+        "sha256": "88c071ed5e8f322ac0f8d088b4902b2ea168c6633a2cc810eec684b028292131",
+        "bytes": 10724
+      },
+      {
+        "path": "v3-UiPoolDataProvider-legacy-contract/types.ts",
+        "sha256": "6819a710bc25626bb21adac6ef1fca21a6e3275e66347e8caa4a7aaaacf25fa0",
+        "bytes": 2053
+      },
+      {
+        "path": "v3-faucet-contract/faucet.v3.test.ts",
+        "sha256": "38ba7937cf230c98577f39b059aecc794034cebe4a8088625c1b3fad1bbc3d73",
+        "bytes": 6810
+      },
+      {
+        "path": "v3-faucet-contract/index.ts",
+        "sha256": "866a25ffefd8b3b742af2d45a5cdeffc37daf991b42cefe113264c878bb25c01",
+        "bytes": 2596
+      },
+      {
+        "path": "v3-faucet-contract/typechain/IERC20FaucetOwnable.ts",
+        "sha256": "ece0ff3d6f9c841a578e7786c4d8c0c0c7d1c38aa87c30e7cc995e84930af783",
+        "bytes": 4679
+      },
+      {
+        "path": "v3-faucet-contract/typechain/IERC20FaucetOwnable__factory.ts",
+        "sha256": "c9c14e2c535b837e017cea02feae8b96737f0f03ed37c7c82674fdd57ed696db",
+        "bytes": 1476
+      },
+      {
+        "path": "v3-faucet-contract/typechain/common.ts",
+        "sha256": "d614014de85094c860a3c3e8c6539e124f78ebeff1fe26d4185b38c2f7a5dd19",
+        "bytes": 1180
+      },
+      {
+        "path": "v3-migration-contract/index.ts",
+        "sha256": "8e89a6ad554089c527cdd5e3f1a303a1ca423652958f44a6a593a1f80b5f574f",
+        "bytes": 12363
+      },
+      {
+        "path": "v3-migration-contract/typechain/IMigrationHelper.ts",
+        "sha256": "15e98f408a13bdee6ae809f3adf2cc3fa111cbc760ef92f8483164a42dfa7284",
+        "bytes": 12764
+      },
+      {
+        "path": "v3-migration-contract/typechain/IMigrationHelper__factory.ts",
+        "sha256": "2742fdc950775c93bf4f920d764bc3608e4db00ce823256112d2b6f9e6c24e84",
+        "bytes": 5871
+      },
+      {
+        "path": "v3-migration-contract/typechain/common.ts",
+        "sha256": "d614014de85094c860a3c3e8c6539e124f78ebeff1fe26d4185b38c2f7a5dd19",
+        "bytes": 1180
+      },
+      {
+        "path": "v3-migration-contract/v3MigrationTypes.ts",
+        "sha256": "cfbf44a12a6fb320d237d1bb076e5212f3418ff4481b277730be55bc97583708",
+        "bytes": 1344
+      },
+      {
+        "path": "v3-migration-contract/v3migration.test.ts",
+        "sha256": "125aae52dd3fb0524a153ee6d114a266b113ea7621ca8aef81d608f7451cb22c",
+        "bytes": 22081
+      },
+      {
+        "path": "v3-pool-contract/index.ts",
+        "sha256": "e740f1b87625475638159e157d3f376c04e89ccf36ac1895269929b2247a0cad",
+        "bytes": 42977
+      },
+      {
+        "path": "v3-pool-contract/lendingPoolTypes.ts",
+        "sha256": "7735c188110b921fb601a6b344e656d69c0a06d727915660c08aa180af84bfe0",
+        "bytes": 5598
+      },
+      {
+        "path": "v3-pool-contract/pool.test.ts",
+        "sha256": "3a3f2382f396de2b1620915840a4c4e52dca1c8e1a54b0cfa8effb7e51505b9b",
+        "bytes": 202372
+      },
+      {
+        "path": "v3-pool-contract/typechain/IPool.d.ts",
+        "sha256": "df96d3b1b4df705227e9752e61ac66b4e9004154799787b367c37b61c2ff0325",
+        "bytes": 70798
+      },
+      {
+        "path": "v3-pool-contract/typechain/IPool__factory.ts",
+        "sha256": "c9d5410dfcba3a379b63d4634d55858cc9fd3517e67b0c6763b17abe1691ffc7",
+        "bytes": 32277
+      },
+      {
+        "path": "v3-pool-contract-bundle/index.ts",
+        "sha256": "c05f5272411af95478460022a5bc3ad7788675c98da8361ab0b4d1f703140d88",
+        "bytes": 15900
+      },
+      {
+        "path": "v3-pool-contract-bundle/pool-bundle.test.ts",
+        "sha256": "2687263c95536928cfc09ba68ff1210fab554e83310008dbe8514eead695cf68",
+        "bytes": 41281
+      },
+      {
+        "path": "v3-pool-rollups/index.ts",
+        "sha256": "077c3708bb06627afc2cdee6c325407e6d00c420d30c30215fbcb01c0e0b9c83",
+        "bytes": 21012
+      },
+      {
+        "path": "v3-pool-rollups/pool-rollups.test.ts",
+        "sha256": "0c67abc5d1b895f1990e4c6b5d9b513fafe6c28a37eaeb9d6b545eda8a007f1e",
+        "bytes": 42390
+      },
+      {
+        "path": "v3-pool-rollups/poolTypes.ts",
+        "sha256": "e80ccc0e4998b5f04a2f370269e059ddbd3916913b3fa592f5cfec81d8119708",
+        "bytes": 1825
+      },
+      {
+        "path": "v3-pool-rollups/typechain/IL2Pool.d.ts",
+        "sha256": "fb94bfb83e81a792dc6466d1a1911b302c55f29f1357f99cd28172a7d07fc361",
+        "bytes": 13329
+      },
+      {
+        "path": "v3-pool-rollups/typechain/IL2Pool__factory.ts",
+        "sha256": "a3bcf8b65c821084f71208511c5530f29c087a6f835112016910b4de0961acc5",
+        "bytes": 3887
+      },
+      {
+        "path": "v3-pool-rollups/typechain/L2Encoder.d.ts",
+        "sha256": "21200dd992426b618ff734cf16a9da00f8451f7e7616a2d32ab0d76988f31530",
+        "bytes": 17492
+      },
+      {
+        "path": "v3-pool-rollups/typechain/L2Encoder__factory.ts",
+        "sha256": "5100592f0f79f961c294e6bf05cb2353f3d915a2cdfd9cb27945ae281e7b23ef",
+        "bytes": 19373
+      },
+      {
+        "path": "v3-staking-contract/index.ts",
+        "sha256": "764a54bbd00cb266092c418634e115c8ba3dbadb3917aaadf0fce27b016e59a8",
+        "bytes": 10096
+      },
+      {
+        "path": "v3-staking-contract/staking-v3.test.ts",
+        "sha256": "3adba8a5daed0d4e2d244a3a4dced457006b1f210fd7abc4506ae8dad21829d5",
+        "bytes": 31701
+      },
+      {
+        "path": "v3-staking-contract/typechain/Abi.ts",
+        "sha256": "a5eccd7624c4f25c9fac489cbb3eb56a4d6ad571c166f578b9adb3c33cd00810",
+        "bytes": 66351
+      },
+      {
+        "path": "v3-staking-contract/typechain/common.ts",
+        "sha256": "272ba69a74dde5eab11096c0f956831d9e0b571fe6a2fc44e5d3ee34fa95719a",
+        "bytes": 1131
+      },
+      {
+        "path": "v3-staking-contract/typechain/factories/Abi__factory.ts",
+        "sha256": "1fbf133da1e29d09056f72bff973daab3221192ae50fd411d9bae9f174780b33",
+        "bytes": 32198
+      },
+      {
+        "path": "v3-wethgateway-contract/index.ts",
+        "sha256": "438ac66fd6111dcb3a7698f52a604d1512aecdc11fabb343080ff812100d6cde",
+        "bytes": 10881
+      },
+      {
+        "path": "v3-wethgateway-contract/typechain/WrappedTokenGatewayV3.ts",
+        "sha256": "0268b3ee1ffef1d02b8c7041704acdaae88af12eb41e80a624f8f1c0f450f465",
+        "bytes": 13859
+      },
+      {
+        "path": "v3-wethgateway-contract/typechain/WrappedTokenGatewayV3__factory.ts",
+        "sha256": "74e7c36bc9c9de007e7323e63411e5c8563b50e9ca47a0e8b562c62078862926",
+        "bytes": 5686
+      },
+      {
+        "path": "v3-wethgateway-contract/typechain/common.ts",
+        "sha256": "272ba69a74dde5eab11096c0f956831d9e0b571fe6a2fc44e5d3ee34fa95719a",
+        "bytes": 1131
+      },
+      {
+        "path": "v3-wethgateway-contract/wethGateway.test.ts",
+        "sha256": "1a75b31f3701320c985c2bf082700780b35d0520f48e562a9a99cbd8f47ea5ab",
+        "bytes": 35036
+      },
+      {
+        "path": "wallet-balance-provider/index.ts",
+        "sha256": "7a8bc24f2e1489fe191fd2f2a327a1fcee30d0dd845ed1baca3573d578fba2a4",
+        "bytes": 2952
+      },
+      {
+        "path": "wallet-balance-provider/typechain/WalletBalanceProvider.d.ts",
+        "sha256": "b9a3bde7636b6486effb638beef1afa2c4e8d966d009c8366e4e05e8c9df8a0c",
+        "bytes": 6437
+      },
+      {
+        "path": "wallet-balance-provider/typechain/WalletBalanceProviderFactory.ts",
+        "sha256": "bc2152e258697cfebe30645476544367ebad291327ec43cc40555956e9dd8de4",
+        "bytes": 7583
+      },
+      {
+        "path": "wallet-balance-provider/types/WalletBalanceProviderTypes.ts",
+        "sha256": "918a37d5d00395708cccda375b870ae3773b0abe536286e8164af377e0d8b53b",
+        "bytes": 213
+      },
+      {
+        "path": "wallet-balance-provider/wallet-balance-provider.test.ts",
+        "sha256": "9174daf5486526e2de5b04a80541df8a3e60fbc629f2b013831a04c401a4b8b0",
+        "bytes": 4446
+      },
+      {
+        "path": "wethgateway-contract/index.ts",
+        "sha256": "e7eff0381560e1290d7376bfa775dd73a68180611febbdf125d38fbfca0fd29b",
+        "bytes": 11438
+      },
+      {
+        "path": "wethgateway-contract/typechain/IWETHGateway.d.ts",
+        "sha256": "c10ff09c19f6e70c65cf775283cabbf9ef4efe03ed07ed3731b459d96c7f130f",
+        "bytes": 10145
+      },
+      {
+        "path": "wethgateway-contract/typechain/IWETHGateway__factory.ts",
+        "sha256": "b0de163cec2348a58a3460d8d85c88840f7b89782d5a8e7cf7ecb9b910e39a9e",
+        "bytes": 2546
+      },
+      {
+        "path": "wethgateway-contract/wethGateway.test.ts",
+        "sha256": "271ec404bde39ed081d061175b844bc0e623f0f4c544b703356b6402a039a705",
+        "bytes": 41832
+      }
+    ],
+    "vendoredFiles": [
+      {
+        "originalPath": "baseDebtToken-contract/baseDebtToken.test.ts",
+        "vendoredPath": "debt-token-contract/base-debt-token.test.ts"
+      },
+      {
+        "originalPath": "baseDebtToken-contract/index.ts",
+        "vendoredPath": "debt-token-contract/index.ts"
+      },
+      {
+        "originalPath": "commons/BaseService.test.ts",
+        "vendoredPath": "commons/lending-base-service.test.ts"
+      },
+      {
+        "originalPath": "commons/gasStation.test.ts",
+        "vendoredPath": "commons/gas-station.test.ts"
+      },
+      {
+        "originalPath": "commons/gasStation.ts",
+        "vendoredPath": "commons/gas-station.ts"
+      },
+      {
+        "originalPath": "commons/types.ts",
+        "vendoredPath": "commons/types.ts"
+      },
+      {
+        "originalPath": "commons/utils.test.ts",
+        "vendoredPath": "commons/utils.test.ts"
+      },
+      {
+        "originalPath": "commons/utils.ts",
+        "vendoredPath": "commons/utils.ts"
+      },
+      {
+        "originalPath": "commons/validators/methodValidators.ts",
+        "vendoredPath": "commons/validators/method-validators.ts"
+      },
+      {
+        "originalPath": "commons/validators/paramValidators.ts",
+        "vendoredPath": "commons/validators/param-validators.ts"
+      },
+      {
+        "originalPath": "commons/validators/validations.ts",
+        "vendoredPath": "commons/validators/validations.ts"
+      },
+      {
+        "originalPath": "commons/validators/validators.test.ts",
+        "vendoredPath": "commons/validators/validators.test.ts"
+      },
+      {
+        "originalPath": "erc20-2612/erc20_2612.test.ts",
+        "vendoredPath": "erc20-permit-contract/erc20-2612.test.ts"
+      },
+      {
+        "originalPath": "erc20-2612/index.ts",
+        "vendoredPath": "erc20-permit-contract/index.ts"
+      },
+      {
+        "originalPath": "erc20-contract/erc20.test.ts",
+        "vendoredPath": "erc20-contract/erc20.test.ts"
+      },
+      {
+        "originalPath": "erc20-contract/index.ts",
+        "vendoredPath": "erc20-contract/index.ts"
+      },
+      {
+        "originalPath": "v3-UiIncentiveDataProvider-contract/types.ts",
+        "vendoredPath": "commons/incentive-types.ts"
+      },
+      {
+        "originalPath": "v3-UiPoolDataProvider-contract/types.ts",
+        "vendoredPath": "ui-pool-data-provider-contract/types.ts"
+      },
+      {
+        "originalPath": "v3-UiPoolDataProvider-legacy-contract/_mocks.ts",
+        "vendoredPath": "ui-pool-data-provider-contract/mocks.ts"
+      },
+      {
+        "originalPath": "v3-UiPoolDataProvider-legacy-contract/index.ts",
+        "vendoredPath": "ui-pool-data-provider-contract/index.ts"
+      },
+      {
+        "originalPath": "v3-UiPoolDataProvider-legacy-contract/legacyUiPoolDataProvider.test.ts",
+        "vendoredPath": "ui-pool-data-provider-contract/ui-pool-data-provider.test.ts"
+      },
+      {
+        "originalPath": "v3-pool-contract-bundle/index.ts",
+        "vendoredPath": "pool-contract/pool-bundle.ts"
+      },
+      {
+        "originalPath": "v3-pool-contract-bundle/pool-bundle.test.ts",
+        "vendoredPath": "pool-contract/pool-bundle.test.ts"
+      },
+      {
+        "originalPath": "v3-pool-contract/index.ts",
+        "vendoredPath": "pool-contract/pool.ts"
+      },
+      {
+        "originalPath": "v3-pool-contract/lendingPoolTypes.ts",
+        "vendoredPath": "pool-contract/pool-types.ts"
+      },
+      {
+        "originalPath": "v3-pool-contract/pool.test.ts",
+        "vendoredPath": "pool-contract/pool.test.ts"
+      },
+      {
+        "originalPath": "v3-wethgateway-contract/index.ts",
+        "vendoredPath": "wrapped-native-gateway-contract/index.ts"
+      },
+      {
+        "originalPath": "v3-wethgateway-contract/wethGateway.test.ts",
+        "vendoredPath": "wrapped-native-gateway-contract/weth-gateway.test.ts"
+      },
+      {
+        "originalPath": "wallet-balance-provider/index.ts",
+        "vendoredPath": "wallet-balance-provider/index.ts"
+      },
+      {
+        "originalPath": "wallet-balance-provider/types/WalletBalanceProviderTypes.ts",
+        "vendoredPath": "wallet-balance-provider/types/wallet-balance-provider-types.ts"
+      },
+      {
+        "originalPath": "wallet-balance-provider/wallet-balance-provider.test.ts",
+        "vendoredPath": "wallet-balance-provider/wallet-balance-provider.test.ts"
+      }
+    ],
+    "omittedFiles": [
+      {
+        "originalPath": "V3-uiStakeDataProvider-contract/_mocks.ts",
+        "reason": "Unused upstream V3-uiStakeDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "V3-uiStakeDataProvider-contract/index.ts",
+        "reason": "Unused upstream V3-uiStakeDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "V3-uiStakeDataProvider-contract/typechain/Abi.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "V3-uiStakeDataProvider-contract/typechain/common.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "V3-uiStakeDataProvider-contract/typechain/factories/Abi__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "V3-uiStakeDataProvider-contract/typechain/index.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "V3-uiStakeDataProvider-contract/types.ts",
+        "reason": "Unused upstream V3-uiStakeDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "V3-uiStakeDataProvider-contract/uiStakeDataProviderv3.test.ts",
+        "reason": "Unused upstream V3-uiStakeDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "abpt-migration/abptMigration.test.ts",
+        "reason": "Unused upstream abpt-migration service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "abpt-migration/index.ts",
+        "reason": "Unused upstream abpt-migration service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "abpt-migration/typechain/StkABPTMigrator.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "abpt-migration/typechain/StkABPTMigrator__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "baseDebtToken-contract/typechain/IDebtTokenBase.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "baseDebtToken-contract/typechain/IDebtTokenBase__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "cl-feed-registry/cl-feed-registry.test.ts",
+        "reason": "Unused upstream cl-feed-registry service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "cl-feed-registry/index.ts",
+        "reason": "Unused upstream cl-feed-registry service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "cl-feed-registry/typechain/FeedRegistryInterface.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "cl-feed-registry/typechain/FeedRegistryInterface__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "cl-feed-registry/types/ChainlinkFeedsRegistryTypes.ts",
+        "reason": "Unused upstream cl-feed-registry service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "commons/BaseService.ts",
+        "reason": "Factory-based ethers 5 base replaced by the existing native AbiBaseService; gas cases ported to commons/base-service.test.ts and lending tests."
+      },
+      {
+        "originalPath": "commons/ipfs.test.ts",
+        "reason": "Unused upstream commons service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "commons/ipfs.ts",
+        "reason": "Unused upstream commons service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "erc20-2612/typechain/IERC202612.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "erc20-2612/typechain/IERC202612__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "erc20-contract/typechain/IERC20Detailed.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "erc20-contract/typechain/IERC20Detailed__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "faucet-contract/faucet.test.ts",
+        "reason": "Unused upstream faucet-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "faucet-contract/index.ts",
+        "reason": "Unused upstream faucet-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "faucet-contract/typechain/IFaucet.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "faucet-contract/typechain/IFaucet__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-contract/governance.test.ts",
+        "reason": "Unused upstream governance-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "governance-contract/index.ts",
+        "reason": "Unused upstream governance-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "governance-contract/typechain/IAaveGovernanceV2.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-contract/typechain/IAaveGovernanceV2__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-contract/typechain/IGovernanceStrategy.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-contract/typechain/IGovernanceStrategy__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-contract/typechain/IGovernanceV2Helper.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-contract/typechain/IGovernanceV2Helper__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-contract/types.ts",
+        "reason": "Unused upstream governance-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "governance-power-delegation-contract/governance-power-delegation-contract.test.ts",
+        "reason": "Unused upstream governance-power-delegation-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "governance-power-delegation-contract/index.ts",
+        "reason": "Unused upstream governance-power-delegation-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "governance-power-delegation-contract/typechain/IGovernancePowerDelegationToken.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-power-delegation-contract/typechain/IGovernancePowerDelegationToken__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/aave-token-v3/index.ts",
+        "reason": "Unused upstream governance-v3 service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "governance-v3/delegate-helper/index.ts",
+        "reason": "Unused upstream governance-v3 service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "governance-v3/governance-core/index.ts",
+        "reason": "Unused upstream governance-v3 service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "governance-v3/governance-data-helper/index.ts",
+        "reason": "Unused upstream governance-v3 service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "governance-v3/payloads-data-helper/index.ts",
+        "reason": "Unused upstream governance-v3 service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "governance-v3/typechain/AaveTokenV3.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/GovernanceCore.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/GovernanceDataHelper.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/MetaDelegateHelper.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/PayloadsControllerDataHelper.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/VotingMachine.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/VotingMachineDataHelper.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/common.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/factories/AaveTokenV3__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/factories/GovernanceCore__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/factories/GovernanceDataHelper__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/factories/MetaDelegateHelper__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/factories/PayloadsControllerDataHelper__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/factories/VotingMachineDataHelper__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/factories/VotingMachine__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/factories/index.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/typechain/index.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "governance-v3/voting-machine-data-helper/index.ts",
+        "reason": "Unused upstream governance-v3 service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "incentive-controller/incentive-controller.test.ts",
+        "reason": "Unused upstream incentive-controller service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "incentive-controller/index.ts",
+        "reason": "Unused upstream incentive-controller service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "incentive-controller/typechain/IAaveIncentivesController.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "incentive-controller/typechain/IAaveIncentivesController__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "incentive-controller-v2/incentive-controller-v2.test.ts",
+        "reason": "Unused upstream incentive-controller-v2 service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "incentive-controller-v2/index.ts",
+        "reason": "Unused upstream incentive-controller-v2 service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "incentive-controller-v2/typechain/IAaveIncentivesControllerV2.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "incentive-controller-v2/typechain/IAaveIncentivesControllerV2__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "index.ts",
+        "reason": "Upstream barrel removed; the owned root explicitly exports retained native/lending APIs."
+      },
+      {
+        "originalPath": "lendingPool-contract/index.ts",
+        "reason": "Unused upstream lendingPool-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "lendingPool-contract/lendingPool.test.ts",
+        "reason": "Unused upstream lendingPool-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "lendingPool-contract/lendingPoolTypes.ts",
+        "reason": "Unused upstream lendingPool-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "lendingPool-contract/typechain/ILendingPool.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "lendingPool-contract/typechain/ILendingPool__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "lendingPool-contract-bundle/index.ts",
+        "reason": "Unused upstream lendingPool-contract-bundle service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "lendingPool-contract-bundle/lendingPoolBundle.test.ts",
+        "reason": "Unused upstream lendingPool-contract-bundle service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "paraswap-debtSwitch-contract/debtSwitch.test.ts",
+        "reason": "Unused upstream paraswap-debtSwitch-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "paraswap-debtSwitch-contract/index.ts",
+        "reason": "Unused upstream paraswap-debtSwitch-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "paraswap-debtSwitch-contract/typechain/ParaSwapDebtSwitchAdapter.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "paraswap-debtSwitch-contract/typechain/ParaSwapDebtSwitchAdapter__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "paraswap-liquiditySwapAdapter-contract/index.ts",
+        "reason": "Unused upstream paraswap-liquiditySwapAdapter-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "paraswap-liquiditySwapAdapter-contract/paraswapLiquiditySwapAdapter.test.ts",
+        "reason": "Unused upstream paraswap-liquiditySwapAdapter-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "paraswap-liquiditySwapAdapter-contract/typechain/IParaSwapLiquiditySwapAdapter.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "paraswap-liquiditySwapAdapter-contract/typechain/IParaSwapLiquiditySwapAdapter__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "paraswap-repayWithCollateralAdapter-contract/index.ts",
+        "reason": "Unused upstream paraswap-repayWithCollateralAdapter-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "paraswap-repayWithCollateralAdapter-contract/paraswapRepayWithCollateralAdapter.test.ts",
+        "reason": "Unused upstream paraswap-repayWithCollateralAdapter-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "paraswap-repayWithCollateralAdapter-contract/typechain/ParaSwapRepayAdapter.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "paraswap-repayWithCollateralAdapter-contract/typechain/ParaSwapRepayAdapter__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "paraswap-withdrawAndSwitchAdapter-contract/index.ts",
+        "reason": "Unused upstream paraswap-withdrawAndSwitchAdapter-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "paraswap-withdrawAndSwitchAdapter-contract/paraswapWithdrawAndSwitchAdapter.test.ts",
+        "reason": "Unused upstream paraswap-withdrawAndSwitchAdapter-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "paraswap-withdrawAndSwitchAdapter-contract/typechain/ParaSwapWithdrawSwapAdapter.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "paraswap-withdrawAndSwitchAdapter-contract/typechain/ParaSwapWithdrawSwapAdapter__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "permissions-manager/_mocks.ts",
+        "reason": "Unused upstream permissions-manager service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "permissions-manager/index.ts",
+        "reason": "Unused upstream permissions-manager service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "permissions-manager/permissions-manager.test.ts",
+        "reason": "Unused upstream permissions-manager service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "permissions-manager/typechain/PermissionManager.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "permissions-manager/typechain/PermissionManagerFactory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "permissions-manager/types/PermissionManagerTypes.ts",
+        "reason": "Unused upstream permissions-manager service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "repayWithCollateralAdapter-contract/index.ts",
+        "reason": "Unused upstream repayWithCollateralAdapter-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "repayWithCollateralAdapter-contract/repayWithCollateralAdapter.test.ts",
+        "reason": "Unused upstream repayWithCollateralAdapter-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "repayWithCollateralAdapter-contract/typechain/IRepayWithCollateral.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "repayWithCollateralAdapter-contract/typechain/IRepayWithCollateral__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "staking-contract/index.ts",
+        "reason": "Unused upstream staking-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "staking-contract/staking.test.ts",
+        "reason": "Unused upstream staking-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "staking-contract/typechain/IAaveStakingHelper.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "staking-contract/typechain/IAaveStakingHelper__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "staking-contract/typechain/IStakedAaveV3.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "staking-contract/typechain/IStakedAaveV3__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "synthetix-contract/index.ts",
+        "reason": "Unused upstream synthetix-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "synthetix-contract/synthetix.test.ts",
+        "reason": "Unused upstream synthetix-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "synthetix-contract/typechain/ISynthetix.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "synthetix-contract/typechain/ISynthetix__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "token-wrapper/index.ts",
+        "reason": "Unused upstream token-wrapper service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "token-wrapper/token-wrapper.test.ts",
+        "reason": "Unused upstream token-wrapper service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "token-wrapper/typechain/TokenWrapper.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "token-wrapper/typechain/TokenWrapper_factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "uiStakeDataProvider-contract/_mocks.ts",
+        "reason": "Unused upstream uiStakeDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "uiStakeDataProvider-contract/index.ts",
+        "reason": "Unused upstream uiStakeDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "uiStakeDataProvider-contract/typechain/StakedTokenDataProvider.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "uiStakeDataProvider-contract/typechain/StakedTokenDataProviderFactory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "uiStakeDataProvider-contract/types.ts",
+        "reason": "Unused upstream uiStakeDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "uiStakeDataProvider-contract/uiStakeDataProvider.test.ts",
+        "reason": "Unused upstream uiStakeDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "umbrella/RewardsDistributor.test.ts",
+        "reason": "Unused upstream umbrella service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "umbrella/RewardsDistributor.ts",
+        "reason": "Unused upstream umbrella service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "umbrella/StakeDataProvider.test.ts",
+        "reason": "Unused upstream umbrella service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "umbrella/StakeDataProvider.ts",
+        "reason": "Unused upstream umbrella service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "umbrella/StakeToken.test.ts",
+        "reason": "Unused upstream umbrella service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "umbrella/StakeToken.ts",
+        "reason": "Unused upstream umbrella service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "umbrella/UmbrellaBatchHelper.test.ts",
+        "reason": "Unused upstream umbrella service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "umbrella/UmbrellaBatchHelper.ts",
+        "reason": "Unused upstream umbrella service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "umbrella/index.ts",
+        "reason": "Unused upstream umbrella service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "umbrella/typechain/IRewardsDistributor.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "umbrella/typechain/IRewardsDistributor__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "umbrella/typechain/StakeDataProvider.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "umbrella/typechain/StakeDataProvider__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "umbrella/typechain/StakeToken.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "umbrella/typechain/StakeToken__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "umbrella/typechain/UmbrellaBatchHelper.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "umbrella/typechain/UmbrellaBatchHelper__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "umbrella/typechain/common.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-UiIncentiveDataProvider-contract/_mocks.ts",
+        "reason": "Unused upstream v3-UiIncentiveDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-UiIncentiveDataProvider-contract/index.ts",
+        "reason": "Unused upstream v3-UiIncentiveDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-UiIncentiveDataProvider-contract/typechain/IUiIncentiveDataProviderV3.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-UiIncentiveDataProvider-contract/typechain/IUiIncentiveDataProviderV3__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-UiIncentiveDataProvider-contract/uiIncentiveDataProviderV3.test.ts",
+        "reason": "Unused upstream v3-UiIncentiveDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-UiPoolDataProvider-contract/_mocks.ts",
+        "reason": "Unused upstream v3-UiPoolDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-UiPoolDataProvider-contract/index.ts",
+        "reason": "Unused upstream v3-UiPoolDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-UiPoolDataProvider-contract/typechain/IUiPoolDataProviderV3.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-UiPoolDataProvider-contract/typechain/IUiPoolDataProviderV3__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-UiPoolDataProvider-contract/uiPoolDataProvider.test.ts",
+        "reason": "Unused upstream v3-UiPoolDataProvider-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-UiPoolDataProvider-legacy-contract/typechain/IUiPoolDataProviderV3.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-UiPoolDataProvider-legacy-contract/typechain/IUiPoolDataProviderV3__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-UiPoolDataProvider-legacy-contract/types.ts",
+        "reason": "Raw DTO declaration consolidated into ABI-derived ethers6 output types at ui-pool-data-provider-contract/types.ts; the active tuple and stable-debt fields remain."
+      },
+      {
+        "originalPath": "v3-faucet-contract/faucet.v3.test.ts",
+        "reason": "Unused upstream v3-faucet-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-faucet-contract/index.ts",
+        "reason": "Unused upstream v3-faucet-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-faucet-contract/typechain/IERC20FaucetOwnable.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-faucet-contract/typechain/IERC20FaucetOwnable__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-faucet-contract/typechain/common.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-migration-contract/index.ts",
+        "reason": "Unused upstream v3-migration-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-migration-contract/typechain/IMigrationHelper.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-migration-contract/typechain/IMigrationHelper__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-migration-contract/typechain/common.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-migration-contract/v3MigrationTypes.ts",
+        "reason": "Unused upstream v3-migration-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-migration-contract/v3migration.test.ts",
+        "reason": "Unused upstream v3-migration-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-pool-contract/typechain/IPool.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-pool-contract/typechain/IPool__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-pool-rollups/index.ts",
+        "reason": "Unused upstream v3-pool-rollups service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-pool-rollups/pool-rollups.test.ts",
+        "reason": "Unused upstream v3-pool-rollups service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-pool-rollups/poolTypes.ts",
+        "reason": "Unused upstream v3-pool-rollups service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-pool-rollups/typechain/IL2Pool.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-pool-rollups/typechain/IL2Pool__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-pool-rollups/typechain/L2Encoder.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-pool-rollups/typechain/L2Encoder__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-staking-contract/index.ts",
+        "reason": "Unused upstream v3-staking-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-staking-contract/staking-v3.test.ts",
+        "reason": "Unused upstream v3-staking-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "v3-staking-contract/typechain/Abi.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-staking-contract/typechain/common.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-staking-contract/typechain/factories/Abi__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-wethgateway-contract/typechain/WrappedTokenGatewayV3.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-wethgateway-contract/typechain/WrappedTokenGatewayV3__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "v3-wethgateway-contract/typechain/common.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "wallet-balance-provider/typechain/WalletBalanceProvider.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "wallet-balance-provider/typechain/WalletBalanceProviderFactory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "wethgateway-contract/index.ts",
+        "reason": "Unused upstream wethgateway-contract service or support outside the retained lending helper surface."
+      },
+      {
+        "originalPath": "wethgateway-contract/typechain/IWETHGateway.d.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "wethgateway-contract/typechain/IWETHGateway__factory.ts",
+        "reason": "Generated ethers 5 TypeChain support removed; canonical ABI constants supply retained contract interfaces."
+      },
+      {
+        "originalPath": "wethgateway-contract/wethGateway.test.ts",
+        "reason": "Unused upstream wethgateway-contract service or support outside the retained lending helper surface."
+      }
+    ]
+  },
+  "transformations": [
+    "Use ethers 6.17.0 Provider, TransactionRequest, SignatureLike, bigint and canonical ABI constants throughout retained helpers; share AbiBaseService for encoding, reads, transactions and gas estimation.",
+    "Re-export the canonical InterestRate enum from commons/types.ts.",
+    "Use a standalone undefined check for expectToBeDefined without a Jest runtime dependency.",
+    "Normalize current helper module paths to lowercase kebab-case while retaining original source identities and finite omission accounting.",
+    "Consolidate Pool, PoolBundle, ABI/types and finite raw transactions under pool-contract; expose the five raw parameter types at the root and retained decimal parameter types through deep imports.",
+    "Expose exact normalized allowance and delegation strings plus named raw bigint readers; use standard nonces(address), the lending 1.1 UI tuple, and explicit gateway rate modes.",
+    "Retain native direct gas estimates and lending surplus policy while omitting unsupported services, encoders and generated ethers 5 factories.",
+    "Use current Jest matcher names in original helper tests without changing their financial expectations.",
+    "Share provider-free claim and DustLock encoders with existing helpers, validate exact uint256 inputs, and expose strict lock reads and explicit calculation time.",
+    "Delegate DUST market APR to math-utils using canonical native bigint reads, one batch clock and explicit unresolved-result omissions.",
+    "Return plain mutable UI DTOs, retain exact raw enumeration cursors, add opt-in complete ownership checks, and decode canonical historical/current emission layouts without inventing resolution flags.",
+    "Omit fixed upstream gas limits from synchronous builders because Monad bills the full gas limit; rebuild lending-core 1.1 E-mode categories from embedded reserve fields; reject zero-address and native-sentinel misuse, accept referral code 0 and revocable exact delegations, require boolean collateral flags and map InterestRate.None to variable debt."
+  ],
+  "transformedFiles": [
+    {
+      "path": "baseDebtToken-contract/baseDebtToken.test.ts",
+      "originalSha256": "6d11abc50db7cb30c59ddfa92ff7f63a9c6aab4c5211450690dbf8500611bdb8",
+      "vendoredSha256": "52eb93940837b0febe9c53091f3e059d477e3113fbcff74058632f818f35235a",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Expect exact uint256 delegation amounts, zero-amount revocation and no fixed synchronous gas limit."
+    },
+    {
+      "path": "baseDebtToken-contract/index.ts",
+      "originalSha256": "843eea5767ad65fd85d9a79c457afa925ca16602a37619b65226ecc33276918b",
+      "vendoredSha256": "9f5a3f57bbafea26cf010f4f1a0391a8449299b313bb2b4dcac430e2a82c6d1f",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Accept exact uint256 delegation amounts including zero-amount revocation; omit the fixed upstream gas limit from generateApproveDelegationTxData."
+    },
+    {
+      "path": "commons/BaseService.test.ts",
+      "originalSha256": "656fbf22f7b18932d337dd887360446ccf58639692c0dc13913df63d65596037",
+      "vendoredSha256": "d70b546f37285189888084706b160b8414390480c34efdbc5638be760ad1c64b",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value."
+    },
+    {
+      "path": "commons/gasStation.test.ts",
+      "originalSha256": "2db531bef0f37631565c3c59932aae3bb53dcf2acc65110d558f865c6b0cabe2",
+      "vendoredSha256": "f794fd3cafee51e18a93c8426843661d20a29abef1256803eeb5b74672582a0e"
+    },
+    {
+      "path": "commons/gasStation.ts",
+      "originalSha256": "8e5eefe4fa21b891c32f8174904732a535c3f0773ceb4eb29b6d75c612011ed9",
+      "vendoredSha256": "a4969332351863ecd83ecc85d18e61daf6a0ac7cc8ae0fbf1a38804f356f4cfa",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+    },
+    {
+      "path": "commons/types.ts",
+      "originalSha256": "09f69ec1f9bc7c09406f6ecddd20b844358ca2e999e4f347224fc8959178eb97",
+      "vendoredSha256": "b1ac7116cacc1eb02e26fd26b325cecd3e6a88639fdade9fa9f71699ac1b5d20"
+    },
+    {
+      "path": "commons/utils.test.ts",
+      "originalSha256": "ad709c943920de31ad3c18af5264fae8e390518d9c4c8d585984314566c176ea",
+      "vendoredSha256": "d708459497881fc4c30afc30bf593864b238189c14703abd0e08d9f29eccf9da",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value."
+    },
+    {
+      "path": "commons/utils.ts",
+      "originalSha256": "6418d2d68a7a0038f02bbf97b7a974c63e6e81fbb8765a8eb2f3895600af958f",
+      "vendoredSha256": "21b97df2923ba9d1a16801a12e615758a77848821a047fa085f50c6470f45f0a",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+    },
+    {
+      "path": "commons/validators/methodValidators.ts",
+      "originalSha256": "59e2b459236be3e6d9b6cf6e189c3ad74ad41a3294ffee59d03f97801bdeea06",
+      "vendoredSha256": "921474255b3e13838e1f28fca0ee66bd076a6f3fccf5497b7e5bb1a780b9b116",
+      "reason": "Typed local method/metadata boundaries retain legacy public signatures, original indexing/arguments dispatch, coercions, falsy defaults and validation order."
+    },
+    {
+      "path": "commons/validators/paramValidators.ts",
+      "originalSha256": "43b591af6853804a0cd3c8a4e7ce673bb88f500904c5106436850f4aea7d14c3",
+      "vendoredSha256": "42ce1ba2ca1f4a358260385a30f8544e4c18ff49564f1885f49b9a31585028ff",
+      "reason": "Typed local method/metadata boundaries retain legacy public signatures, original indexing/arguments dispatch, coercions, falsy defaults and validation order."
+    },
+    {
+      "path": "commons/validators/validations.ts",
+      "originalSha256": "59521ec0661f138f67d3f7c5bfcd8afc0f3ddb3501bac332e85bfed7a303a5e3",
+      "vendoredSha256": "11002352e5c79248445212eec6bc9844e0bf1b9a2fd320ef8b68866a520115e0",
+      "reason": "Typed local method/metadata boundaries retain legacy public signatures, original indexing/arguments dispatch, coercions, falsy defaults and validation order. Reject the zero address in decorated address validators."
+    },
+    {
+      "path": "commons/validators/validators.test.ts",
+      "originalSha256": "8e82c58fddc19f50c21557871437041c5d78f40ebebf0e64177e22bfeed8b838",
+      "vendoredSha256": "e9c193de01bfd8992befe8535964dbd3c5f410da0d0c10cf73e80d905dd8796b",
+      "reason": "Typed local method/metadata boundaries retain legacy public signatures, original indexing/arguments dispatch, coercions, falsy defaults and validation order."
+    },
+    {
+      "path": "erc20-2612/erc20_2612.test.ts",
+      "originalSha256": "23d5b2dda29ae38beab41d62b8fc21032b9a8ad15828c7619b4bf0365f5696e6",
+      "vendoredSha256": "906548ca81cb97cb18dfe0f461bba757bdb12bb7abd97b471ced2e8dcb6739e3",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value."
+    },
+    {
+      "path": "erc20-2612/index.ts",
+      "originalSha256": "41393750af422d8bd35b1cdef03020edd8f72d7b61cc0bac988983875cdb1f7f",
+      "vendoredSha256": "4304f514c58446246337415a1aa9d53f432085a5998aaf05dc13b7069b0dce1d",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+    },
+    {
+      "path": "erc20-contract/erc20.test.ts",
+      "originalSha256": "8888b12aa0753ed48d88997a92f96997b62530b620604a01d81cc851e9e45ab1",
+      "vendoredSha256": "17d916d870d71a9ac3d97c21d933329204f0f50ef20a15429bc411430a3a1cb2",
+      "reason": "Retain formatted offline regression coverage and replace positive-only approval expectations with zero-reset, exact uint256 encoding and synchronous rejection of invalid amounts including malformed sign/whitespace strings."
+    },
+    {
+      "path": "erc20-contract/index.ts",
+      "originalSha256": "5c3ffd25d86610ec5a17acbcf16746cd7b19cf6e31fb995f1612ee35265dc834",
+      "vendoredSha256": "0b79dca38edb4afe73c955d6f59f47f3490dde9a71e814840743ad27c22b4e7e",
+      "reason": "Retain ethers 6 formatting and typing adaptations; accept zero ERC20 approval resets and synchronously validate the full integer string with BigInt and explicit uint256 bounds before encoding or returning transaction callbacks. Omit the fixed upstream gas limit from approveTxData. Reject binary, octal and non-integer approval amount strings with a labeled error."
+    },
+    {
+      "path": "v3-UiIncentiveDataProvider-contract/types.ts",
+      "originalSha256": "04d837cdb511a946b3b39fcd1481d0878f6e4c8b2725c825c6c988d9cb301230",
+      "vendoredSha256": "2a89dbc9ec490a8a7e724c1114a6cd43ffcef7878db6646d76da900606ce4e36",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+    },
+    {
+      "path": "v3-UiPoolDataProvider-contract/types.ts",
+      "originalSha256": "c69ea52740a1b173f68d17f496f559b8a6908d602df7ba5529b4096a9698f33d",
+      "vendoredSha256": "e1d646ad922187cacd0807c088c8888d43d8baa0e83883936adc6a26baa0abe1",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+    },
+    {
+      "path": "v3-UiPoolDataProvider-legacy-contract/_mocks.ts",
+      "originalSha256": "77e28a9c8805b55dc6a5a7e1c12f19b4a41dcb09bf52e13507b425ee05c66dd5",
+      "vendoredSha256": "e69eee5806871f67403013ca32640f18305991a82ef6ac8faecb95d974074983",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+    },
+    {
+      "path": "v3-UiPoolDataProvider-legacy-contract/index.ts",
+      "originalSha256": "0028e26170f3e7bf9830eafc070f7389fc006849eee261fb956388ea34c29b57",
+      "vendoredSha256": "25efcda25dedd36d114d37082137665ad81144b04177d69ea27e65b09192409e",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Rebuild lending-core 1.1 E-mode categories from embedded reserve fields; remove Ethereum-mainnet AMM symbol overrides."
+    },
+    {
+      "path": "v3-UiPoolDataProvider-legacy-contract/legacyUiPoolDataProvider.test.ts",
+      "originalSha256": "79a8445b8ae7eaf8adae89f9d8e38c09550490c2e70a3165c98dd0ae10d1409a",
+      "vendoredSha256": "a4568c20293b561b8b30cc139138763ee5a1f29c652a4c5aa82c489e87a1addb",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Expect rebuilt E-mode categories, raw on-chain symbols and concrete read values."
+    },
+    {
+      "path": "v3-pool-contract-bundle/index.ts",
+      "originalSha256": "c05f5272411af95478460022a5bc3ad7788675c98da8361ab0b4d1f703140d88",
+      "vendoredSha256": "5e0c55e897bb3b5bbdb87a2513546de14140904cbafac44a742dbf5fa476c877",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Omit fixed upstream gas limits from the synchronous builders; map InterestRate.None to variable debt; reject a zero onBehalfOf; document getApprovedAmount units."
+    },
+    {
+      "path": "v3-pool-contract-bundle/pool-bundle.test.ts",
+      "originalSha256": "2687263c95536928cfc09ba68ff1210fab554e83310008dbe8514eead695cf68",
+      "vendoredSha256": "cc03f769cd04a1bc5b0e7044a0437800a398036fc813d7bc14a188f9f9997778"
+    },
+    {
+      "path": "v3-pool-contract/index.ts",
+      "originalSha256": "e740f1b87625475638159e157d3f376c04e89ccf36ac1895269929b2247a0cad",
+      "vendoredSha256": "e79ba5586d13fb18527283818b60ae38ff5485ff5c997fed15cdd2f6ce459f85",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Map InterestRate.None to variable debt; accept referral code 0 in supplyWithPermit; require a boolean collateral flag; reject the native sentinel in permit and collateral methods; snapshot earlier approvals so raw approvals estimate their own gas."
+    },
+    {
+      "path": "v3-pool-contract/lendingPoolTypes.ts",
+      "originalSha256": "7735c188110b921fb601a6b344e656d69c0a06d727915660c08aa180af84bfe0",
+      "vendoredSha256": "504ae6c8927d952ce8e97405a57c7c91819ac68fb828c339a66140d4ec26bb11",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+    },
+    {
+      "path": "v3-pool-contract/pool.test.ts",
+      "originalSha256": "3a3f2382f396de2b1620915840a4c4e52dca1c8e1a54b0cfa8effb7e51505b9b",
+      "vendoredSha256": "3ebc3e0251c2abe9bf09c37bb1b979704fa47ca2927e9fe63ff40625f4f42ff0",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Expect variable debt for InterestRate.None, referral code 0 acceptance and native-sentinel rejection in supplyWithPermit."
+    },
+    {
+      "path": "v3-wethgateway-contract/index.ts",
+      "originalSha256": "438ac66fd6111dcb3a7698f52a604d1512aecdc11fabb343080ff812100d6cde",
+      "vendoredSha256": "875c9cc7234ad03dc9fedf6329d32c7be701d3afdca9ccee79f7a27c47b3fbaf",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Omit fixed upstream gas limits from the synchronous gateway builders."
+    },
+    {
+      "path": "v3-wethgateway-contract/wethGateway.test.ts",
+      "originalSha256": "1a75b31f3701320c985c2bf082700780b35d0520f48e562a9a99cbd8f47ea5ab",
+      "vendoredSha256": "32b5bb722196afe8465369bddbdc6f8c6d402e51923a223f6b8b0de06361a658",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Correct the borrowETH, withdrawETH and repayETH describe labels."
+    },
+    {
+      "path": "wallet-balance-provider/index.ts",
+      "originalSha256": "7a8bc24f2e1489fe191fd2f2a327a1fcee30d0dd845ed1baca3573d578fba2a4",
+      "vendoredSha256": "8e017505b2c835fe360c6cdcbec7fd746b2f2aaa2af273fa0a467dba6c9eee49",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+    },
+    {
+      "path": "wallet-balance-provider/types/WalletBalanceProviderTypes.ts",
+      "originalSha256": "918a37d5d00395708cccda375b870ae3773b0abe536286e8164af377e0d8b53b",
+      "vendoredSha256": "3118e8e463f48ebf2069287ea83056a81852a6750cea83c9e3dc0425a2e3a353"
+    },
+    {
+      "path": "wallet-balance-provider/wallet-balance-provider.test.ts",
+      "originalSha256": "9174daf5486526e2de5b04a80541df8a3e60fbc629f2b013831a04c401a4b8b0",
+      "vendoredSha256": "3fc36934ce38ee1ff07f7b3808f0ca3909e43d2576b29c7ab6fce6c0f25b2ad3",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Assert concrete read values instead of resolution only."
+    }
+  ],
+  "addedSupportFiles": [
+    {
+      "path": "__tests__/offline-provider.ts",
+      "sha256": "04020e79f32f195da4a5b0024765ef55b45c35f4f2206f566fb9fe890ed64bdc"
+    },
+    {
+      "path": "abi-usage.test.ts",
+      "sha256": "73dafd125b8b3bf7446f303a6ae96c472c505e73cef333c91e3b91d179ed9d00",
+      "reason": "Track canonical ABI call sites at their reader and extracted transaction-builder owners, preserving nonempty pattern guards, full-signature checks and revenue output validation."
+    },
+    {
+      "path": "claim-rewards-contract/index.ts",
+      "sha256": "887ea8b9a32df222e381ca8cd99d15d9a80d278b3454763dd0103fd26f4f410c",
+      "reason": "Shared provider-free claim encoding with readonly assets, exact uint256 token and lock inputs, and canonical calldata regression coverage."
+    },
+    {
+      "path": "claim-rewards-contract/types.ts",
+      "sha256": "f81b02aea4a2e70aedd1dc2170b5287003318f4a8904fe0187dacace90fcd2a0",
+      "reason": "Shared provider-free claim encoding with readonly assets, exact uint256 token and lock inputs, and canonical calldata regression coverage."
+    },
+    {
+      "path": "commons/base-service.test.ts",
+      "sha256": "68b166c59059e24eca84a268a8d74e76473ad21017973819517392f462def126",
+      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+    },
+    {
+      "path": "commons/base-service.ts",
+      "sha256": "57a8b4061f61ca582de5c09a4bb3012e796162a45330dd6959eacae791ea6f91",
+      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+    },
+    {
+      "path": "commons/read-types.ts",
+      "sha256": "437536346dc796c38b498dab4ea0c9333ffb7c50fb112fb9112631f6fa967411"
+    },
+    {
+      "path": "dust-apr-contract/index.test.ts",
+      "sha256": "bfd45a6168e6545eaab84ca359d7bc02468699c42c54e7ee0ce6eeed6ea91954",
+      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs."
+    },
+    {
+      "path": "dust-apr-contract/index.ts",
+      "sha256": "ddce53bceb0e4396721353f6fb72b56f87753e8362b2e9b439cb20dc38effc71",
+      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs."
+    },
+    {
+      "path": "dust-apr-contract/types.ts",
+      "sha256": "7054be0b827de69731d3dd4f977a2d490261e48567eaeb27a299f7d35e3a866c",
+      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs."
+    },
+    {
+      "path": "dust-incentive-provider-contract/index.test.ts",
+      "sha256": "d8dd7260924a8bcb2df71e011c5864c849e7d477dd3f6f99ac7dd635bb0b7b5e",
+      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+    },
+    {
+      "path": "dust-incentive-provider-contract/index.ts",
+      "sha256": "5a4097c350867b2a679af026c2c42e0f3e0efa4131415eda18c7ff1d6db7ea0b",
+      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+    },
+    {
+      "path": "dust-incentive-provider-contract/types.ts",
+      "sha256": "6362bb7e2f8ffc2ab422a3780c509860b7b2e1b48de32995f1d6cd83d96ef5c8",
+      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+    },
+    {
+      "path": "dust-lock-contract/index.test.ts",
+      "sha256": "5178a3893ff9f0fc059ebeb6de2d617c5fa97ac3a0d45ae125ac434ec7c64fa8",
+      "reason": "Compose a provider-free canonical lock transaction builder with exact uint256 inputs, explicit calculation time and strict read primitives; preserve legacy aggregate behavior."
+    },
+    {
+      "path": "dust-lock-contract/index.ts",
+      "sha256": "5fa484fbf10944c9d4545c653ef0f6a5b47d77cfc79a09dff19262a43734170e",
+      "reason": "Compose a provider-free canonical lock transaction builder with exact uint256 inputs, explicit calculation time and strict read primitives; preserve legacy aggregate behavior."
+    },
+    {
+      "path": "dust-lock-contract/types.ts",
+      "sha256": "c0c2fb2d1b361d75cd38ac08b3fa287360292989d99a673c695b175869b49b99",
+      "reason": "Compose a provider-free canonical lock transaction builder with exact uint256 inputs, explicit calculation time and strict read primitives; preserve legacy aggregate behavior."
+    },
+    {
+      "path": "index.ts",
+      "sha256": "c6d1984ccb94a03030f194416f28b474a1c45778d5b45430a456eff762d33c0b",
+      "reason": "Export provider-free claim and lock builders, exact DUST APR and shared UI result conversion, emission decoding and pagination types; retain existing lending exports."
+    },
+    {
+      "path": "interest-rate.ts",
+      "sha256": "bac04414d1452687ff918efe38c738e720a0278a01c3d983b5d76d9ee311b7f9",
+      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+    },
+    {
+      "path": "lending-ethers.test.ts",
+      "sha256": "1a16cf5176324eb674e8e657f15fadbcab9cef0648c5babbf3d8f53c46f3b373"
+    },
+    {
+      "path": "neverland-ui-provider-contract/index.test.ts",
+      "sha256": "20f1d8c2642777dda2d9a600135c535a2020ea2eb13f407a57bc6192f4bfa134",
+      "reason": "Materialize canonical UI results as plain DTOs, preserve raw bigint cursors, add strict ownership-cardinality pagination and canonical historical/current emission decoding with synthetic ABI regressions."
+    },
+    {
+      "path": "neverland-ui-provider-contract/index.ts",
+      "sha256": "a93057eb34aefce0cd83405d1cf4ae1a2ed60e6923497d289b06cf33865b8b03",
+      "reason": "Materialize canonical UI results as plain DTOs, preserve raw bigint cursors, add strict ownership-cardinality pagination and canonical historical/current emission decoding with synthetic ABI regressions."
+    },
+    {
+      "path": "neverland-ui-provider-contract/types.ts",
+      "sha256": "e26dcea4c85ce96701d694a1686ff88c4c2f984d229260229c583d74159ba927",
+      "reason": "Materialize canonical UI results as plain DTOs, preserve raw bigint cursors, add strict ownership-cardinality pagination and canonical historical/current emission decoding with synthetic ABI regressions."
+    },
+    {
+      "path": "pool-contract/index.ts",
+      "sha256": "4173dd3fa8286d5523b5dbb1d7e10000a926ecf012eda51d85bf8524808a7973"
+    },
+    {
+      "path": "pool-contract/permit.test.ts",
+      "sha256": "b095b056fe634597d864031f2d4b1ac1d845cef435866c32f933b7afeb623523"
+    },
+    {
+      "path": "pool-contract/permit.ts",
+      "sha256": "cb736c1aea551290d1bc346e008ad56106c18de8f14fc397c688463abc62bf07",
+      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+    },
+    {
+      "path": "pool-contract/raw-pool.test.ts",
+      "sha256": "f0003092abfeacd3ff5ae6c7f60d567355c17a36b64922b4382b36a7551eadb7"
+    },
+    {
+      "path": "pool-contract/validation.ts",
+      "sha256": "ec72e7219fb75c23adbd5e9343e86439f2631beb73ffad51211ffb36ffe372dd"
+    },
+    {
+      "path": "sdk-compatibility.test.ts",
+      "sha256": "d6cd5ac63d577228df77f101274c25b030792bd62b04b5aff99af3519c7d7091",
+      "reason": "Public helper identities and complete transaction request regressions use helper-owned vectors."
+    },
+    {
+      "path": "shared-neverland-math.test.ts",
+      "sha256": "35ec825855101ff05d4775611679b339f886b05332c741c27a40ffc3c6ef16f6"
+    },
+    {
+      "path": "ve-dust-revenue-contract/index.test.ts",
+      "sha256": "d4798d7773e7c7232c3bf190bbc816353eac358106034ab92005732cc72ab057",
+      "reason": "Accept readonly exact uint256 IDs in revenue batch encoders and verify canonical calldata without changing existing aggregation policies."
+    },
+    {
+      "path": "ve-dust-revenue-contract/index.ts",
+      "sha256": "eeb22e0bcd4cbd05484a752d6dd66eea636a7bb49da1eb4503c7fd3c4e8f55c5",
+      "reason": "Accept readonly exact uint256 IDs in revenue batch encoders and verify canonical calldata without changing existing aggregation policies."
+    },
+    {
+      "path": "ve-dust-revenue-contract/types.ts",
+      "sha256": "e816c3d94fb6ac5f93d982335f2a21242fa23e331271cc0527baa5fad17ff696",
+      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+    },
+    {
+      "path": "weth-gateway-legacy-contract/index.test.ts",
+      "sha256": "1ac3a04fa9383168967db29c4b34a16b8d0f3f7870d10921c18c2016463ad288"
+    },
+    {
+      "path": "weth-gateway-legacy-contract/index.ts",
+      "sha256": "5672eca7a1309d684f27948ff96e7bfca39c1a150a37663a38cdae59d1067fe2"
+    },
+    {
+      "path": "weth-gateway-legacy-contract/types.ts",
+      "sha256": "bdf29daadbd584ff658881e02777c3fa13972b7016e47deee8d9f6df551250b5",
+      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+    },
+    {
+      "path": "commons/abi-types.ts",
+      "sha256": "e196a59346c14866ea4b530b630e61601273e05c53d6fa64d248fa10595e794b",
+      "reason": "Internal ABI-derived ethers views preserve Contract/Result identity, original dynamic method dispatch, positional and named tuple access, and bigint output widths. exclude empty decoded output names, distinguish transaction responses from decoded read/static-call results, and document frozen ethers Results while retaining existing public array signatures and object identity."
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "ce84640bcd829408a1502c174de5f93a52252185f5adf32d5d962e9834d84bd1",
+      "reason": "Editor-discoverable noEmit project owns maintained Jest tests and source aliases; package-root production builds still exclude tests."
+    },
+    {
+      "path": "__fixtures__/transaction-regression-vectors.json",
+      "sha256": "7d8b10b6f8ef8941e821aa65fe7719f23e8b3f0e3930586f30fb5a1dad2bcf77",
+      "reason": "Complete regression expectations and public SDK operations with immutable source identities."
+    },
+    {
+      "path": "claim-rewards-contract/index.test.ts",
+      "sha256": "c91a6c9d640f22d99618c8ff96a0453320204105d92611b13811211886933ef8",
+      "reason": "Shared provider-free claim encoding with readonly assets, exact uint256 token and lock inputs, and canonical calldata regression coverage."
+    },
+    {
+      "path": "commons/abi-result.test.ts",
+      "sha256": "fb87fb500dc117288952680cc0d4a07d9bb9c68af5c84996d9c70409ba279fcd",
+      "reason": "Regression coverage for empty, singleton and nested ABI arrays, tuple records and exact scalar values."
+    },
+    {
+      "path": "commons/abi-result.ts",
+      "sha256": "3e7a5758123050f56b71ad9fd6d7ebd43be08ad4e849793633bbf14ee072d312",
+      "reason": "Materialize native contract-call results through ABI parameter recursion into mutable arrays and named records without changing scalar values."
+    },
+    {
+      "path": "commons/uint256.ts",
+      "sha256": "3d09ef4895b20ca4bce60cabf6fc0b839b6ab6ee0f2165d643bf937e923486d7",
+      "reason": "Validate exact uint256 inputs without Number narrowing or permissive malformed-sign preprocessing."
+    },
+    {
+      "path": "dust-lock-contract/transaction-builder.test.ts",
+      "sha256": "deddc8746cfa323bdd73063c075264364821cbe3f589c3e3294203f3b33acc91",
+      "reason": "Compose a provider-free canonical lock transaction builder with exact uint256 inputs, explicit calculation time and strict read primitives; preserve legacy aggregate behavior."
+    },
+    {
+      "path": "dust-lock-contract/transaction-builder.ts",
+      "sha256": "fe5e6ade415449fa8957f7f3e2cc6eff5c9003a010548fa6860b4fb8e2aa095b",
+      "reason": "Compose a provider-free canonical lock transaction builder with exact uint256 inputs, explicit calculation time and strict read primitives; preserve legacy aggregate behavior."
+    },
+    {
+      "path": "neverland-ui-provider-contract/__tests__/fixtures.ts",
+      "sha256": "57ba6f57d2e17eac68cb55d7b0cfb37a9e19f88d88b290c75e392c268f625d9b",
+      "reason": "Materialize canonical UI results as plain DTOs, preserve raw bigint cursors, add strict ownership-cardinality pagination and canonical historical/current emission decoding with synthetic ABI regressions."
+    },
+    {
+      "path": "neverland-ui-provider-contract/emission-breakdown.test.ts",
+      "sha256": "156285debaaa87b518ba9929604440c5195b22b6ca6b0ec42289d50fa6d54372",
+      "reason": "Materialize canonical UI results as plain DTOs, preserve raw bigint cursors, add strict ownership-cardinality pagination and canonical historical/current emission decoding with synthetic ABI regressions."
+    },
+    {
+      "path": "neverland-ui-provider-contract/emission-breakdown.ts",
+      "sha256": "ff5505715d93cf2602e653012c9be673fa984fea4659c5b002972ad1bb5a5db7",
+      "reason": "Materialize canonical UI results as plain DTOs, preserve raw bigint cursors, add strict ownership-cardinality pagination and canonical historical/current emission decoding with synthetic ABI regressions."
+    },
+    {
+      "path": "neverland-ui-provider-contract/reads.test.ts",
+      "sha256": "9c890e772d63fb48304f4edbfbcbc1fef962ed10efa58a75fa3f4a520ff6fc8e",
+      "reason": "Materialize canonical UI results as plain DTOs, preserve raw bigint cursors, add strict ownership-cardinality pagination and canonical historical/current emission decoding with synthetic ABI regressions."
+    },
+    {
+      "path": "emode-pipeline.test.ts",
+      "sha256": "c9e878808d65af63f4331a4810e067ef6093d5222269c2bc7b76250a8a1f14f5"
+    },
+    {
+      "path": "pool-contract/fund-routing.test.ts",
+      "sha256": "5346eb56959ad18e94116289dd134324d749bf244353cabc678dfa8498060e80"
+    }
+  ]
+}

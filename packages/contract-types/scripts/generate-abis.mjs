@@ -18,6 +18,7 @@ while (args.length) {
     artifactRoot = resolve(args.shift());
   } else throw new Error(`Unknown or incomplete option: ${flag}`);
 }
+
 if (check && importSource) throw new Error('--check cannot import or change ABI files.');
 
 const provenancePath = join(root, 'abi-provenance.json');
@@ -31,21 +32,26 @@ const assertAbi = abi => {
     throw new Error('Expected a complete ABI array.');
   }
 };
+
 const entries = provenance.abis;
 const names = new Set();
 for (const entry of entries) {
   if (!/^[a-z][A-Za-z0-9]*Abi$/.test(entry.export) || names.has(entry.export)) {
     throw new Error(`Invalid or duplicate export: ${entry.export}`);
   }
+
   if (!/^[A-Z][A-Za-z0-9]*Abi$/.test(entry.typeName) || !provenance.sources[entry.source]) {
     throw new Error(`Invalid type or source: ${entry.export}`);
   }
+
   names.add(entry.export);
 }
+
 for (const [alias, target] of Object.entries(provenance.aliases ?? {})) {
   if (!/^[a-z][A-Za-z0-9]*Abi$/.test(alias) || names.has(alias) || !names.has(target)) {
     throw new Error(`Invalid alias: ${alias}`);
   }
+
   names.add(alias);
 }
 
@@ -62,8 +68,10 @@ if (importSource) {
     }),
   );
   for (const { entry, abi } of imports) {
+    // eslint-disable-next-line no-await-in-loop -- Keep deterministic ABI processing and output writes sequential, with the existing first-failure and partial-write behavior.
     await writeFile(
       abiPath(entry),
+      // eslint-disable-next-line no-await-in-loop -- Keep deterministic ABI processing and output writes sequential, with the existing first-failure and partial-write behavior.
       await format(JSON.stringify(abi), { ...config, parser: 'json' }),
     );
     entry.sha256 = hash(abi);
@@ -74,6 +82,7 @@ if (importSource) {
       ]),
     );
   }
+
   await writeFile(
     provenancePath,
     await format(JSON.stringify(provenance), { ...config, parser: 'json' }),
@@ -88,10 +97,13 @@ const literalType = value => {
       .map(([key, item]) => `readonly ${JSON.stringify(key)}: ${literalType(item)};`)
       .join('')}}`;
   }
+
   return JSON.stringify(value);
 };
+
 const outputs = [];
 for (const entry of entries) {
+  // eslint-disable-next-line no-await-in-loop -- Keep deterministic ABI processing and output writes sequential, with the existing first-failure and partial-write behavior.
   const abi = JSON.parse(await readFile(abiPath(entry), 'utf8'));
   assertAbi(abi);
   if (hash(abi) !== entry.sha256) throw new Error(`ABI differs from provenance: ${entry.export}`);
@@ -103,6 +115,7 @@ for (const entry of entries) {
       `export const ${entry.export} = ${entry.export}Json as unknown as ${literalType(abi)} satisfies Abi;\n`,
   });
 }
+
 const aliases = Object.entries(provenance.aliases ?? {});
 outputs.push({
   path: join(root, 'src/abis/index.ts'),
@@ -131,12 +144,16 @@ outputs.push({
 
 const stale = [];
 for (const output of outputs) {
+  // eslint-disable-next-line no-await-in-loop -- Keep deterministic ABI processing and output writes sequential, with the existing first-failure and partial-write behavior.
   const formatted = await format(output.text, { ...config, parser: 'typescript' });
   if (check) {
+    // eslint-disable-next-line no-await-in-loop -- Keep deterministic ABI processing and output writes sequential, with the existing first-failure and partial-write behavior.
     const current = await readFile(output.path, 'utf8').catch(() => '');
     if (current !== formatted) stale.push(output.path);
+    // eslint-disable-next-line no-await-in-loop -- Keep deterministic ABI processing and output writes sequential, with the existing first-failure and partial-write behavior.
   } else await writeFile(output.path, formatted);
 }
+
 if (stale.length)
   throw new Error(`Stale ABI exports. Run yarn generate:abis:\n${stale.join('\n')}`);
 console.log(

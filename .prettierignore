@@ -1,3 +1,25 @@
 coverage/
 dist/
 /.nx/workspace-data
+
+# Compiler incremental build metadata (dist/ is already excluded above).
+**/*.tsbuildinfo
+
+# ABI imports and typed exports are owned by scripts/generate-abis.mjs.
+packages/contract-types/src/abis/*Abi.json
+packages/contract-types/src/abis/*Abi.ts
+packages/contract-types/src/abis/index.ts
+packages/contract-types/src/types.ts
+
+# Complete regression vectors have intentional bytes guarded by the immutable-data manifest.
+packages/math-utils/src/__fixtures__/math-regression-vectors.json
+packages/math-utils/src/__fixtures__/financial-regression-vectors.json
+packages/contract-helpers/src/__fixtures__/transaction-regression-vectors.json
+
+# Local scratch/cache and vendored tooling are outside maintained workspace source.
+.claude/
+.remember/
+.superpowers/
+docs/superpowers/
+.yarn/
+node_modules/
