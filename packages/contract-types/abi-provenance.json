@@ -76,24 +76,24 @@
       "entries": { "constructor": 1, "function": 34, "event": 7, "error": 0 }
     },
     {
-      "export": "aaveOracleAbi",
+      "export": "lendingOracleAbi",
       "contract": "AaveOracle",
       "source": "neverland-lending",
       "sourcePath": "contracts/misc/AaveOracle.sol",
       "artifact": "contracts/misc/AaveOracle.sol/AaveOracle.json",
       "group": "lending",
-      "typeName": "AaveOracleAbi",
+      "typeName": "LendingOracleAbi",
       "sha256": "eddba4899431b35bfb046374cab319589a0984552da355aa28d661a8cee229e2",
       "entries": { "constructor": 1, "function": 9, "event": 3, "error": 0 }
     },
     {
-      "export": "aaveProtocolDataProviderAbi",
+      "export": "protocolDataProviderAbi",
       "contract": "AaveProtocolDataProvider",
       "source": "neverland-lending",
       "sourcePath": "contracts/misc/AaveProtocolDataProvider.sol",
       "artifact": "contracts/misc/AaveProtocolDataProvider.sol/AaveProtocolDataProvider.json",
       "group": "lending",
-      "typeName": "AaveProtocolDataProviderAbi",
+      "typeName": "ProtocolDataProviderAbi",
       "sha256": "762c2c11724b15b6a0721d5d2c247fe748942754f808954bdcb13989a05fd5fd",
       "entries": { "constructor": 1, "function": 19, "event": 0, "error": 0 }
     },

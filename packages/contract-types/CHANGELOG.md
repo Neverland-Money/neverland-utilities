@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-types@2.0.0...@neverland-money/contract-types@3.0.0) (2026-10-27)
+
+### Breaking Changes
+
+- **contract-types:** rename owned `aaveOracleAbi`/`AaveOracleAbi` to
+  `lendingOracleAbi`/`LendingOracleAbi` and
+  `aaveProtocolDataProviderAbi`/`AaveProtocolDataProviderAbi` to
+  `protocolDataProviderAbi`/`ProtocolDataProviderAbi`, including module paths; no old aliases
+  remain. Every ABI byte, selector, tuple, canonical Solidity source name and provenance identity is
+  unchanged, and the 53 ABI families and two unrelated aliases remain.
+- **contract-types:** `abi-provenance.json` is no longer included in the published package; 2.0.0
+  shipped it. It stays in the repository, so read it there instead of importing it from the package.
+
+### Bug Fixes
+
+- **contract-types:** the build now cleans `dist` first, so renamed modules cannot ship stale
+  output. Cleanup uses Node filesystem calls instead of `npx rimraf`, and the build uses TypeScript
+  6.0.3.
+
 ## [2.0.0](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-types@1.0.1...@neverland-money/contract-types@2.0.0) (2026-10-07)
 
 ### Breaking Changes

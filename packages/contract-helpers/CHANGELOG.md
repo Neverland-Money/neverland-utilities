@@ -3,6 +3,128 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-helpers@2.0.0...@neverland-money/contract-helpers@3.0.0) (2026-10-27)
+
+### Breaking Changes
+
+- **contract-helpers:** rename every PascalCase module directory to lowercase kebab-case under both
+  `dist/cjs` and `dist/esm`. Update deep imports: `ClaimRewards-contract` to
+  `claim-rewards-contract`, `DustAPR-contract` to `dust-apr-contract`,
+  `DustIncentiveProvider-contract` to `dust-incentive-provider-contract`, `DustLock-contract` to
+  `dust-lock-contract`, `NeverlandUiProvider-contract` to `neverland-ui-provider-contract`,
+  `VeDustRevenue-contract` to `ve-dust-revenue-contract`, `WETHGatewayLegacy-contract` to
+  `weth-gateway-legacy-contract`, `commons/BaseService` to `commons/base-service`, and
+  `interestRate` to `interest-rate`. No root export was removed, so imports from
+  `@neverland-money/contract-helpers` are unaffected.
+- **contract-helpers:** widen `IncreaseAmountParams.tokenId`, `MergeParams.fromTokenId`,
+  `MergeParams.toTokenId` and the claim `ClaimRewardsParams.lockTime` and `tokenId` from `number` to
+  `BigNumberish`, so token IDs above 2^53 and `MaxUint256` permanent lock times encode exactly.
+  `ClaimRewardsParams.assetAddresses` is now `readonly string[]`. `MarketAPR.totalSupply` is now
+  optional because dormant results omit it.
+- **NeverlandUiService:** `getProtocolMeta`, `getAllPrices`, `getGlobalStats`, `getMarketData`,
+  `getNetworkData`, `getUiBootstrap`, `getUserRewardsSummary`, `getUserDashboard` and
+  `getUiFullBundle` now return plain objects and arrays, including the rows nested in dashboards and
+  bundles. They no longer expose ethers `Result` positional indexes, `toObject()` or `toArray()`.
+  Read fields by name. Quantities remain `bigint`.
+- **ClaimRewardsHelper:** the claim builders (`getClaimAllRewardsToSelfTxData`,
+  `getClaimRewardsToSelfTxData`, `buildClaimAllRewardsToSelfTxData` and
+  `buildClaimRewardsToSelfTxData`) require an explicit `lockTime`; 2.0.0 defaulted a missing value
+  to 0, an instant claim. `0` is an instant claim with a 50% toll. A duration in seconds of at least
+  28 days creates a timed lock with a toll that slides with the commitment; use 35 days or more,
+  because the unlock time rounds down to a whole week. `MaxUint256` creates a permanent lock with no
+  toll. A `tokenId` above 0 deposits into that lock and ignores `lockTime`; pass 0. Quote any route
+  with the transfer strategy's `previewClaim`.
+- **contract-helpers:** the synchronous lending builders no longer set `gasLimit`, because Monad
+  bills `gas_limit` times `gas_price` rather than gas used. Upstream `@aave/contract-helpers` filled
+  in a fixed Ethereum-mainnet value. This covers the `PoolBundle` supply, borrow, repay and
+  repayWithATokens builders (`generateTxData` and `generateSignedTxData`),
+  `WETHGatewayService.generateDepositEthTxData`, `generateBorrowEthTxData` and
+  `generateRepayEthTxData`, `ERC20Service.approveTxData`, and
+  `BaseDebtToken.generateApproveDelegationTxData`. Wallets and ethers estimate gas when it is
+  absent.
+- **contract-helpers:** `InterestRate.None` now selects variable debt (2) on the `Pool` and
+  `PoolBundle` paths, matching the gateway; upstream mapped it to stable debt (1).
+  `InterestRate.Stable` still selects stable (1).
+
+### Features
+
+- **contract-helpers:** add the Aave-derived lending services, ported from `@aave/contract-helpers`
+  1.36.1 to ethers 6 and `bigint`; none of them exist in 2.0.0. The root exports `Pool`,
+  `PoolBundle`, `ERC20Service`, `ERC20_2612Service`, `BaseDebtToken`, `UiPoolDataProvider`,
+  `WalletBalanceProvider` and `buildErc2612PermitTypedData`. `WETHGatewayService` is available from
+  the `wrapped-native-gateway-contract` deep path. Raw nonces, allowances, delegations and balances
+  are `bigint`; `approvedAmount` and `approvedDelegationAmount` return exact strings in normalized
+  token units.
+- **Pool:** add the finite raw methods `supplyRaw`, `repayRaw`, `supplyWithPermitRaw` and
+  `repayWithPermitRaw`. They take exact base-unit `amountRaw` strings and reject zero, max-uint,
+  native-sentinel and invalid amounts, addresses and rate modes. `zeroFirst` inserts a zero approval
+  before a new finite approval when the current allowance is insufficient and nonzero. Each raw
+  approval estimates its own `gas()` instead of reusing the pending-approval table value; a finite
+  approval queued behind a zero reset still previews with the table value until the reset is mined.
+- **DustLockHelper:** add `DustLockTransactionBuilder` for lock transaction data without a provider,
+  and the provider-free `buildClaimAllRewardsToSelfTxData` and `buildClaimRewardsToSelfTxData`.
+  Token IDs, amounts and lock times accept exact `BigNumberish` values. Add `getTransferTxData`,
+  `getTotalVotingPower`, `readEarlyWithdrawPenaltyAmount`, and a `spender` argument on
+  `getDustAllowance`.
+- **UiPoolDataProvider:** `getEModes` and `getEModesHumanized` rebuild lending-core 1.1 E-mode
+  categories from the E-mode fields embedded in each reserve. Add the export
+  `synthesizeEModesFromReserves` and the type `EModeReserveFields` for callers that already hold
+  reserves.
+- **DustLockHelper:** `getUserLocks`, `getUserLocksWithMulticall` and `getUserDustDataWithMulticall`
+  accept an optional `currentTimestamp` for `daysRemaining` and `isExpired`.
+- **NeverlandUiService:** add `{ requireComplete: true }` pagination checks,
+  `decodeUserEmissionBreakdown` and `materializeContractResult`. `calculateTotalRewardsUSD` reports
+  `emissionsIncluded` and leaves unresolved emissions out of both totals.
+- **DustAPRCalculator:** `MarketAPR.totalSupplyUSD` exposes the USD supply behind an APR, and is
+  re-exported from math-utils with `calculateMarketAPRFromInputs`, `DustMarketAPRInputs` and
+  `UnresolvedDustAPRInputError`. Share the exact integer calculation with math-utils and accept an
+  explicit protocol clock through `{ nowSeconds }`.
+- **contract-helpers:** add an `exports` map. The root `import` condition selects ESM and `require`
+  selects CommonJS, and native Node ESM can import `dist/esm` deep paths. Re-export
+  `calculateBufferedRepayAmount` from math-utils. The package `LICENSE` now retains the
+  `Copyright (c) 2021 Aave` attribution for upstream-derived source; the 2.0.0 license named only
+  Neverland.
+
+### Bug Fixes
+
+- **DustLockHelper:** `getCreateLockForTxData` encodes `(amount, duration, recipient)` in the
+  contract's order. 2.0.0 passed `(to, amount, unlockTime)`. The legacy `unlockTime` field is a
+  duration in seconds, not a timestamp.
+- **WETHGatewayLegacyAdapter:** `encodeBorrowETH` and `encodeRepayETH` map `InterestRate` to the
+  numeric rate mode (1 or 2). 2.0.0 passed the enum string to the ABI encoder, which throws.
+- **contract-helpers:** relative to upstream `@aave/contract-helpers` 1.36.1, the decorated lending
+  validators and `PoolBundle` `onBehalfOf` reject the zero address. `supplyWithPermit` accepts
+  referral code `'0'`. `setUsageAsCollateral` requires a boolean. `supplyWithPermit`,
+  `repayWithPermit` and `setUsageAsCollateral` reject the native sentinel.
+- **BaseDebtToken:** `approveDelegation` and `generateApproveDelegationTxData` accept 0 to revoke a
+  delegation and parse exact uint256 values.
+- **contract-helpers:** the exact uint256 parser used by the DustLock, claim, VeDustRevenue and
+  delegation builders rejects binary and octal strings and labels decimal and exponent errors. ERC20
+  approval amounts follow the same rule.
+- **contract-helpers:** gas estimation falls back to the default recommendation for actions missing
+  from the table, such as `setEModeUsage`.
+- **VeDustRevenueHelper:** query earned rewards in ascending token order, as `RevenueReward`
+  requires, and return each column in caller order. The constructor validates `revenueAddress`. The
+  batch encoders bound `tokenIds` to 1-64 entries and `rewardTokens` to 1-32.
+- **DustAPRCalculator:** fix the tuple decoding and token-decimal normalization behind the known
+  issue in 2.0.0. `calculateMarketAPR` reads the incentivized token's `totalSupply()` and
+  `decimals()`; unresolved inputs reject with `UnresolvedDustAPRInputError`, failed batch entries
+  are omitted, and dormant results omit unread supply. `calculateWeightedAverageAPR` weights by USD
+  supply and throws `UnresolvedDustAPRInputError` when an active market lacks `totalSupplyUSD`.
+  Float prices convert to USD8 exactly instead of through `price * 1e8`.
+- **NeverlandUiService:** pagination rejects a `pageSize` that is not a positive safe integer. A
+  revert on the first dashboard page now throws instead of returning an empty dashboard
+  (`getUiFullBundle` and `getUiFullBundleFromParts` return `null`); later pages still return the
+  pages already loaded with `hasMore` set.
+- **UiPoolDataProvider:** remove upstream's dead Ethereum-mainnet AMM symbol overrides.
+
+### Dependencies
+
+- **contract-helpers:** `@neverland-money/contract-types` moves from `^2.0.0` to the exact `3.0.0`,
+  and the new `@neverland-money/math-utils` dependency is the exact `1.0.0`. `ethers` stays
+  `^6.17.0`, and the new `bignumber.js` (`^9.3.1`) and `reflect-metadata` (`^0.1.14`) dependencies
+  are caret ranges, so consumers on compatible newer versions install them once.
+
 ## [2.0.0](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-helpers@1.0.1...@neverland-money/contract-helpers@2.0.0) (2026-10-07)
 
 ### Breaking Changes

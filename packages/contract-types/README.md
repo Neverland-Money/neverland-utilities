@@ -1,7 +1,7 @@
 # Neverland Contract Types
 
 <p>
-  <a href="./README.md"><img src="https://img.shields.io/badge/Neverland%20Contract%20Types-v2.0.0%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Contract Types v2.0.0 - Monad mainnet (143) - MIT"/></a>
+  <a href="https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/contract-types/README.md"><img src="https://img.shields.io/badge/Neverland%20Contract%20Types-v3.0.0%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Contract Types v3.0.0 - Monad mainnet (143) - MIT"/></a>
 </p>
 
 Compiled ABIs and precise TypeScript types for Neverland's public contracts, lending core, wrapped
@@ -11,7 +11,7 @@ helpers live in `contract-helpers`.
 
 ## Package
 
-The package is published as:
+Install the package:
 
 ```bash
 npm install @neverland-money/contract-types
@@ -21,13 +21,33 @@ The published package includes:
 
 - `dist/esm/`: ES module build, used by bundlers through the `module` field.
 - `dist/cjs/`: CommonJS build, used by `require` through the `main` field.
-- `README.md`, `CHANGELOG.md`, and `abi-provenance.json`.
+- `README.md`, `CHANGELOG.md` and `LICENSE`.
+
+Source provenance, generator scripts and test fixtures stay in the repository. In particular,
+`abi-provenance.json` is no longer published (2.0.0 shipped it); it stays in the repository.
+
+The `dist/esm` build is for bundlers. Its relative imports are extensionless and its ABI modules
+import JSON without import attributes, so native Node ESM cannot load its deep paths. A native Node
+`import` of the package root loads the CommonJS entrypoint.
 
 Example import:
 
 ```typescript
 import { dustLockAbi, erc20Abi, poolAbi } from '@neverland-money/contract-types';
 ```
+
+## Breaking Migration To 3.0.0
+
+`aaveOracleAbi` / `AaveOracleAbi` become `lendingOracleAbi` / `LendingOracleAbi`;
+`aaveProtocolDataProviderAbi` / `AaveProtocolDataProviderAbi` become `protocolDataProviderAbi` /
+`ProtocolDataProviderAbi`, including module filenames. There are no aliases under the old names. ABI
+bytes and original Solidity source/contract identifiers in provenance remain unchanged.
+`abi-provenance.json` is no longer published; read it from the repository instead of importing it
+from the package.
+
+ABI-derived viem return types infer small integers as numbers. Ethers 6 returns bigint for every
+integer width. The helpers use an outputs-only mapping at the ABI read boundary and checked metadata
+conversions; do not cast raw ethers results directly to viem return types.
 
 ## Available ABIs
 
@@ -41,8 +61,8 @@ enforced by the contracts.
 | ABI export                              | Contract                             |
 | --------------------------------------- | ------------------------------------ |
 | `aTokenAbi`                             | `AToken`                             |
-| `aaveOracleAbi`                         | `AaveOracle`                         |
-| `aaveProtocolDataProviderAbi`           | `AaveProtocolDataProvider`           |
+| `lendingOracleAbi`                      | `AaveOracle`                         |
+| `protocolDataProviderAbi`               | `AaveProtocolDataProvider`           |
 | `aclManagerAbi`                         | `ACLManager`                         |
 | `defaultReserveInterestRateStrategyAbi` | `DefaultReserveInterestRateStrategy` |
 | `poolAbi`                               | `Pool`                               |
@@ -197,19 +217,7 @@ import { dustLockAbi } from '@neverland-money/contract-types';
 const provider = new ethers.JsonRpcProvider('https://rpc.monad.xyz');
 const contract = new ethers.Contract('0x...', dustLockAbi, provider);
 
-// TypeScript infers types from the ABI
-const balance = await contract.balanceOfNFT(tokenId);
-```
-
-### With Ethers v5
-
-```typescript
-import { ethers } from 'ethers';
-import { dustLockAbi } from '@neverland-money/contract-types';
-
-const provider = new ethers.providers.JsonRpcProvider('https://rpc.monad.xyz');
-const contract = new ethers.Contract('0x...', dustLockAbi as any, provider);
-
+// Ethers 6 returns this integer read as a bigint.
 const balance = await contract.balanceOfNFT(tokenId);
 ```
 
@@ -264,94 +272,58 @@ Pass the exported ABI directly to viem when exact function and argument inferenc
 Misspelled methods and invalid arguments that the previous general `Abi` casts accepted now produce
 compiler errors.
 
-## Benefits Over Typechain
+## Compared With TypeChain
 
-- Zero runtime overhead, just types.
-- Works with Viem, Ethers v5, and Ethers v6.
-- No code generation needed.
-- Smaller bundle size.
-- Better type inference.
-- Easier to maintain.
-- Native JSON import support.
+- No generated contract classes or factories. Each ABI is a plain JSON value that you pass to viem
+  or ethers directly.
+- The package is not types only. Each build ships every ABI as a JSON file, about 1 MB in total,
+  plus a small JavaScript module per ABI that re-exports it. Import only the ABIs you need and
+  measure your own bundle.
+- Each ABI also has a generated readonly literal type, which gives viem exact function, argument and
+  return inference.
+- Tested with viem and ethers 6. Ethers 6 returns bigint for every integer width, so do not cast its
+  results to viem's inferred return types.
+- No code generation step in your project.
+
+## Source Provenance
+
+All JSON ABIs are included in both build directories. Their source revisions, compiler settings,
+artifact paths and payload hashes are retained in the repository's
+[ABI provenance](https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/contract-types/abi-provenance.json),
+which is not part of the published package. The generator checks those records before every package
+build. Source maintenance and generation are documented in the
+[contributor guide](https://github.com/Neverland-Money/neverland-utilities/blob/main/CONTRIBUTING.md).
+
+ABI availability does not establish deployment or activation. Use `@neverland-money/address-book`
+and deployment records to choose the correct market and contract address.
 
 ## Development
 
-Use Node `24` via the repository `.nvmrc`. Build and test from the repository root:
+Use Node `24` via the repository `.nvmrc` and Yarn `4.3.1` via Corepack. From the repository root:
 
 ```bash
-yarn install
 yarn build
 yarn test packages/contract-types
-yarn workspace @neverland-money/contract-types check:abis
 ```
 
-## Layout
-
-- `src/abis/*.json`: the ABI files, copied from compiled `neverland-contracts` and
-  `neverland-lending` sources.
-- `src/abis/*.ts`: generated typed exports and the public ABI barrel.
-- `src/types.ts`: generated ABI type aliases and viem type utilities.
-- `abi-provenance.json`: source revisions, compiler settings, artifact paths, and ABI hashes.
-- `scripts/generate-abis.mjs`: artifact import, typed export generation, and stale-output checking.
-- `src/abis/abis.test.ts`: tests for the ABIs.
-- `dist/`: generated build output, not committed.
-
-## ABI Provenance And Generation
-
-[`abi-provenance.json`](./abi-provenance.json) records every family, its compiled artifact path,
-source revision, compiler and settings, ABI entry counts, and SHA-256 of the compact JSON array. The
-existing nine ABI families retain their published 1.0.1 runtime values.
-
-| Source                   | Pinned revision                            | Generation                                                      |
-| ------------------------ | ------------------------------------------ | --------------------------------------------------------------- |
-| Neverland lending        | `a26582fcc24df718a57efd505d51d8cdeeed388d` | Hardhat 2.26.3, Solidity 0.8.10, optimizer 100,000 runs, London |
-| Neverland contracts      | `71c2d0658d6e12e61018156808f1bd6e9a24675c` | Forge 1.5.1, Solidity 0.8.30, optimizer 200 runs, Cancun        |
-| Neverland wrapped tokens | `5c6a9ed564f9f41308103c1be26d4731883d146c` | Forge 1.5.1, Solidity 0.8.35, optimizer 200,000 runs, Prague    |
-| Aave V3 periphery        | `9afa82664affda1af6f472dfa9492b5feb0d32a9` | Forge 1.5.1, Solidity 0.8.35, optimizer 200 runs, Cancun        |
-| OpenZeppelin IERC4626    | `5fd1781b1454fd1ef8e722282f86f9293cacf256` | Forge 1.5.1, Solidity 0.8.35, optimizer 200 runs, Cancun        |
-
-The periphery and OpenZeppelin revisions are submodules pinned by the Neverland contracts revision.
-Forge builds used isolated output and cache directories; the wrapped-token build used a clean source
-archive. The Pool ABI was generated with `npm run compile` (`SKIP_LOAD=true hardhat compile`) from a
-clean lending source archive. Its complete `Pool.sol:Pool` ABI has 48 functions, 16 events, and a
-constructor. That revision uses string revert codes and declares no custom ABI errors.
-
-`erc20Abi`, `multicall3Abi`, and `wethGatewayLegacyAbi` are retained from the published 1.0.1
-package; their original compiler revisions were not recorded. ERC-4626 comes from the compiled
-OpenZeppelin `IERC4626` interface, including inherited ERC20 and metadata methods. All other
-families come from complete implementation artifacts. Source-backed coverage includes contracts
-prepared for future integrations. An export does not establish that a contract is deployed,
-activated, or available in every market; use `address-book` and deployment records to choose an
-address.
-
-To update an ABI, first compile its pinned source using the source's recorded generation method.
-When changing source revisions, update the source metadata and compiler settings as well. Import all
-recorded artifacts for that source, then regenerate the TypeScript exports:
-
-```bash
-# Run from packages/contract-types. Paths point at freshly compiled artifact directories.
-node scripts/generate-abis.mjs --import neverland-lending /path/to/lending/artifacts
-node scripts/generate-abis.mjs --import neverland-contracts /path/to/contracts/out
-node scripts/generate-abis.mjs --import neverland-wrapped-tokens /path/to/wrapped-tokens/out
-node scripts/generate-abis.mjs --import aave-v3-periphery /path/to/periphery/out
-node scripts/generate-abis.mjs --import openzeppelin-contracts-v5 /path/to/standards/out
-
-yarn generate:abis
-yarn check:abis
-```
-
-Imports copy each artifact's entire `abi` array without filtering entries and update its hash.
-`check:abis` rejects ABI drift and stale generated modules, barrels, or type aliases; it runs before
-the package build. All JSON ABIs remain included in both build directories.
+See the
+[contributor guide](https://github.com/Neverland-Money/neverland-utilities/blob/main/CONTRIBUTING.md)
+for installation, source maintenance, and the complete validation workflow.
 
 ## Related Packages
 
-- `@neverland-money/address-book`: deployed contract addresses.
-- `@neverland-money/contract-helpers`: helper classes that use these ABIs.
+- [`@neverland-money/address-book`](https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/address-book/README.md):
+  deployed contract addresses.
+- [`@neverland-money/contract-helpers`](https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/contract-helpers/README.md):
+  ethers 6 helpers for Neverland contracts.
+- [`@neverland-money/math-utils`](https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/math-utils/README.md):
+  reserve, account, interest, and reward calculations.
 
 ## License And Notices
 
-See [LICENSE](../../LICENSE). Released under the MIT License.
+See
+[LICENSE](https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/contract-types/LICENSE).
+Released under the MIT License.
 
 <p>
   <a href="https://neverland.money"><img src="https://img.shields.io/badge/Website-neverland.money-480052?style=for-the-badge&logo=safari&logoColor=white" height="22" alt="Website"/></a>

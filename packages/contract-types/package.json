@@ -1,6 +1,6 @@
 {
   "name": "@neverland-money/contract-types",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Typed ABIs for Neverland protocol contracts",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -10,20 +10,18 @@
   "files": [
     "dist",
     "README.md",
-    "CHANGELOG.md",
-    "abi-provenance.json"
+    "CHANGELOG.md"
   ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "clean": "cd ../.. && npx rimraf packages/contract-types/dist packages/contract-types/*.log*",
+    "clean": "node -e \"const fs = require('node:fs'); for (const name of fs.readdirSync('.')) if (name === 'dist' || name.includes('.log')) fs.rmSync(name, { recursive: true, force: true });\"",
     "lint": "cd ../.. && eslint \"packages/contract-types/src/**/*.ts\"",
-    "check-types": "yarn check:abis && cd ../.. && tsc -p packages/contract-types/tsconfig.json --noEmit && tsc -p packages/contract-types/tsconfig.json --module commonjs --noEmit",
-    "prebuild": "npm run clean",
+    "check-types": "yarn check:abis && cd ../.. && node ./node_modules/typescript/bin/tsc -p packages/contract-types/tsconfig.json --noEmit && node ./node_modules/typescript/bin/tsc -p packages/contract-types/tsconfig.json --module commonjs --noEmit",
     "generate:abis": "node scripts/generate-abis.mjs",
     "check:abis": "node scripts/generate-abis.mjs --check",
-    "build": "yarn check:abis && cd ../.. && tsc -p packages/contract-types/tsconfig.json && tsc -p packages/contract-types/tsconfig.json --module commonjs --outDir ./packages/contract-types/dist/cjs",
+    "build": "yarn clean && yarn check:abis && cd ../.. && node ./node_modules/typescript/bin/tsc -p packages/contract-types/tsconfig.json && node ./node_modules/typescript/bin/tsc -p packages/contract-types/tsconfig.json --module commonjs --outDir ./packages/contract-types/dist/cjs",
     "test": "cd ../.. && yarn test packages/contract-types",
     "test:watch": "cd ../.. && yarn test --watch packages/contract-types",
     "cover": "cd ../.. && yarn cover packages/contract-types",

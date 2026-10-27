@@ -3,11 +3,15 @@ import importPlugin from 'eslint-plugin-import';
 import prettier from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 
-const typescriptFiles = ['packages/*/src/**/*.ts'];
+const typescriptFiles = ['packages/**/*.ts', 'scripts/fixtures/**/*.ts'];
 
 export default [
   {
     ignores: [
+      '.claude/**',
+      '.remember/**',
+      '.superpowers/**',
+      'docs/superpowers/**',
       '.yarn/**',
       '.nx/**',
       '**/node_modules/**',
@@ -18,11 +22,16 @@ export default [
       'packages/contract-types/src/abis/*Abi.ts',
       'packages/contract-types/src/abis/index.ts',
       'packages/contract-types/src/types.ts',
+      // Complete regression vectors retain bytes guarded by their hash manifest.
+      'packages/math-utils/src/__fixtures__/math-regression-vectors.json',
+      'packages/math-utils/src/__fixtures__/financial-regression-vectors.json',
+      'packages/contract-helpers/src/__fixtures__/transaction-regression-vectors.json',
     ],
   },
   // XO's TypeScript-only entries are unscoped; keep its JS and JSON entries intact.
   ...xoTypescript.map(config => {
     if (config.language === 'json/json') {
+      // The earlier JSONC entry owns compiler configs; generic JSON must not replace its language.
       return { ...config, ignores: ['**/tsconfig.json', '.vscode/*.json'] };
     }
 
@@ -42,7 +51,7 @@ export default [
     languageOptions: {
       parserOptions: {
         projectService: false,
-        project: './tsconfig.test.json',
+        project: './tsconfig.eslint.json',
         tsconfigRootDir: import.meta.dirname,
       },
     },

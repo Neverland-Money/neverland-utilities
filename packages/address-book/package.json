@@ -1,6 +1,6 @@
 {
   "name": "@neverland-money/address-book",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Address book for Neverland Lending protocol contract addresses",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -11,11 +11,10 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "cd ../.. && npx rimraf packages/address-book/dist packages/address-book/*.log*",
+    "clean": "node -e \"const fs = require('node:fs'); for (const name of fs.readdirSync('.')) if (name === 'dist' || name.includes('.log')) fs.rmSync(name, { recursive: true, force: true });\"",
     "lint": "cd ../.. && eslint \"packages/address-book/src/**/*.ts\"",
-    "check-types": "cd ../.. && tsc -p packages/address-book/tsconfig.json --noEmit && tsc -p packages/address-book/tsconfig.json --module commonjs --noEmit",
-    "prebuild": "npm run clean",
-    "build": "cd ../.. && tsc -p packages/address-book/tsconfig.json && tsc -p packages/address-book/tsconfig.json --module commonjs --outDir ./packages/address-book/dist/cjs",
+    "check-types": "cd ../.. && node ./node_modules/typescript/bin/tsc -p packages/address-book/tsconfig.json --noEmit && node ./node_modules/typescript/bin/tsc -p packages/address-book/tsconfig.json --module commonjs --noEmit",
+    "build": "yarn clean && cd ../.. && node ./node_modules/typescript/bin/tsc -p packages/address-book/tsconfig.json && node ./node_modules/typescript/bin/tsc -p packages/address-book/tsconfig.json --module commonjs --outDir ./packages/address-book/dist/cjs",
     "test": "cd ../.. && yarn test packages/address-book",
     "test:watch": "cd ../.. && yarn test --watch packages/address-book",
     "cover": "cd ../.. && yarn cover packages/address-book",

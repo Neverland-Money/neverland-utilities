@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.3](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/address-book@1.0.2...@neverland-money/address-book@1.0.3) (2026-10-27)
+
+### Bug Fixes
+
+- **address-book:** ship the MIT `LICENSE` from the package directory. Its holder line now reads
+  `Copyright (c) 2025 Neverland`, matching the root `LICENSE`; 1.0.2 read `Neverland Money`.
+- **address-book:** update the README. It now links the sibling packages and the contributor guide,
+  and notes that `dist/esm` is bundler-only.
+- **address-book:** the build now cleans `dist` first, so removed modules cannot ship stale output.
+  Cleanup uses Node filesystem calls instead of `npx rimraf`, and the build and type checks use the
+  repository's TypeScript. Address exports are unchanged.
+
 ## [1.0.2](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/address-book@1.0.1...@neverland-money/address-book@1.0.2) (2026-10-07)
 
 ### Bug Fixes

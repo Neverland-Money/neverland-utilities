@@ -1,75 +1,82 @@
 # Neverland Utilities
 
 <p>
-  <a href="./README.md"><img src="https://img.shields.io/badge/Neverland%20Utilities-3%20packages%20%C2%B7%20Monad%20mainnet%20%C2%B7%20Node%2024%20%C2%B7-192170?style=for-the-badge" alt="Neverland Utilities - 3 packages - Monad mainnet - Node 24"/></a>
+  <a href="./README.md"><img src="https://img.shields.io/badge/Neverland%20Utilities-4%20packages%20%C2%B7%20Monad%20mainnet%20%C2%B7%20Node%2024%20%C2%B7-192170?style=for-the-badge" alt="Neverland Utilities - 4 packages - Monad mainnet - Node 24"/></a>
 </p>
 
-TypeScript packages for integrating with the Neverland lending protocol on Monad: typed ABIs,
-deployed contract addresses, and helper classes for the contracts the Neverland app uses.
+TypeScript packages for integrating with Neverland on Monad: deployed contract addresses, typed
+ABIs, ethers 6 helpers, and calculations for lending, veDUST locks, and rewards.
 
-This repository is a Yarn workspace managed with Lerna. Each package is versioned and published
-independently under the `@neverland-money` scope.
+This repository is a Yarn workspace managed with Lerna. Each package is versioned independently
+under the `@neverland-money` scope.
 
 ## Packages
 
-The packages are published as:
+Install the packages you need:
 
 ```bash
-npm install @neverland-money/address-book @neverland-money/contract-types @neverland-money/contract-helpers
+npm install @neverland-money/address-book @neverland-money/contract-types @neverland-money/contract-helpers @neverland-money/math-utils
 ```
 
 - [`@neverland-money/address-book`](packages/address-book/README.md): deployed addresses for
-  Neverland on Monad mainnet (chain 143), covering the main market, the isolated markets,
-  tokenomics, leaderboard, oracles, and governance.
+  Neverland on Monad mainnet (chain 143), covering the main market, isolated markets, tokenomics,
+  leaderboard, oracles, and governance.
 - [`@neverland-money/contract-types`](packages/contract-types/README.md): contract ABIs as JSON,
-  typed with [ABIType](https://abitype.dev) for use with viem, ethers v5, and ethers v6.
-- [`@neverland-money/contract-helpers`](packages/contract-helpers/README.md): ethers v6 helper
-  classes that read from and build transactions for the Neverland contracts. Depends on
-  `contract-types`.
+  typed with [ABIType](https://abitype.dev) for use with viem and ethers.
+- [`@neverland-money/contract-helpers`](packages/contract-helpers/README.md): ethers 6 helpers that
+  read from and build transactions for Neverland contracts, including lending pools, veDUST locks,
+  rewards, and UI aggregation. Depends on `contract-types` and `math-utils`.
+- [`@neverland-money/math-utils`](packages/math-utils/README.md): reserve and account formatters,
+  interest and repayment calculations, and shared lock, reward, and APR math. Does not require a
+  provider or ethers.
 
-Each package ships an ESM build in `dist/esm`, which bundlers use through the `module` entry, and a
-CommonJS build in `dist/cjs`, which `require` uses through the `main` entry.
+Each package ships an ESM build in `dist/esm` and a CommonJS build in `dist/cjs`, with TypeScript
+declarations. Use the matching module format when importing deep paths. Native Node ESM deep paths
+are supported for `contract-helpers` and `math-utils` only. The `dist/esm` builds of `address-book`
+and `contract-types` are bundler-only: they use extensionless specifiers, and `contract-types`
+imports JSON without import attributes. A native Node `import` of either package root loads its
+CommonJS entrypoint, and deep paths should use `dist/cjs` there.
 
-Example, reading a user's veDUST locks and UI data:
+Example, reading a user's veDUST dashboard with complete pagination:
 
 ```ts
 import { JsonRpcProvider } from 'ethers';
 import { NeverlandMonadMainnet } from '@neverland-money/address-book';
-import { DustLockHelper, NeverlandUiService } from '@neverland-money/contract-helpers';
+import { NeverlandUiService } from '@neverland-money/contract-helpers';
 
 const provider = new JsonRpcProvider('https://rpc.monad.xyz');
-const { DUST_LOCK_ADDRESS, DUST_TOKEN_ADDRESS, NEVERLAND_UI_PROVIDER } = NeverlandMonadMainnet;
-const user = '0x...';
-
-const lock = new DustLockHelper({
-  provider,
-  lockAddress: DUST_LOCK_ADDRESS,
-  dustTokenAddress: DUST_TOKEN_ADDRESS,
-});
-const locks = await lock.getUserLocks(user);
+const { NEVERLAND_UI_PROVIDER } = NeverlandMonadMainnet;
+const user = '0x...'; // Replace with the user's wallet address.
 
 const ui = new NeverlandUiService(NEVERLAND_UI_PROVIDER, provider);
-const bundle = await ui.getUiFullBundle(user);
+const dashboard = await ui.getUserDashboardWithPagination(user, 5, {
+  requireComplete: true,
+});
 ```
 
-See each package README for its full API.
+Complete pagination rejects missing or inconsistent token collections. Reward and price resolution
+still have their own status fields; see the
+[UI aggregation guide](packages/contract-helpers/README.md#ui-aggregation-neverlanduiservice).
+
+See each package README for its API. The
+[helper migration guide](packages/contract-helpers/README.md#breaking-migration-to-300) covers
+ethers 6 signatures, canonical module paths, and changes to transaction builders.
 
 ## Source Of Truth
 
-The packages mirror the deployed protocol, so they change when a contract is upgraded or deployed:
+Contract integrations and calculations follow pinned source revisions:
 
-- The original project ABIs retain their deployment-aligned 1.0.1 snapshots. Additional public
-  contract, lending, wrapped-token, and periphery ABIs are compiled from pinned source revisions,
-  including contracts prepared for future integrations. Their artifact paths, compiler settings, and
-  hashes are recorded in `packages/contract-types/abi-provenance.json`. ABI availability does not
-  establish deployment or activation.
-- Addresses are read from the chain and from the `neverland-contracts` deployment records, and match
-  [docs.neverland.money](https://docs.neverland.money). Proxy implementations, logic libraries, and
-  base token implementations change on every upgrade.
-- Helpers call contracts through ethers and cast ABIs where needed, so their TypeScript build does
-  not catch ABI drift. `abiUsage.test.ts` in `contract-helpers` fails when a helper names a function
-  that its ABI lacks or overloads. It does not compare arguments or return values, so when an ABI
-  changes, still review the helpers that call it.
+- ABI source revisions, compiler settings, artifact paths, and hashes are recorded in
+  [abi-provenance.json](packages/contract-types/abi-provenance.json). The ABI collection includes
+  contracts prepared for future integrations; ABI availability does not establish deployment or
+  activation.
+- Deployment addresses are maintained in `address-book`. Update the corresponding address records
+  when a contract is deployed or upgraded.
+- Lending balance and account calculations follow the committed lending-core 1.1.0 integer
+  arithmetic. The [math guide](packages/math-utils/README.md) documents rounding, input units, and
+  formatter behavior.
+- ABI usage checks, transaction encoding tests, and numerical regression tests cover the helper and
+  math APIs. Deployed contract identity and application integration require separate verification.
 
 ## Development
 
@@ -78,72 +85,64 @@ Use Node `24` via `.nvmrc` and Yarn `4.3.1` via Corepack.
 ```bash
 nvm use
 corepack enable
-yarn install
+yarn install --immutable
 yarn build
+yarn check-types
+yarn lint
+yarn format:check
 yarn test
 ```
 
-The tests are Jest suites next to the code they cover (`packages/*/src/**/*.test.ts`). They resolve
-the workspace packages to their sources and mock every contract read, so they need neither a build
-nor an RPC endpoint. `.github/workflows/ci.yml` runs the same install, build, and tests on every
-commit pushed to a pull request.
+The Jest suites live next to the code they cover (`packages/*/src/**/*.test.ts`) and use offline
+inputs or mocked contract reads. Lerna orchestrates package builds and type checks; ESLint checks
+the maintained workspace source and tooling.
 
-Yarn is configured with immutable installs, so a change to `yarn.lock` has to be committed. The Yarn
-cache under `.yarn/cache` is committed as well. Installing on a different operating system swaps
-platform-specific binaries in it, so check `git status` before committing.
+After building, run `yarn test:packages` to pack all four workspaces and install their tarballs in
+an isolated consumer project. It checks package contents, CommonJS and ESM imports, deep paths,
+browser bundling, transaction encoding, and public TypeScript declarations. The pull request
+workflow runs the same gates as the validation sequence in the [release guide](RELEASE.md).
 
-After building, run `yarn test:packages` to pack all three workspaces and install their tarballs in
-an isolated npm project with nested dependencies. It checks package contents, CommonJS and native
-Node imports, Pool calldata, and strict public declarations in Node, Bundler, and NodeNext modes. CI
-runs this check after the build and unit tests.
+Yarn uses immutable installs, and `.yarn/cache` is committed alongside `yarn.lock`. Review both when
+changing dependencies.
 
-Yarn does not run the `prebuild` clean hook, so stale files from deleted sources stay in `dist`.
-Delete the build output before building anything you intend to publish:
+Every package build cleans its own `dist` first, so deleted or renamed source files cannot leave
+stale artifacts. `yarn clean` also removes coverage output, and the release sequence still runs it
+before `yarn build`:
 
 ```bash
-rm -rf packages/*/dist
+yarn clean
 yarn build
 ```
 
+Generated ABIs are maintained by their generator. See the [contributor guide](CONTRIBUTING.md) for
+generation commands and the complete validation workflow.
+
 ## Layout
 
-- [`packages/address-book/`](packages/address-book/): deployed addresses, one file per deployment
-  under `src/addresses/`.
-- [`packages/contract-types/`](packages/contract-types/): ABI JSON files and their typed exports
-  under `src/abis/`.
-- [`packages/contract-helpers/`](packages/contract-helpers/): helper classes, one folder per
-  contract under `src/<Name>-contract/`, plus shared code in `src/commons/`.
+- [`packages/address-book/`](packages/address-book/): deployed addresses under `src/addresses/`.
+- [`packages/contract-types/`](packages/contract-types/): ABI JSON files and typed exports under
+  `src/abis/`.
+- [`packages/contract-helpers/`](packages/contract-helpers/): helpers in lowercase kebab-case
+  folders, with shared code in `src/commons/` and the shared pool implementation in
+  `src/pool-contract/`.
+- [`packages/math-utils/`](packages/math-utils/): pure calculations and reserve, account, and
+  incentive formatters.
 - `lerna.json`: Lerna configuration with independent versioning.
-- `tsconfig.json`: TypeScript configuration shared by every package.
-- `jest.config.js` and `tsconfig.test.json`: Jest configuration for the `*.test.ts` suites.
+- `tsconfig.json`: TypeScript configuration shared by the packages.
+- `jest.config.js` and `tsconfig.test.json`: Jest and test TypeScript configuration.
 - `.github/workflows/ci.yml`: the pull request workflow.
 - `dist/`: generated build output inside each package, not committed.
 
 ## Release
 
-The prepared release versions, migration notes, validation evidence, and remaining release holds are
-recorded in [`RELEASE.md`](./RELEASE.md). `VALIDATION.md` records the earlier validation of the
-merged ABI expansion; its candidate versions and ethers v5 hold have since been superseded.
-
-Set each package version and its changelog entry first, and update the version in the badge at the
-top of that package's `README.md`. Then publish the versions already in the manifests:
-
-```bash
-rm -rf packages/*/dist
-yarn build
-yarn release:prepared
-```
-
-`from-package` does not create git tags, so tag each release afterwards as
-`@neverland-money/<package>@<version>`. The `release:latest` script runs
-`lerna publish --conventional-commits`, which derives new versions from commit messages and requests
-npm provenance, so it is meant for CI rather than for publishing versions that were set by hand.
-Both release configurations name `main` as the release branch. `release:prepared` publishes the
-manifest versions without another version increment and requires a clean working tree.
+Follow the [release guide](RELEASE.md) to prepare package versions, validate consumers, and publish
+the prepared manifests. Keep each package's changelog and README aligned with its version and public
+API.
 
 ## License And Notices
 
-See [LICENSE](./LICENSE). Released under the MIT License.
+See [LICENSE](./LICENSE). Released under the MIT License. Package licenses retain the notices for
+derived code.
 
 <p>
   <a href="https://neverland.money"><img src="https://img.shields.io/badge/Website-neverland.money-480052?style=for-the-badge&logo=safari&logoColor=white" height="22" alt="Website"/></a>
