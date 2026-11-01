@@ -102,6 +102,71 @@ The shared synchronous encoders map `InterestRate.Stable` to 1 and every other v
 `InterestRate.None`, to variable debt (2), the same numeric mode as the existing async methods.
 Native deposit/withdraw and all existing Neverland helper interfaces remain.
 
+Every builder that returns or populates a native-value or gateway-targeted transaction rejects a
+zero `WETH_GATEWAY` and the keyless `API_ETH_MOCK_ADDRESS` native sentinel, each in any spelling
+ethers accepts (0x-prefixed, unprefixed hex or ICAP), compared through `getAddress`. The decorated
+`WETHGatewayService` methods and the native branches of the decorated `Pool` methods throw
+`TypeError('WETH_GATEWAY must not be the zero address')` for zero and
+`TypeError('WETH_GATEWAY must not be the native sentinel <API_ETH_MOCK_ADDRESS>')` for the sentinel.
+`generateDepositEthTxData`, `generateBorrowEthTxData` and `generateRepayEthTxData`, the native
+`PoolBundle` builders and the root-exported `WETHGatewayLegacyAdapter` `depositETH`, `borrowETH`,
+`repayETH` and `withdrawETH` throw (or reject with) the same sentinel error, and
+`TypeError('WETH_GATEWAY must be a nonzero Ethereum address')` for zero.
+
+For an unset or malformed `WETH_GATEWAY` (empty, whitespace, padded, newline-terminated, bad
+checksum, `0x0` or any other non-address string), the decorated native methods keep the upstream
+contract: they log `[WethGatewayValidator] You need to pass valid addresses` and return an empty
+transaction list. Treat `[]` as a failed build, never as success. The synchronous builders, the
+native `PoolBundle` builders and the adapter populate methods throw for the same configuration.
+`new Pool(provider, { POOL })` without a gateway remains valid for ERC20 flows. Constructing `Pool`,
+`PoolBundle`, `WETHGatewayService` or `WETHGatewayLegacyAdapter` never starts an ENS lookup, and the
+adapter constructor never builds a contract. `WETHGatewayLegacyAdapter.contract` is an accessor, not
+a field: it throws a `TypeError` for an unset, malformed, zero or native-sentinel gateway, and
+otherwise returns a contract at the checksummed gateway. The adapter does not resolve ENS names as
+gateways, it populates requests to the checksummed gateway, and `getWETHAddress()` reads the
+checksummed gateway and rejects for an unusable one.
+
+`onBehalfOf` (the withdrawal recipient for the adapter's `withdrawETH`) rejects address(0) in every
+spelling and the keyless `API_ETH_MOCK_ADDRESS` native sentinel on the decorated `Pool` and
+`WETHGatewayService` methods, every `PoolBundle` builder, the synchronous `generateDepositEthTxData`
+and `generateRepayEthTxData`, and the `WETHGatewayLegacyAdapter` `depositETH`, `repayETH` and
+`withdrawETH`. Supplied aTokens or withdrawn funds sent to either address would be lost. Reserve,
+token and other asset fields still accept the native sentinel. An empty `onBehalfOf` keeps its
+previous handling.
+
+Native `Pool.borrow` and `PoolBundle.borrowTxBuilder` reject `onBehalfOf` values other than `user`
+(compared case-insensitively), because the gateway borrows for its caller and has no beneficiary
+argument. Configure the gateway for the intended market: its deployed contract binds the Pool and
+wrapped native token at construction and does not use the ABI's `lendingPool` argument to choose
+them.
+
+Decimal amount conversion throws `RangeError` instead of rounding. This covers the exported
+`valueToWei`, the decimal `Pool` methods, the `WETHGatewayService` native methods, and
+`ERC20Service.isApproved` and `BaseDebtToken.isDelegationApproved` without `nativeDecimals`. It
+throws when an amount is not a base-10 decimal (0x, 0b or 0o prefixes, `Infinity`, `NaN`, blanks or
+separators), is negative, cannot be represented exactly in the token's decimals, or exceeds
+MaxUint256 in base units. It still accepts the base-10 spellings the decorated amount validators
+accept: surrounding whitespace, a leading `+`, fractions such as `1.` or `.5`, and exponent notation
+such as `1e-6`. With `nativeDecimals: true`, `isApproved` and `isDelegationApproved` still take raw
+integers, including hex. The `'-1'` maximum keeps its meaning wherever a method supports it.
+`valueToWei` and `decimalsToCurrencyUnits` use a module-private bignumber.js constructor, so an
+application's global `BigNumber.config` does not change them.
+
+`PoolBundle` builders and the synchronous `WETHGatewayService` builders take raw base-unit amounts
+as plain unsigned decimal digit strings. They throw
+`TypeError('amount must be an unsigned decimal integer string')` for empty, whitespace-only, padded,
+`+`, `0x`, `0b`, `0o`, negative, fractional and exponent strings;
+`RangeError('amount must be positive')` for zero; and `RangeError('amount is out of range')` above
+MaxUint256. `'-1'` still selects the maximum for `repayTxBuilder.generateTxData` on ERC20 reserves,
+`repayTxBuilder.generateSignedTxData` and `repayWithATokensTxBuilder.generateTxData`. For native
+actions the parsed amount lands in different places. Deposit sends it as `value` (the `depositETH`
+calldata carries no amount). Borrow encodes it in the calldata and sets no `value`. Repay encodes it
+in the calldata and also sends it as `value`.
+
+The current Monad `UI_INCENTIVE_DATA_PROVIDER.getReservesIncentivesData` aggregate reverts because
+the DUST rewards controller does not implement the `getRewardOracle` call expected by that generic
+Aave reader. Use `DustIncentiveProvider` direct controller reads for DUST rewards.
+
 ### E-Mode Categories
 
 `getEModesHumanized` and `getEModes` rebuild lending-core 1.1 E-mode categories from the fields each
@@ -239,8 +304,8 @@ const payload = JSON.stringify({
 ```
 
 `SignatureLike` is ethers 6's union: serialized 65-byte, compact 64-byte and ethers 6 object forms
-are accepted. Ethers 5 bytes/_vs/recoveryParam forms are outside the 3.0.0 API. Signature primitives
-and raw inputs are captured before awaits and deferred callbacks.
+are accepted. Ethers 5 bytes/\_vs/recoveryParam forms are outside the 3.0.0 API. Signature
+primitives and raw inputs are captured before awaits and deferred callbacks.
 
 The buffer accepts Number `windowSeconds` from 0 through 3600, default 600, including every
 remaining horizon 0..600. It compounds conservatively, adds one atom, and rejects invalid inputs and
@@ -259,27 +324,30 @@ the deep paths, the changed types and the runtime behavior below. Deep paths cha
 `dist/esm` and `dist/cjs`. No root export was removed, so imports from the package root keep
 working.
 
-| Kind      | In 2.0.0                                                                               | In 3.0.0                                                                                                                                                                                                                                                   |
-| --------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Deep path | `ClaimRewards-contract`                                                                | `claim-rewards-contract`                                                                                                                                                                                                                                   |
-| Deep path | `DustAPR-contract`                                                                     | `dust-apr-contract`                                                                                                                                                                                                                                        |
-| Deep path | `DustIncentiveProvider-contract`                                                       | `dust-incentive-provider-contract`                                                                                                                                                                                                                         |
-| Deep path | `DustLock-contract`                                                                    | `dust-lock-contract`                                                                                                                                                                                                                                       |
-| Deep path | `NeverlandUiProvider-contract`                                                         | `neverland-ui-provider-contract`                                                                                                                                                                                                                           |
-| Deep path | `VeDustRevenue-contract`                                                               | `ve-dust-revenue-contract`                                                                                                                                                                                                                                 |
-| Deep path | `WETHGatewayLegacy-contract`                                                           | `weth-gateway-legacy-contract`                                                                                                                                                                                                                             |
-| Deep path | `commons/BaseService`                                                                  | `commons/base-service`                                                                                                                                                                                                                                     |
-| Deep path | `interestRate`                                                                         | `interest-rate`                                                                                                                                                                                                                                            |
-| Type      | `IncreaseAmountParams.tokenId`, `MergeParams.fromTokenId` and `toTokenId`: `number`    | `BigNumberish`                                                                                                                                                                                                                                             |
-| Type      | `ClaimRewardsParams.lockTime` and `tokenId`: optional `number`                         | `lockTime: BigNumberish` (required), `tokenId?: BigNumberish`                                                                                                                                                                                              |
-| Type      | `ClaimRewardsParams.assetAddresses`: `string[]`                                        | `readonly string[]`                                                                                                                                                                                                                                        |
-| Type      | `MarketAPR.totalSupply`: `string`                                                      | `totalSupply?: string`; dormant results omit it                                                                                                                                                                                                            |
-| Runtime   | `NeverlandUiService` reads return ethers `Result` values with positional indexes       | `getProtocolMeta`, `getAllPrices`, `getGlobalStats`, `getMarketData`, `getNetworkData`, `getUiBootstrap`, `getUserRewardsSummary`, `getUserDashboard` and `getUiFullBundle` return plain objects with no positional indexes and no `toObject` or `toArray` |
-| Runtime   | A missing claim `lockTime` meant 0, an instant claim                                   | `lockTime` is required; see [Claims](#claims-claimrewardshelper)                                                                                                                                                                                           |
-| Runtime   | A reverted first dashboard page returned an empty dashboard with `hasMore: true`       | `getUserDashboard` and `getUiFullBundlePaginated` throw; `getUiFullBundle` and `getUiFullBundleFromParts` return `null`                                                                                                                                    |
-| Runtime   | `DustAPRCalculator.calculateMarketAPR` returned an inactive zero result on any failure | Unresolved inputs reject with `UnresolvedDustAPRInputError`; `calculateBatchAPR` omits failed markets                                                                                                                                                      |
-| Runtime   | `calculateWeightedAverageAPR` weighted by raw `totalSupply`                            | Weights by `totalSupplyUSD` and throws when an active market lacks it                                                                                                                                                                                      |
-| Runtime   | `VeDustRevenueHelper` batch encoders accepted any array length                         | `tokenIds` must hold 1-64 entries and `rewardTokens` 1-32                                                                                                                                                                                                  |
+| Kind      | In 2.0.0                                                                                 | In 3.0.0                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| --------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Deep path | `ClaimRewards-contract`                                                                  | `claim-rewards-contract`                                                                                                                                                                                                                                                                                                                                                                                                            |
+| Deep path | `DustAPR-contract`                                                                       | `dust-apr-contract`                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Deep path | `DustIncentiveProvider-contract`                                                         | `dust-incentive-provider-contract`                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Deep path | `DustLock-contract`                                                                      | `dust-lock-contract`                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Deep path | `NeverlandUiProvider-contract`                                                           | `neverland-ui-provider-contract`                                                                                                                                                                                                                                                                                                                                                                                                    |
+| Deep path | `VeDustRevenue-contract`                                                                 | `ve-dust-revenue-contract`                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Deep path | `WETHGatewayLegacy-contract`                                                             | `weth-gateway-legacy-contract`                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Deep path | `commons/BaseService`                                                                    | `commons/base-service`                                                                                                                                                                                                                                                                                                                                                                                                              |
+| Deep path | `interestRate`                                                                           | `interest-rate`                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Type      | `IncreaseAmountParams.tokenId`, `MergeParams.fromTokenId` and `toTokenId`: `number`      | `BigNumberish`                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Type      | `ClaimRewardsParams.lockTime` and `tokenId`: optional `number`                           | `lockTime: BigNumberish` (required), `tokenId?: BigNumberish`                                                                                                                                                                                                                                                                                                                                                                       |
+| Type      | `ClaimRewardsParams.assetAddresses`: `string[]`                                          | `readonly string[]`                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Type      | `MarketAPR.totalSupply`: `string`                                                        | `totalSupply?: string`; dormant results omit it                                                                                                                                                                                                                                                                                                                                                                                     |
+| Runtime   | `NeverlandUiService` reads return ethers `Result` values with positional indexes         | `getProtocolMeta`, `getAllPrices`, `getGlobalStats`, `getMarketData`, `getNetworkData`, `getUiBootstrap`, `getUserRewardsSummary`, `getUserDashboard` and `getUiFullBundle` return plain objects with no positional indexes and no `toObject` or `toArray`                                                                                                                                                                          |
+| Runtime   | A missing claim `lockTime` meant 0, an instant claim                                     | `lockTime` is required; see [Claims](#claims-claimrewardshelper)                                                                                                                                                                                                                                                                                                                                                                    |
+| Runtime   | A reverted first dashboard page returned an empty dashboard with `hasMore: true`         | `getUserDashboard` and `getUiFullBundlePaginated` throw; `getUiFullBundle` and `getUiFullBundleFromParts` return `null`                                                                                                                                                                                                                                                                                                             |
+| Runtime   | `DustAPRCalculator.calculateMarketAPR` returned an inactive zero result on any failure   | Unresolved inputs reject with `UnresolvedDustAPRInputError`; `calculateBatchAPR` omits failed markets                                                                                                                                                                                                                                                                                                                               |
+| Runtime   | `calculateWeightedAverageAPR` weighted by raw `totalSupply`                              | Weights by `totalSupplyUSD` and throws when an active market lacks it                                                                                                                                                                                                                                                                                                                                                               |
+| Runtime   | `VeDustRevenueHelper` batch encoders accepted any array length                           | `tokenIds` must hold 1-64 entries and `rewardTokens` 1-32                                                                                                                                                                                                                                                                                                                                                                           |
+| Runtime   | `WETHGatewayLegacyAdapter` populated requests for any gateway string and any beneficiary | `depositETH`, `borrowETH`, `repayETH` and `withdrawETH` reject an unset, malformed, zero or native-sentinel gateway; `depositETH`, `repayETH` and `withdrawETH` reject a zero or native-sentinel `onBehalfOf`; `contract` is an accessor that throws for an unusable gateway and the constructor builds no contract; `getWETHAddress` reads the checksummed gateway; ENS names are not resolved and `to` is the checksummed gateway |
+| Runtime   | `DustIncentiveProvider.getRewardsDataHumanized` priced emissions at any time             | APR is `'0'` at or after `distributionEnd`; an explicit `currentTimestamp` must be a nonnegative safe integer in Unix seconds, else `TypeError`; the latest block is read only when the APR can be positive; a zero APR from no TVL, price or emissions, or from an ended campaign, is always `'0'`, where `'0.0000'` could appear before                                                                                           |
+| Runtime   | `VeDustRevenueHelper` assumed 6 decimals and summed raw units across reward tokens       | Per-token `decimals()`; USD totals count only `usdRewardTokens` (default: the first reward token, USDC, when the list is complete); see [Revenue](#revenue-vedustrevenuehelper)                                                                                                                                                                                                                                                     |
 
 ### From @aave/contract-helpers 1.36.1
 
@@ -320,9 +388,21 @@ behavior changes from upstream are:
   [Gas And Transaction Callbacks](#gas-and-transaction-callbacks).
 - `InterestRate.None` selects variable debt (2) on the `Pool` and `PoolBundle` paths. Upstream
   mapped it to stable debt (1). `InterestRate.Stable` still selects stable.
-- The decorated lending validators and `PoolBundle` `onBehalfOf` reject the zero address.
-  `supplyWithPermit`, `repayWithPermit` and `setUsageAsCollateral` reject the native sentinel,
-  `setUsageAsCollateral` requires a boolean, and `supplyWithPermit` accepts referral code `'0'`.
+- Native builders reject a zero or native-sentinel `WETH_GATEWAY` in any spelling, and native borrow
+  rejects an `onBehalfOf` other than `user`. Decorated native methods return `[]` with a console
+  error for an unset or malformed gateway, while the synchronous builders and the adapter throw.
+- Decimal methods, the exported `valueToWei`, `ERC20Service.isApproved` and
+  `BaseDebtToken.isDelegationApproved` throw `RangeError` for excess precision, hex and out-of-range
+  amounts. Round amounts down to the token's decimals (for example with bignumber.js `ROUND_DOWN`)
+  and pass base-10 strings.
+- `PoolBundle` and the synchronous gateway builders accept only unsigned decimal digit strings as
+  raw amounts. Upstream accepted 0x-hex amounts here (ethers 5 `BigNumber.from`); convert them with
+  `BigInt(hex).toString()`.
+- Every `onBehalfOf` beneficiary (decorated methods, `PoolBundle`, synchronous gateway builders and
+  `WETHGatewayLegacyAdapter`) rejects address(0) in every spelling and the native sentinel. The
+  decorated lending validators reject the zero address in every address field. `supplyWithPermit`,
+  `repayWithPermit` and `setUsageAsCollateral` reject the native sentinel, `setUsageAsCollateral`
+  requires a boolean, and `supplyWithPermit` accepts referral code `'0'`.
 - `approveDelegation` and `generateApproveDelegationTxData` accept `'0'` to revoke a delegation and
   parse exact uint256 amounts.
 - `getEModes` and `getEModesHumanized` rebuild categories; see
@@ -446,6 +526,12 @@ const { rewardTokens, unclaimedAmounts } = await incentives.getAllUserRewards(
 const index = await incentives.getUserAssetIndex(userAddress, aTokenAddress, dustTokenAddress);
 ```
 
+`getRewardsDataHumanized` returns zero APR at or after `distributionEnd`, and zero without TVL,
+reward price or emissions. Pass `{ currentTimestamp: snapshotTimestamp }` with a known reserve
+snapshot; otherwise it reads the provider's latest block time, and only when the APR could be
+positive. An explicit `currentTimestamp` must be a nonnegative safe integer in Unix seconds;
+anything else (negative, fractional, `NaN`, `Infinity` or a non-number) throws a `TypeError`.
+
 Static helpers: `DustIncentiveProvider.calculateAnnualEmissions(emissionPerSecond, decimals?)` and
 `DustIncentiveProvider.calculateEmissionAPR(emissionPerSecond, rewardPriceUSD, tvlUSD, decimals?)`.
 
@@ -559,6 +645,7 @@ const revenue = new VeDustRevenueHelper({
   chainId: 143,
   revenueAddress: '0x...', // RevenueReward
   dustLockAddress: '0x...', // DustLock
+  usdRewardTokens: [USDC_ADDRESS], // optional: reward tokens counted at $1
 });
 
 const protocol = await revenue.getProtocolData();
@@ -574,6 +661,39 @@ otherwise; chunk larger sets:
 - `getEnableSelfRepayLoanBatchTxData` and `getDisableSelfRepayLoanBatchTxData` take 1 to 64 token
   IDs.
 - `getBatchClaimRewardsTxData` takes 1 to 64 token IDs and 1 to 32 reward tokens, in any order.
+
+Per-token amounts use each reward token's ERC20 `decimals()`, read once per helper and token.
+`totalRevenueUSD` and `pendingRewardsUSD` count only USD reward tokens, at $1 per whole token, and
+never add raw units of different tokens. Pass them as `usdRewardTokens`, which is the recommended
+setup. Pass `[]` to count none. When it is omitted, only the first registered reward token counts
+(USDC on Monad), but only if the reward-token list is complete. If the `getRewardTokens()` read
+failed and the index-enumeration fallback skipped an index (a failed `rewardTokens(i)` read), a skip
+may have shifted the list, so no default USD token is selected: nothing counts toward USD totals,
+`pendingRewardsUSD` is '0.00', and the enumerated tokens are listed in `unpricedRewardTokens`. An
+explicit `usdRewardTokens` always wins over this rule.
+
+Fields, as `types.ts` defines them:
+
+- `rewardTokenDecimals?: Array<number | null>` lists each token's decimals, aligned with
+  `rewardTokens`. `null` marks a failed read or a value above 36; that token's
+  `individualNftRewards` entries are '0'. It is empty when no reward was queried.
+- `unpricedRewardTokens?: string[]`, in `rewardTokens` order, lists the reward tokens the USD totals
+  leave out. In user data it names each token with a nonzero `rewardAmounts` entry that
+  `totalRevenueUSD` leaves out (not a USD reward token, or unknown decimals), merged with the USD
+  reward tokens that `pendingRewardsUSD` leaves out because their decimals are unreadable, without
+  duplicates. This also holds for a user with no veNFTs. `getProtocolData()` returns the same
+  optional field for the pending figure only: the USD reward tokens whose `decimals()` read failed
+  (or exceeded 36), in registration order, or every enumerated token when the list is incomplete as
+  described above.
+- `hasRewards` is true when any token has a nonzero amount.
+
+When a token's `decimals()` read fails, that token is left out instead of zeroing the result. With
+several USD tokens, `pendingRewardsUSD` sums the readable ones and is '0.00' only when none is
+priced, or when the pending read itself fails (in which case the list is empty).
+
+Check `unpricedRewardTokens` before you trust a USD total: a nonempty list means the total is
+partial. Output matches earlier releases only when every `decimals()` read succeeds and the
+reward-token list is complete, with USDC as the only reward token.
 
 ### Claims: ClaimRewardsHelper
 

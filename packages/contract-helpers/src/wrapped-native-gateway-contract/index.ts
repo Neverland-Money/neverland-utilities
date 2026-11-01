@@ -1,6 +1,7 @@
 import { wethGatewayLegacyAbi } from '@neverland-money/contract-types';
 import type { Interface, Provider, TransactionRequest } from 'ethers';
 import { MaxUint256, ZeroAddress } from 'ethers';
+import { assertBeneficiary, nonzeroGatewayAddress } from '../commons/address';
 import { AbiBaseService } from '../commons/base-service';
 import { estimateGas } from '../commons/gas-station';
 import type {
@@ -20,6 +21,7 @@ import {
 import type { BaseDebtTokenInterface } from '../debt-token-contract';
 import { BaseDebtToken } from '../debt-token-contract';
 import type { IERC20ServiceInterface } from '../erc20-contract';
+import { positiveRawAmount } from '../pool-contract/validation';
 import { WETHGatewayLegacyAdapter } from '../weth-gateway-legacy-contract';
 export type WETHDepositParamsType = {
   lendingPool: tEthereumAddress;
@@ -109,6 +111,9 @@ export class WETHGatewayService
     this.borrowETH = this.borrowETH.bind(this);
     this.wethGatewayInstance = this.iface;
     this.generateDepositEthTxData = (args: WETHDepositParamsType): TransactionRequest => {
+      this.assertGatewayAddress();
+      assertBeneficiary(args.onBehalfOf ?? args.user, 'onBehalfOf');
+      const value = positiveRawAmount(args.amount);
       const txData = this.adapter.encodeDepositETH(
         args.lendingPool,
         args.onBehalfOf ?? args.user,
@@ -118,15 +123,16 @@ export class WETHGatewayService
         data: txData,
         to: this.wethGatewayAddress,
         from: args.user,
-        value: BigInt(args.amount),
+        value,
       };
       return actionTx;
     };
 
     this.generateBorrowEthTxData = (args: WETHBorrowParamsType): TransactionRequest => {
+      this.assertGatewayAddress();
       const txData = this.adapter.encodeBorrowETH(
         args.lendingPool,
-        args.amount,
+        positiveRawAmount(args.amount).toString(),
         args.interestRateMode,
         args.referralCode ?? '0',
       );
@@ -139,9 +145,12 @@ export class WETHGatewayService
     };
 
     this.generateRepayEthTxData = ({ lendingPool, amount, user, onBehalfOf, interestRateMode }) => {
+      this.assertGatewayAddress();
+      assertBeneficiary(onBehalfOf ?? user, 'onBehalfOf');
+      const value = positiveRawAmount(amount);
       const txData = this.adapter.encodeRepayETH(
         lendingPool,
-        amount,
+        value.toString(),
         interestRateMode,
         onBehalfOf ?? user,
       );
@@ -149,7 +158,7 @@ export class WETHGatewayService
         data: txData,
         to: this.wethGatewayAddress,
         from: user,
-        value: BigInt(amount),
+        value,
       };
       return actionTx;
     };
@@ -326,5 +335,9 @@ export class WETHGatewayService
         gas: this.generateTxPriceEstimation([], txCallback),
       },
     ];
+  }
+
+  private assertGatewayAddress(): void {
+    nonzeroGatewayAddress(this.wethGatewayAddress);
   }
 }

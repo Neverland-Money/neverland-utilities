@@ -405,6 +405,7 @@ export function formatReservesAndIncentives<T extends ReserveDataWithPrice>({
       priceInMarketReferenceCurrency: reserve.formattedPriceInMarketReferenceCurrency,
       decimals: reserve.decimals,
       marketReferenceCurrencyDecimals,
+      currentTimestamp,
     });
     return { ...reserve, ...incentive };
   });

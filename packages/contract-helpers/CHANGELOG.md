@@ -45,6 +45,58 @@ All notable changes to this project will be documented in this file. See
 - **contract-helpers:** `InterestRate.None` now selects variable debt (2) on the `Pool` and
   `PoolBundle` paths, matching the gateway; upstream mapped it to stable debt (1).
   `InterestRate.Stable` still selects stable (1).
+- **contract-helpers:** decimal amount conversion throws `RangeError` instead of rounding. This
+  covers the exported `valueToWei`, the decimal `Pool` methods, the `WETHGatewayService` native
+  methods, and `ERC20Service.isApproved` and `BaseDebtToken.isDelegationApproved` without
+  `nativeDecimals`. It throws when an amount is not a base-10 decimal (0x, 0b or 0o prefixes,
+  `Infinity`, `NaN`, blanks or separators), is negative, cannot be represented exactly in the
+  token's decimals, or exceeds MaxUint256 in base units. Base-10 spellings with surrounding
+  whitespace, a leading `+`, fractions such as `1.` or `.5`, and exponents such as `1e-6` still
+  work, and `'-1'` keeps its maximum meaning where supported. Round amounts down to the token's
+  decimals first.
+- **contract-helpers:** `PoolBundle` builders and the synchronous `WETHGatewayService` builders take
+  raw amounts as plain unsigned decimal digit strings and throw for empty, padded, `+`, `0x`, `0b`,
+  `0o`, negative, fractional and exponent strings (`TypeError`), for zero and for values above
+  MaxUint256 (`RangeError`). `'-1'` still selects the maximum where supported. Upstream accepted
+  0x-hex amounts; convert them with `BigInt(hex).toString()`.
+- **contract-helpers:** native borrow rejects an `onBehalfOf` address other than the caller
+  (compared case-insensitively) because the gateway cannot encode it.
+- **WETHGatewayLegacyAdapter:** `depositETH`, `borrowETH`, `repayETH` and `withdrawETH` reject an
+  unset, malformed, zero or native-sentinel gateway. `contract` is now an accessor that throws a
+  `TypeError` for such a gateway instead of an eagerly built field, and the constructor builds no
+  contract. `getWETHAddress()` reads the checksummed gateway and rejects for an unusable one.
+  `depositETH`, `repayETH` and `withdrawETH` reject a zero or native-sentinel `onBehalfOf` (the
+  withdrawal recipient). The constructor still accepts any string, ENS names are not resolved as
+  gateways, and the populated `to` is the checksummed gateway.
+- **contract-helpers:** decorated native methods return `[]` and log
+  `[WethGatewayValidator] You need to pass valid addresses` for an unset or malformed gateway, as in
+  upstream; treat `[]` as a failed build. The synchronous builders, the native `PoolBundle` builders
+  and the adapter throw for the same configuration. A zero or native-sentinel gateway is not "unset
+  or malformed": every decorated method, builder and adapter method throws for it.
+
+### Security Fixes
+
+- Reject zero and native-sentinel (`API_ETH_MOCK_ADDRESS`) native gateway destinations in every
+  spelling (0x-prefixed, unprefixed hex and ICAP) in decorated and synchronous transaction builders,
+  the native `PoolBundle` builders and the `WETHGatewayLegacyAdapter` populate methods, before a
+  transaction can carry native value to either address. The sentinel error reads
+  `WETH_GATEWAY must not be the native sentinel <API_ETH_MOCK_ADDRESS>`.
+- For native actions the parsed amount is the transaction `value` for deposit (the calldata carries
+  no amount), the calldata amount for borrow (no `value`), and both for repay.
+- `valueToWei` parses with a linear-time pattern, so inputs with very long digit or whitespace runs
+  fail fast instead of taking quadratic time. The accepted spellings, results and error messages are
+  unchanged.
+- `onBehalfOf` rejects address(0) in every spelling and the keyless `API_ETH_MOCK_ADDRESS` native
+  sentinel on the decorated `Pool` and `WETHGatewayService` methods, every `PoolBundle` builder, the
+  synchronous `generateDepositEthTxData` and `generateRepayEthTxData`, and the adapter `depositETH`,
+  `repayETH` and `withdrawETH`. Supplied aTokens or withdrawn funds sent to either address would be
+  lost. Reserve, token and other asset fields still accept the native sentinel.
+- `DustIncentiveProvider.getRewardsDataHumanized` now reports zero APR at or after
+  `distributionEnd`, using an optional `currentTimestamp` or the provider's latest block time. An
+  explicit `currentTimestamp` must be a nonnegative safe integer, otherwise it throws a `TypeError`,
+  and the block is read only when TVL, reward price and emissions are all positive. Every APR known
+  to be zero (no TVL, price or emissions, or an ended campaign) is now reported as `'0'`, where
+  `'0.0000'` could appear before.
 
 ### Features
 
@@ -85,6 +137,10 @@ All notable changes to this project will be documented in this file. See
   `Copyright (c) 2021 Aave` attribution for upstream-derived source; the 2.0.0 license named only
   Neverland.
 
+- **VeDustRevenueHelper:** add the optional `usdRewardTokens` context field, the reward tokens
+  counted at $1 per whole token in USD totals, and the additive optional `VeDustRevenueData` fields
+  `rewardTokenDecimals` and `unpricedRewardTokens`.
+
 ### Bug Fixes
 
 - **DustLockHelper:** `getCreateLockForTxData` encodes `(amount, duration, recipient)` in the
@@ -106,6 +162,29 @@ All notable changes to this project will be documented in this file. See
 - **VeDustRevenueHelper:** query earned rewards in ascending token order, as `RevenueReward`
   requires, and return each column in caller order. The constructor validates `revenueAddress`. The
   batch encoders bound `tokenIds` to 1-64 entries and `rewardTokens` to 1-32.
+- **VeDustRevenueHelper:** format each reward token with its own ERC20 `decimals()` instead of
+  assuming 6. Stop adding raw units across tokens: `totalRevenueUSD`, `formattedRevenueUSD` and
+  `pendingRewardsUSD` now count only USD reward tokens, by default the first registered reward token
+  (USDC). `hasRewards` reflects a nonzero raw amount of any token. When a token's `decimals()` read
+  fails, that token is excluded and flagged instead of zeroing the result. While USDC is the only
+  reward token and every `decimals()` read succeeds, output is unchanged. Check
+  `unpricedRewardTokens` before trusting a USD total, and pass `usdRewardTokens` explicitly.
+  `getProtocolData()` also returns the optional `unpricedRewardTokens`, listing USD reward tokens
+  with unreadable decimals; user data merges those into its own list. With several USD tokens,
+  `pendingRewardsUSD` sums the readable ones. When `usdRewardTokens` is omitted and the
+  index-enumeration fallback skipped an index, no default USD token is selected: nothing counts,
+  `pendingRewardsUSD` is '0.00' and the enumerated tokens are listed as unpriced.
+- **contract-helpers:** `valueToWei` and `decimalsToCurrencyUnits` use a module-private bignumber.js
+  constructor, so an application's global `BigNumber.config` (DECIMAL_PLACES, ROUNDING_MODE, RANGE)
+  no longer changes SDK amount conversions. Decimal `Pool` supply, deposit and repay, and the native
+  `withdrawETH` and `borrowETH`, throw `RangeError` before reading allowances when an amount exceeds
+  MaxUint256 in base units, instead of returning a redundant MaxUint256 approval for an action that
+  cannot encode. `isApproved` and `isDelegationApproved` in decimal mode throw for such amounts
+  instead of returning false.
+- **contract-helpers:** constructing `Pool`, `PoolBundle`, `WETHGatewayService` or
+  `WETHGatewayLegacyAdapter` with an unset, malformed, padded, unprefixed or ICAP gateway no longer
+  starts an unawaited ENS lookup. On networks without ENS, such as Monad, that lookup could exit
+  Node with an unhandled rejection.
 - **DustAPRCalculator:** fix the tuple decoding and token-decimal normalization behind the known
   issue in 2.0.0. `calculateMarketAPR` reads the incentivized token's `totalSupply()` and
   `decimals()`; unresolved inputs reject with `UnresolvedDustAPRInputError`, failed batch entries

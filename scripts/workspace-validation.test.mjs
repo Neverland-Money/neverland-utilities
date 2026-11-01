@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
@@ -50,6 +51,63 @@ test('formatting and lint protect generator outputs and immutable complete regre
       assert.equal(info.ignored, true, path);
     }),
   );
+});
+
+function git(args) {
+  return execFileSync('git', args, {
+    cwd: root,
+    encoding: 'utf8',
+    env: { ...process.env, GIT_OPTIONAL_LOCKS: '0' },
+    maxBuffer: 64 * 1024 * 1024,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+}
+
+function repositoryWorkTree() {
+  try {
+    return realpathSync(git(['rev-parse', '--show-toplevel']).trim()) === realpathSync(root);
+  } catch {
+    return false;
+  }
+}
+
+test('repository ignore rules hide no tracked file and keep tool state local', context => {
+  if (!repositoryWorkTree()) {
+    context.skip('not running inside the repository git work tree');
+    return;
+  }
+
+  const ignored = git(['ls-files', '-ci', '--exclude-standard']).split('\n').filter(Boolean);
+  assert.deepEqual(
+    ignored.slice(0, 20),
+    [],
+    `${ignored.length} tracked file(s) match .gitignore rules and would hide new siblings`,
+  );
+
+  const expected = {
+    // Any dot folder is local tool or cache state, at any depth, so no tool is named here.
+    '.local-tool/state.json': true,
+    'packages/contract-helpers/src/.cache/state.json': true,
+    '.yarn/install-state.gz': true,
+    '.github/workflows/release.yml': false,
+    '.husky/pre-commit': false,
+    '.yarn/cache/new-npm-1.0.0-0000000000-0000000000.zip': false,
+    '.yarn/patches/new.patch': false,
+  };
+  const actual = {};
+  const listing = git([
+    'check-ignore',
+    '--no-index',
+    '--verbose',
+    '--non-matching',
+    ...Object.keys(expected),
+  ]);
+  for (const line of listing.split('\n').filter(Boolean)) {
+    const [source, path] = line.split('\t');
+    actual[path] = source !== '::' && !source.split(':').slice(2).join(':').startsWith('!');
+  }
+
+  assert.deepEqual(actual, expected);
 });
 
 const immutable = JSON.parse(

@@ -29,6 +29,7 @@ describe('calculateReserveIncentives', () => {
         decimals: 18,
         priceInMarketReferenceCurrency: userReserveMock.reserve.priceInMarketReferenceCurrency,
         marketReferenceCurrencyDecimals: 8,
+        currentTimestamp: 1,
       });
       expect(result.aIncentivesData[0].incentiveAPR).toBe('0.00000000000021024');
       expect(result.vIncentivesData[0].incentiveAPR).toBe('0.00000000000063072');
@@ -38,6 +39,22 @@ describe('calculateReserveIncentives', () => {
       expect(result.vIncentivesData[0].rewardTokenAddress).toBe(
         '0x0000000000000000000000000000000000000000',
       );
+    });
+
+    it('returns zero APR at and after distribution end despite a stale update timestamp', () => {
+      const reward = reserveIncentiveMock.reserveIncentive;
+      const result = calculateReserveIncentives({
+        reserves: [reserve],
+        reserveIncentiveData: reward,
+        totalLiquidity: totalLiquidity.toString(),
+        totalVariableDebt: calculateReserveDebtResult.totalVariableDebt.toString(),
+        decimals: 18,
+        priceInMarketReferenceCurrency: userReserveMock.reserve.priceInMarketReferenceCurrency,
+        marketReferenceCurrencyDecimals: 8,
+        currentTimestamp: 2,
+      });
+      expect(result.aIncentivesData[0].incentiveAPR).toBe('0');
+      expect(result.vIncentivesData[0].incentiveAPR).toBe('0');
     });
   });
 });

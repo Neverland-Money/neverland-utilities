@@ -127,6 +127,25 @@ export interface FormatUserSummaryAndIncentivesResponse<
   calculatedUserIncentives: UserIncentiveDict;
 }
 
+/** Only an unsigned decimal zero, the form the on-chain readers emit, is an inert raw amount. */
+function isZeroRawAmount(value: unknown): boolean {
+  return typeof value === 'string' && /^0+$/.test(value);
+}
+
+/**
+ * Whether a raw user reserve can change any summary output: a balance or debt that is not an
+ * unsigned decimal zero, malformed values included, or an enabled collateral or borrowing flag.
+ * A zero-balance collateral flag still matters, because it can put the account in isolation mode.
+ */
+function canChangeSummary(userReserve: UserReserveData): boolean {
+  if (userReserve.usageAsCollateralEnabledOnUser || userReserve.borrowingEnabledOnUser) return true;
+  return (
+    !isZeroRawAmount(userReserve.scaledATokenBalance) ||
+    !isZeroRawAmount(userReserve.scaledVariableDebt) ||
+    (userReserve.currentStableDebt !== undefined && !isZeroRawAmount(userReserve.currentStableDebt))
+  );
+}
+
 export function formatUserSummary<T extends FormatReserveUSDResponse = FormatReserveUSDResponse>({
   currentTimestamp,
   marketReferencePriceInUsd,
@@ -158,20 +177,40 @@ export function formatUserSummary<T extends FormatReserveUSDResponse = FormatRes
     );
   }
 
-  // Combine raw user and formatted reserve data
+  // Combine raw user and formatted reserve data by case-insensitive underlying asset. A row that can
+  // change the summary must match exactly one formatted reserve and be its asset's only row;
+  // otherwise the summary could omit or double-count a position. An all-zero, flag-free row cannot
+  // change any output, so it is skipped when it has no unique match or repeats an earlier row.
   const combinedReserves: Array<CombinedReserveData<T>> = [];
+  const seenAssets = new Map<string, boolean>();
 
-  userReserves.forEach(userReserve => {
-    const reserve = formattedReserves.find(
-      r => r.underlyingAsset.toLowerCase() === userReserve.underlyingAsset.toLowerCase(),
-    );
-    if (reserve) {
+  for (const userReserve of userReserves) {
+    const asset = userReserve.underlyingAsset.toLowerCase();
+    const changesSummary = canChangeSummary(userReserve);
+    const earlierChangesSummary = seenAssets.get(asset);
+    if (earlierChangesSummary !== undefined) {
+      if (changesSummary || earlierChangesSummary) {
+        throw new Error(`Duplicate user reserve for asset ${userReserve.underlyingAsset}`);
+      }
+
+      continue;
+    }
+
+    seenAssets.set(asset, changesSummary);
+    const matches = formattedReserves.filter(r => r.underlyingAsset.toLowerCase() === asset);
+    if (matches.length === 1) {
       combinedReserves.push({
         ...userReserve,
-        reserve,
+        reserve: matches[0],
       });
+    } else if (changesSummary) {
+      throw new Error(
+        matches.length === 0
+          ? `Missing formatted reserve for user asset ${userReserve.underlyingAsset}`
+          : `Multiple formatted reserves for user asset ${userReserve.underlyingAsset}`,
+      );
     }
-  });
+  }
 
   const computedUserReserves: Array<UserReserveSummaryResponse<T>> = combinedReserves.map(
     userReserve =>

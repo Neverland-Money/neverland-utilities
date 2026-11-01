@@ -18,6 +18,7 @@ describe('calculateAllReserveIncentives', () => {
       reserveIncentives: [reserveIncentiveMock.reserveIncentive],
       reserves: [reserve],
       marketReferenceCurrencyDecimals: 8,
+      currentTimestamp: 1,
     });
     expect(result['0x0000000000000000000000000000000000000000'].aIncentives[0].incentiveAPR).toBe(
       '157680',
@@ -35,6 +36,7 @@ describe('calculateAllReserveIncentives', () => {
       reserveIncentives: [reserveIncentiveMock.reserveIncentive],
       reserves: [reserve],
       marketReferenceCurrencyDecimals: 8,
+      currentTimestamp: 1,
     });
     expect(result['0x0000000000000000000000000000000000000000'].aIncentives[0].incentiveAPR).toBe(
       '0',
@@ -49,6 +51,7 @@ describe('calculateAllReserveIncentives', () => {
       reserveIncentives: [reserveIncentiveMock.reserveIncentive],
       reserves: [],
       marketReferenceCurrencyDecimals: 8,
+      currentTimestamp: 1,
     });
     expect(result['0x0000000000000000000000000000000000000000']).toBe(undefined);
   });

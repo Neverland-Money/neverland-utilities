@@ -1,4 +1,4 @@
-import { getAddress, isAddress, ZeroAddress } from 'ethers';
+import { getAddress, isAddress } from 'ethers';
 import { InterestRate } from '../commons/types';
 import { API_ETH_MOCK_ADDRESS } from '../commons/utils';
 
@@ -7,13 +7,6 @@ export const UINT256_MAX = 2n ** 256n - 1n;
 /** Neverland lending has no stable debt, so every mode except Stable selects variable debt (2), as the gateway does. */
 export function legacyRateMode(value: InterestRate | undefined): 1 | 2 {
   return value === InterestRate.Stable ? 1 : 2;
-}
-
-/** Reject the zero address where the Pool would otherwise credit or debit address(0). */
-export function assertNonZeroAddress(value: string | undefined, name: string): void {
-  if (typeof value === 'string' && value.toLowerCase() === ZeroAddress) {
-    throw new TypeError(`${name} must not be the zero address`);
-  }
 }
 
 export function assertErc20Reserve(reserve: string, method: string): void {
@@ -44,6 +37,16 @@ export function unsignedDecimal(
   }
 
   return decimal;
+}
+
+/**
+ * A positive raw uint256 amount for builders whose protocol action rejects zero. Callers that
+ * support the '-1' maximum map it to MaxUint256 first; blank, signed and prefixed strings throw.
+ */
+export function positiveRawAmount(value: unknown, name = 'amount'): bigint {
+  const amount = BigInt(unsignedDecimal(value, name));
+  if (amount === 0n) throw new RangeError(`${name} must be positive`);
+  return amount;
 }
 
 export function address(value: string, name: string): string {

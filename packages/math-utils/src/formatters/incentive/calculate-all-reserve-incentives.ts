@@ -23,12 +23,15 @@ export interface CalculateAllReserveIncentivesRequest {
   reserveIncentives: ReservesIncentiveDataHumanized[];
   reserves: ReserveCalculationData[];
   marketReferenceCurrencyDecimals: number;
+  /** Unix seconds of the reserve snapshot; defaults to wall-clock time for direct callers. */
+  currentTimestamp?: number;
 }
 
 export function calculateAllReserveIncentives({
   reserveIncentives,
   reserves,
   marketReferenceCurrencyDecimals,
+  currentTimestamp,
 }: CalculateAllReserveIncentivesRequest): ReserveIncentiveDict {
   const reserveDict: ReserveIncentiveDict = {};
   // calculate incentive per reserve token
@@ -48,6 +51,7 @@ export function calculateAllReserveIncentives({
           priceInMarketReferenceCurrency: reserve.formattedPriceInMarketReferenceCurrency,
           decimals: reserve.decimals,
           marketReferenceCurrencyDecimals,
+          currentTimestamp,
         });
       reserveDict[calculatedReserveIncentives.underlyingAsset] = {
         aIncentives: calculatedReserveIncentives.aIncentivesData,

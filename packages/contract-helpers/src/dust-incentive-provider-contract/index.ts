@@ -26,6 +26,8 @@ export interface DustIncentiveProviderInterface {
       tvlUSD?: number;
       rewardPriceUSD?: number;
       decimals?: number;
+      /** Unix seconds for a known reserve snapshot; otherwise reads the provider's latest block. */
+      currentTimestamp?: number;
     },
   ) => Promise<IncentiveDataHumanized>;
   getAllUserRewards: (assets: string[], user: string) => Promise<UserRewardsResult>;
@@ -119,21 +121,39 @@ export class DustIncentiveProvider
       tvlUSD?: number;
       rewardPriceUSD?: number;
       decimals?: number;
+      currentTimestamp?: number;
     },
   ): Promise<IncentiveDataHumanized> {
+    const explicitTimestamp = options?.currentTimestamp;
+    if (
+      explicitTimestamp !== undefined &&
+      (typeof explicitTimestamp !== 'number' ||
+        !Number.isSafeInteger(explicitTimestamp) ||
+        explicitTimestamp < 0)
+    ) {
+      throw new TypeError('currentTimestamp must be a nonnegative safe integer');
+    }
+
     const data = await this.getRewardsData(asset, reward);
     const decimals = options?.decimals ?? 18;
     const rewardPriceUSD = options?.rewardPriceUSD ?? 0;
     const tvlUSD = options?.tvlUSD ?? 0;
-    const incentiveAPR =
-      tvlUSD > 0 && rewardPriceUSD > 0
-        ? DustIncentiveProvider.calculateEmissionAPR(
-            data.emissionPerSecond,
-            rewardPriceUSD,
-            tvlUSD,
-            decimals,
-          )
-        : '0';
+    let incentiveAPR = '0';
+    // Resolve block time only when it can change the answer: the APR is zero without TVL, price or emissions.
+    if (tvlUSD > 0 && rewardPriceUSD > 0 && data.emissionPerSecond > 0n) {
+      const timestamp = explicitTimestamp ?? (await this.provider.getBlock('latest'))?.timestamp;
+      if (timestamp === undefined) throw new Error('Latest block is unavailable');
+      // Accrual stops at distributionEnd, so the APR is zero at or after it.
+      if (timestamp < ethers.getNumber(data.distributionEnd)) {
+        incentiveAPR = DustIncentiveProvider.calculateEmissionAPR(
+          data.emissionPerSecond,
+          rewardPriceUSD,
+          tvlUSD,
+          decimals,
+        );
+      }
+    }
+
     return {
       assetAddress: asset,
       rewardTokenAddress: reward,

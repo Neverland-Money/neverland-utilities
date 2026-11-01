@@ -260,7 +260,8 @@
     "Apply lending-core 1.1.0 integer arithmetic and additive formatter inputs/outputs; complete regression vectors record immutable upstream and lending source identities with independent expectations.",
     "Add a pure raw-unit variable-debt repayment bound and public interface using guarded logarithmic ceiling-ray exponentiation.",
     "Add one pure DUST market APR kernel with explicit time, integer truncation order and unresolved-input errors; preserve existing lending and display math.",
-    "Accept numeric legacyEMode parameters, reject E-mode users without category data, and expose the exact USD supply behind DUST market APR."
+    "Accept numeric legacyEMode parameters, reject E-mode users without category data, and expose the exact USD supply behind DUST market APR.",
+    "Security hardening: fail closed on user reserves with balance, debt, an enabled flag or a malformed amount that match no formatted reserve or more than one, or that share an asset with another user reserve; zero incentive APR at and after the distribution end using the snapshot time; and return zero instead of infinite incentive APR for an empty or unpriced supply."
   ],
   "transformedFiles": [
     {
@@ -278,8 +279,8 @@
     {
       "path": "formatters/reserve/index.ts",
       "originalSha256": "baa518923e2b11d7b88e936b2c1181dd074696e2c8eed9431cf57a429b16e8b2",
-      "vendoredSha256": "6602dab34eec626a43ebdff018bdf0990c1115f99f54bba29e41cff44869a081",
-      "reason": "Add only optional legacy eModeCategoryId membership metadata; reserve computation is unchanged. formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+      "vendoredSha256": "4d9a1cdb0eafc10028da4430d18549f9efda15364ef98b8cf3932fb14063d989",
+      "reason": "Add only optional legacy eModeCategoryId membership metadata; reserve computation is unchanged. formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Security hardening: thread the supplied reserve snapshot timestamp through incentive APR calculation."
     },
     {
       "path": "formatters/user/calculate-user-reserve-totals.ts",
@@ -308,8 +309,8 @@
     {
       "path": "formatters/user/index.ts",
       "originalSha256": "9a28dc11c9044a81e2052d93bc16292efcb963ac7f8260c2cbbb5ff364e8d93c",
-      "vendoredSha256": "b4ae4edddf6b1c42cad0308308e1468ef028c0d04f89ee00288104ffbf09ac44",
-      "reason": "Add optional stable-debt/borrow-flag/legacy-category inputs and raw account tuple; require exact same-timestamp normalized index outputs and thread context through incentive entrypoint. formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Accept numeric legacyEMode parameters and reject E-mode users whose category data never reached the formatter."
+      "vendoredSha256": "00fed95aeda24636769101fea98f2f50ad4c290d8fde0018f5c2331b0b5b895c",
+      "reason": "Add optional stable-debt/borrow-flag/legacy-category inputs and raw account tuple; require exact same-timestamp normalized index outputs and thread context through incentive entrypoint. formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Accept numeric legacyEMode parameters and reject E-mode users whose category data never reached the formatter. Security hardening: fail closed when a user reserve with balance, debt, an enabled flag or a malformed amount matches no formatted reserve or more than one, or shares its asset with another user reserve; skip all-zero, flag-free user reserves that cannot change the summary."
     },
     {
       "path": "pool-math.test.ts",
@@ -374,14 +375,14 @@
     {
       "path": "formatters/incentive/calculate-all-reserve-incentives.test.ts",
       "originalSha256": "4393cd958195df331ef0a23c8de12bda42a95110cb5f5a56686d6316738e5f4f",
-      "vendoredSha256": "51079f9eeddd6517f7e20393cf81773c48af9145a9ac237ab1536467c8d7981f",
-      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value."
+      "vendoredSha256": "8944e91e62a7dcf99978a4794e162671edd2e9d69fcf417a6bd4898806d9115e",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Security hardening: pin historical fixture time so its existing active and expired expectations remain meaningful."
     },
     {
       "path": "formatters/incentive/calculate-all-reserve-incentives.ts",
       "originalSha256": "910863a4040f0da88b592b6c7df2c0cc6cb842d7e7f9c2e0c478911b938b7cfe",
-      "vendoredSha256": "e9a080b1c4203ca6417ff169d82f1e39fb77fd177e6333fc308f814eef697ad7",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+      "vendoredSha256": "c744e5b2283289df50ca4be65a432efc54cf604a60ecba3835f214265a6108c6",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Security hardening: thread optional snapshot time through reserve incentive APR calculation."
     },
     {
       "path": "formatters/incentive/calculate-all-user-incentives.test.ts",
@@ -392,26 +393,26 @@
     {
       "path": "formatters/incentive/calculate-incentive-apr.test.ts",
       "originalSha256": "9bd6a7013790d46a10afacd6f34fa0c65403b1fc8a6f2ddf9c6034b61af10139",
-      "vendoredSha256": "f5b3de7d077c294f350cb11c1487e9f5cf67ead6e1035e2a53ad79e0ded1616d",
-      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value."
+      "vendoredSha256": "5e08018a5ada317089f40c7559c467fcdd30d730631c69e8f84a57bd788c5748",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Security hardening: regress zero-supply and zero-price APR denominator behavior."
     },
     {
       "path": "formatters/incentive/calculate-incentive-apr.ts",
       "originalSha256": "aefdfea2fe7f19c0f28fa7b1e546ac981e58c66056ac93b0b8f4a232194b5492",
-      "vendoredSha256": "d0ae8f33de7a58017fca5181efb688a5e7a397e51cf64423010273c297b98509",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+      "vendoredSha256": "157079e8f60bd63ad4545e115633e4fd1e70e5c0d919ca1574512b11a6f4fc68",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Security hardening: return zero when token supply or priced denominator is zero, instead of infinite APR."
     },
     {
       "path": "formatters/incentive/calculate-reserve-incentives.test.ts",
       "originalSha256": "79afb2572ead6f7d1170d51123a16fbecf951dd4ae7ad69e8e13a5d5a37d8cb2",
-      "vendoredSha256": "c7245a5706b376fbf8f7c622e291c87810c365fec0a3ed65a467dc00ea89886b",
-      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value."
+      "vendoredSha256": "fb3aab1d133a7c466b6893bad6d168e510d8ee8f78c21c851c5da1cd915639a0",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Security hardening: regress incentive APR at the distribution-end boundary with a stale controller update timestamp."
     },
     {
       "path": "formatters/incentive/calculate-reserve-incentives.ts",
       "originalSha256": "3ca8d0dd455198e9cf04f0d0d8e75566641786623f173f6a3ace90bb2242212e",
-      "vendoredSha256": "9a9c643c4424b735115a306200b932bdfa2dea681e86ca36b93f49ffe1fb6c05",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+      "vendoredSha256": "16b4f9ce550e1bd480ed0b0bb087d323bfa18b753f26c922a80852988b4693f8",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Security hardening: use current snapshot time as well as controller update time to zero APR after distribution end."
     },
     {
       "path": "formatters/incentive/calculate-user-reserve-incentives.test.ts",
@@ -494,8 +495,8 @@
     {
       "path": "formatters/user/index.test.ts",
       "originalSha256": "5331450d7838d8b8b6fa03456de0c5fad80f9149f0a4bd107bca8364e33b90c2",
-      "vendoredSha256": "f7d712d34b64ba6c788db4f765625e9d508509847566056139450a7be7e2365a",
-      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value."
+      "vendoredSha256": "e819d902f5a864a093bab2d36467c38df2b8be0ae021e9262f603f900a7b4edc",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Security hardening: regress fail-closed reserve matching for balance, debt, stable debt, flags, malformed amounts, repeated user reserves and ambiguous formatted reserves; compare skipped all-zero user reserves with the summary that omits them; and provide complete reserve data for the existing incentive vector."
     },
     {
       "path": "mocks.ts",
@@ -590,8 +591,8 @@
     },
     {
       "path": "math-regression.test.ts",
-      "sha256": "2e12a331b76af04cb74c3d89fb65a31842fd90c21f5d8df370873188ec030579",
-      "reason": "Complete regression expectations and public SDK operations with immutable source identities."
+      "sha256": "8ac1815cd8933305aa36969eda48f18676db621df009b09ca35d63869168ad6a",
+      "reason": "Complete regression expectations and public SDK operations with immutable source identities. Security hardening: keep the immutable upstream expectation for expired incentive APR, but assert the explicit zero-APR correction while comparing all other captured fields and vectors; derive live, boundary and pre-boundary copies of vector 7 to prove formatReservesAndIncentives threads its currentTimestamp into incentive APR."
     },
     {
       "path": "financial-regression.test.ts",

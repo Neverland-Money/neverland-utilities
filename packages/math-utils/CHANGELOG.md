@@ -25,6 +25,18 @@
 - `formatUserSummary` throws when `userEmodeCategoryId` is nonzero and no E-mode category data
   reached the formatter: no `legacyEMode`, and no formatted reserve has `eModes`. Without the guard,
   every collateral would silently use its ordinary LTV and liquidation threshold.
+- `formatUserSummary` and `formatUserSummaryAndIncentives` now throw when a user reserve with a
+  balance, debt or enabled collateral or borrowing flag matches no formatted reserve, matches more
+  than one, or shares its asset with another user reserve, rather than omitting or double-counting
+  that position. An amount that is not an unsigned decimal integer string counts as a balance. User
+  reserves with zero balances and both flags off may be absent from `formattedReserves`: they are
+  skipped, and a repeated copy counts once. Pass the complete `getUserReservesData` result for the
+  market; the formatter cannot detect an entry that the caller removed.
+- Incentive APR now becomes zero at `emissionEndTimestamp`, using the formatter's `currentTimestamp`
+  or an optional timestamp on direct incentive calculations. Direct callers without a timestamp use
+  wall-clock time. Zero or unpriced supply now yields zero APR instead of `Infinity`. The
+  `calculateIncentiveAPR` and `emissionAprPercent` kernels take no time input and do not consider
+  the distribution end; callers must check it.
 - `MarketAPR` gains `totalSupplyUSD`, the USD supply behind a live APR, so averages across markets
   can weight by USD instead of raw token units.
 - Declare `bignumber.js` (`^9.3.1`) and `tslib` as direct dependencies for independent tarball

@@ -1,5 +1,6 @@
 import { wethGatewayLegacyAbi } from '@neverland-money/contract-types';
 import type { ethers } from 'ethers';
+import { assertBeneficiary, nonzeroGatewayAddress } from '../commons/address';
 import { AbiBaseService } from '../commons/base-service';
 import { InterestRate } from '../interest-rate';
 import type {
@@ -16,7 +17,6 @@ import type {
 export class WETHGatewayLegacyAdapter extends AbiBaseService<typeof wethGatewayLegacyAbi> {
   readonly wethGatewayAddress: string;
   readonly provider: ethers.Provider;
-  readonly contract: ethers.Contract;
   readonly contractInterface: ethers.Interface;
 
   constructor(
@@ -28,7 +28,11 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<typeof wethGatewayL
     this.provider = provider;
     this.wethGatewayAddress = wethGatewayAddress;
     this.contractInterface = this.iface;
-    this.contract = this.getContractInstance(wethGatewayAddress);
+  }
+
+  /** The gateway Contract. Throws for an unset, malformed, zero or native-sentinel gateway; never resolves ENS. */
+  get contract(): ethers.Contract {
+    return this.getContractInstance(nonzeroGatewayAddress(this.wethGatewayAddress));
   }
 
   /**
@@ -41,6 +45,8 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<typeof wethGatewayL
     onBehalfOf,
     referralCode = '0',
   }: WETHDepositParamsType): Promise<ethers.TransactionRequest> {
+    this.assertGatewayAddress();
+    assertBeneficiary(onBehalfOf ?? user, 'onBehalfOf');
     return this.contract.depositETH.populateTransaction(
       lendingPool,
       onBehalfOf ?? user,
@@ -58,6 +64,7 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<typeof wethGatewayL
     interestRateMode = InterestRate.Variable,
     referralCode = '0',
   }: LegacyWETHBorrowParamsType): Promise<ethers.TransactionRequest> {
+    this.assertGatewayAddress();
     const numericRateMode = interestRateMode === InterestRate.Stable ? 1 : 2;
     const result = await this.contract.borrowETH.populateTransaction(
       lendingPool,
@@ -78,6 +85,8 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<typeof wethGatewayL
     onBehalfOf,
     interestRateMode = InterestRate.Variable,
   }: LegacyWETHRepayParamsType): Promise<ethers.TransactionRequest> {
+    this.assertGatewayAddress();
+    assertBeneficiary(onBehalfOf ?? user, 'onBehalfOf');
     const numericRateMode = interestRateMode === InterestRate.Stable ? 1 : 2;
     return this.contract.repayETH.populateTransaction(
       lendingPool,
@@ -97,6 +106,8 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<typeof wethGatewayL
     amount,
     onBehalfOf,
   }: WETHWithdrawParamsType): Promise<ethers.TransactionRequest> {
+    this.assertGatewayAddress();
+    assertBeneficiary(onBehalfOf ?? user, 'onBehalfOf');
     return this.contract.withdrawETH.populateTransaction(lendingPool, amount, onBehalfOf ?? user);
   }
 
@@ -104,7 +115,7 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<typeof wethGatewayL
    * Get the WETH/WMON token address
    */
   async getWETHAddress(): Promise<string> {
-    return this.readContract(this.wethGatewayAddress, 'getWETHAddress', []);
+    return this.readContract(nonzeroGatewayAddress(this.wethGatewayAddress), 'getWETHAddress', []);
   }
 
   /**
@@ -148,5 +159,13 @@ export class WETHGatewayLegacyAdapter extends AbiBaseService<typeof wethGatewayL
 
   encodeWithdrawETH(lendingPool: string, amount: string, to: string): string {
     return this.contractInterface.encodeFunctionData('withdrawETH', [lendingPool, amount, to]);
+  }
+
+  /**
+   * Populated requests always target the gateway. The constructor accepts an unset gateway so
+   * WETHGatewayService can build ERC20-only Pool flows; each request rejects it here instead.
+   */
+  private assertGatewayAddress(): void {
+    nonzeroGatewayAddress(this.wethGatewayAddress);
   }
 }

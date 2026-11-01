@@ -49,6 +49,17 @@ Neverland lending-core 1.1.0, so do not assume numeric parity with upstream:
   a new optional `poolAccountData` output on account summaries.
 - `formatUserSummary` throws when `userEmodeCategoryId` is nonzero and no E-mode category data
   reached the formatter.
+- `formatUserSummary` throws when a user reserve with a balance, debt or enabled flag matches no
+  formatted reserve, matches more than one, or shares its asset with another user reserve, so a
+  partial or inconsistent snapshot cannot silently remove or double-count a position. User reserves
+  with zero balances and both flags off may be absent from `formattedReserves`; they are skipped.
+  See [User Reserve Matching](#user-reserve-matching).
+- Incentive APR is zero at or after the distribution end. `formatReservesAndIncentives` uses its
+  `currentTimestamp`; `calculateAllReserveIncentives` and `calculateReserveIncentives` take an
+  optional `currentTimestamp` and use wall-clock time without it. Zero or unpriced token supply
+  produces zero APR rather than `Infinity`. The APR kernels `calculateIncentiveAPR` and
+  `emissionAprPercent` take no time input and do not consider the distribution end, so callers must
+  check the end themselves before using either result.
 - `LegacyEMode.ltv` and `liquidationThreshold` accept numbers or strings.
 - `MarketAPR` gains `totalSupplyUSD`.
 - `bignumber.js` is a direct dependency, `^9.3.1`; upstream listed it as a peer dependency.
@@ -176,6 +187,31 @@ synthetic-preview arguments remain accepted. Integer inputs with an exact effect
 match the aggregate source formula; fractional inputs are display previews and cannot recover
 per-reserve valuation rounding, weighted LT information lost by averaging, or oracle membership. Use
 the formatter's raw account tuple for exact Pool comparisons.
+
+## User Reserve Matching
+
+`formatUserSummary` and `formatUserSummaryAndIncentives` join each `userReserves` entry to
+`formattedReserves` by underlying asset, ignoring case. An entry that can change the summary must
+match exactly one formatted reserve and must be the only entry for its asset; otherwise the
+formatter throws an error that names the asset. An entry counts as able to change the summary when
+any of `scaledATokenBalance`, `scaledVariableDebt` or `currentStableDebt` is nonzero or is not an
+unsigned decimal integer string, or when `usageAsCollateralEnabledOnUser` or
+`borrowingEnabledOnUser` is set. A collateral flag counts even with a zero balance, because it can
+put the account in isolation mode. An omitted `currentStableDebt` is zero.
+
+An entry with zero balances and both flags off cannot change any total or risk value. It is skipped
+when it matches no formatted reserve or more than one, and a repeated copy counts once. A reserve
+listed after the reserve list was cached therefore does not break the summary, while a position on a
+reserve missing from `formattedReserves` still throws. With `formattedReserves` empty and every
+entry zero, the result is an empty account; a nonzero `userEmodeCategoryId` still requires E-mode
+data, as described above.
+
+Pass the complete `getUserReservesData` result for the market as `userReserves`, which is what the
+contract-helpers `getUserReservesHumanized` returns, and read it for the same market as
+`formattedReserves`. The formatter cannot detect an entry that the caller removed: dropping the
+entry that carries debt returns a summary without that debt. Consumers that gate risk decisions on
+the summary should compare `poolAccountData` with `Pool.getUserAccountData`. Treat a matching error
+as an inconsistent snapshot: refetch both lists instead of showing a partial summary.
 
 ## Verification Limits
 
@@ -317,7 +353,10 @@ number conversion. `emissionAprPercent` takes annual emissions in human token un
 human USD units. It returns `'0'` when TVL is nonpositive; otherwise it evaluates
 `(annualEmissionTokens * rewardPriceUSD / tvlUSD * 100).toFixed(4)` in that operation order. NaN and
 Infinity retain JavaScript behavior. Callers keep their own price-availability and finite-TVL
-policy. Token decimal formatting remains in the ethers v6 helper.
+policy. Token decimal formatting remains in the ethers v6 helper. `emissionAprPercent` has no time
+input, so it returns a positive APR for a positive emission even after the distribution end, and so
+does the contract-helpers `DustIncentiveProvider.calculateEmissionAPR` static method that delegates
+to it. Check the distribution end before displaying either result.
 
 The corresponding `DustLockHelper` and `DustIncentiveProvider` static methods delegate to these
 calculations. Their existing signatures and wall-clock behavior are preserved; an increase adds the

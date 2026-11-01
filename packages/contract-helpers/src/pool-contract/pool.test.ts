@@ -1222,7 +1222,7 @@ describe('Pool', () => {
         amount,
         interestRateMode,
         debtTokenAddress,
-        onBehalfOf,
+        onBehalfOf: user,
         referralCode,
       });
       expect(borrowEthSpy).toHaveBeenCalled();
@@ -1381,7 +1381,7 @@ describe('Pool', () => {
           reserve,
           amount,
           interestRateMode,
-          onBehalfOf,
+          onBehalfOf: user,
           referralCode,
         }),
       ).rejects.toThrow(

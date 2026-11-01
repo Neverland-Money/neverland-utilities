@@ -2061,7 +2061,8 @@
     "Share provider-free claim and DustLock encoders with existing helpers, validate exact uint256 inputs, and expose strict lock reads and explicit calculation time.",
     "Delegate DUST market APR to math-utils using canonical native bigint reads, one batch clock and explicit unresolved-result omissions.",
     "Return plain mutable UI DTOs, retain exact raw enumeration cursors, add opt-in complete ownership checks, and decode canonical historical/current emission layouts without inventing resolution flags.",
-    "Omit fixed upstream gas limits from synchronous builders because Monad bills the full gas limit; rebuild lending-core 1.1 E-mode categories from embedded reserve fields; reject zero-address and native-sentinel misuse, accept referral code 0 and revocable exact delegations, require boolean collateral flags and map InterestRate.None to variable debt."
+    "Omit fixed upstream gas limits from synchronous builders because Monad bills the full gas limit; rebuild lending-core 1.1 E-mode categories from embedded reserve fields; reject zero-address and native-sentinel misuse, accept referral code 0 and revocable exact delegations, require boolean collateral flags and map InterestRate.None to variable debt.",
+    "Security hardening: reject zero and native-sentinel gateways and beneficiaries in every spelling, with a validating adapter contract accessor and canonical getWETHAddress; reject inexact or non-base-10 decimal amounts with a linear-time parser, malformed raw amounts, and unsupported native borrow beneficiaries; zero DUST incentive APR at or after distributionEnd; and count revenue only in declared USD reward tokens with per-token decimals, naming excluded tokens in unpricedRewardTokens and selecting no default USD token after a skipped fallback enumeration index."
   ],
   "transformedFiles": [
     {
@@ -2101,20 +2102,20 @@
     {
       "path": "commons/utils.test.ts",
       "originalSha256": "ad709c943920de31ad3c18af5264fae8e390518d9c4c8d585984314566c176ea",
-      "vendoredSha256": "d708459497881fc4c30afc30bf593864b238189c14703abd0e08d9f29eccf9da",
-      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value."
+      "vendoredSha256": "de09d243e17d0069f89185de9e68fa7c97dec1a01e82cb5348db429e2be0507b",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. The upstream rounding vector valueToWei('123.123541241123', 6) is deliberately inverted into a RangeError rejection, and an exact six-decimal vector is kept; other original cases and expected values are unchanged."
     },
     {
       "path": "commons/utils.ts",
       "originalSha256": "6418d2d68a7a0038f02bbf97b7a974c63e6e81fbb8765a8eb2f3895600af958f",
-      "vendoredSha256": "21b97df2923ba9d1a16801a12e615758a77848821a047fa085f50c6470f45f0a",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+      "vendoredSha256": "e97e6d84b466d325b1f2f52f2ec84e7623125281b79f67d9790966a7fb47f61c",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Reject decimal amounts that cannot be expressed as an exact token base-unit integer. Parse with a module-private bignumber.js clone under a strict base-10 grammar, reject negative, non-integral, underflowing and above-MaxUint256 base-unit results with RangeError, and use the same private clone in decimalsToCurrencyUnits. Parse with a linear-time unambiguous decimal pattern so long digit or whitespace runs cannot backtrack, with the same accepted spellings and messages."
     },
     {
       "path": "commons/validators/methodValidators.ts",
       "originalSha256": "59e2b459236be3e6d9b6cf6e189c3ad74ad41a3294ffee59d03f97801bdeea06",
-      "vendoredSha256": "921474255b3e13838e1f28fca0ee66bd076a6f3fccf5497b7e5bb1a780b9b116",
-      "reason": "Typed local method/metadata boundaries retain legacy public signatures, original indexing/arguments dispatch, coercions, falsy defaults and validation order."
+      "vendoredSha256": "72017f4891230f2b75312897ff89d5c6fec06a2762e5e6364039ba16f2497aa7",
+      "reason": "Typed local method/metadata boundaries retain legacy public signatures, original indexing/arguments dispatch, coercions, falsy defaults and validation order. Reject a zero native gateway before decorated methods can construct native transactions. Compare the gateway with address(0) canonically so every spelling of a zero gateway is rejected, and keep the upstream [] result for an unset or malformed gateway. Reject the native sentinel as WETH_GATEWAY in WETHValidator, in any spelling, after the zero check."
     },
     {
       "path": "commons/validators/paramValidators.ts",
@@ -2125,8 +2126,8 @@
     {
       "path": "commons/validators/validations.ts",
       "originalSha256": "59521ec0661f138f67d3f7c5bfcd8afc0f3ddb3501bac332e85bfed7a303a5e3",
-      "vendoredSha256": "11002352e5c79248445212eec6bc9844e0bf1b9a2fd320ef8b68866a520115e0",
-      "reason": "Typed local method/metadata boundaries retain legacy public signatures, original indexing/arguments dispatch, coercions, falsy defaults and validation order. Reject the zero address in decorated address validators."
+      "vendoredSha256": "959fef9aa8da492ee7833fff098931e6dd6261e51227832be089801254a56c93",
+      "reason": "Typed local method/metadata boundaries retain legacy public signatures, original indexing/arguments dispatch, coercions, falsy defaults and validation order. Reject the zero address in decorated address validators. Compare decorated address fields with address(0) canonically, and make onBehalfOf beneficiary fields alone also reject the native sentinel."
     },
     {
       "path": "commons/validators/validators.test.ts",
@@ -2191,8 +2192,8 @@
     {
       "path": "v3-pool-contract-bundle/index.ts",
       "originalSha256": "c05f5272411af95478460022a5bc3ad7788675c98da8361ab0b4d1f703140d88",
-      "vendoredSha256": "87124d45229869b3eff75978b0ed387948e078e6aceab6dfb9e08d5372d89f1b",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Omit fixed upstream gas limits from the synchronous builders; map InterestRate.None to variable debt; reject a zero onBehalfOf; document getApprovedAmount units. Share the native-reserve guard with Pool and reject native sentinels before decoding signed supply and repay inputs."
+      "vendoredSha256": "a9280d3896511f7ecccd666714b59a80dc353e90bc85a384b5b15c9947d65de6",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Omit fixed upstream gas limits from the synchronous builders; map InterestRate.None to variable debt; reject a zero onBehalfOf; document getApprovedAmount units. Share the native-reserve guard with Pool and reject native sentinels before decoding signed supply and repay inputs. Reject native borrow requests for a beneficiary other than the signer because the gateway ABI cannot encode that beneficiary. Check onBehalfOf through the canonical beneficiary check, and parse every ERC20 builder amount as a positive plain-decimal uint256 after the existing '-1' mapping."
     },
     {
       "path": "v3-pool-contract-bundle/pool-bundle.test.ts",
@@ -2202,8 +2203,8 @@
     {
       "path": "v3-pool-contract/index.ts",
       "originalSha256": "e740f1b87625475638159e157d3f376c04e89ccf36ac1895269929b2247a0cad",
-      "vendoredSha256": "a70eea681f39707490d727063b5cfbc2434626996046ad6c6fb1dd9b82028198",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Map InterestRate.None to variable debt; accept referral code 0 in supplyWithPermit; require a boolean collateral flag; reject the native sentinel in permit and collateral methods; snapshot earlier approvals so raw approvals estimate their own gas."
+      "vendoredSha256": "397ff9ce437c628e854216e52aab5dfb39291acb2b2d76bfa0456192861d73cc",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Map InterestRate.None to variable debt; accept referral code 0 in supplyWithPermit; require a boolean collateral flag; reject the native sentinel in permit and collateral methods; snapshot earlier approvals so raw approvals estimate their own gas. Reject native borrow requests for a beneficiary other than the signer because the gateway ABI cannot encode that beneficiary."
     },
     {
       "path": "v3-pool-contract/lendingPoolTypes.ts",
@@ -2214,14 +2215,14 @@
     {
       "path": "v3-pool-contract/pool.test.ts",
       "originalSha256": "3a3f2382f396de2b1620915840a4c4e52dca1c8e1a54b0cfa8effb7e51505b9b",
-      "vendoredSha256": "3ebc3e0251c2abe9bf09c37bb1b979704fa47ca2927e9fe63ff40625f4f42ff0",
-      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Expect variable debt for InterestRate.None, referral code 0 acceptance and native-sentinel rejection in supplyWithPermit."
+      "vendoredSha256": "31ea39940c5b53390b9aada8543b671a4b41f7fa3a308d384e4eaaf9b2d7b828",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Expect variable debt for InterestRate.None, referral code 0 acceptance and native-sentinel rejection in supplyWithPermit. Preserve existing transaction vectors while making native borrow fixtures use the signer beneficiary that the gateway can encode; rejected alternate beneficiaries are covered in fund-routing tests."
     },
     {
       "path": "v3-wethgateway-contract/index.ts",
       "originalSha256": "438ac66fd6111dcb3a7698f52a604d1512aecdc11fabb343080ff812100d6cde",
-      "vendoredSha256": "875c9cc7234ad03dc9fedf6329d32c7be701d3afdca9ccee79f7a27c47b3fbaf",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Omit fixed upstream gas limits from the synchronous gateway builders."
+      "vendoredSha256": "5df02c6c346b9b4e70f6b59a0f93e702f268ec254f77cbcb3d722e21304e9f6e",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Omit fixed upstream gas limits from the synchronous gateway builders. Validate the gateway destination in direct native transaction builders. Use the canonical nonzero gateway check, reject zero and native-sentinel beneficiaries, and parse amounts as positive plain-decimal uint256 values used for both calldata and msg.value."
     },
     {
       "path": "v3-wethgateway-contract/wethGateway.test.ts",
@@ -2298,13 +2299,13 @@
     },
     {
       "path": "dust-incentive-provider-contract/index.test.ts",
-      "sha256": "d8dd7260924a8bcb2df71e011c5864c849e7d477dd3f6f99ac7dd635bb0b7b5e",
-      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+      "sha256": "10382b2f3d1cbb4fed87bdae31242f48bafc5e34b30af84ee984f48c13ffdf3e",
+      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence. Regress humanized APR at both sides of the distribution end. Cover the distributionEnd boundary, the latest-block fallback and its null-block error, skipped getBlock calls when the APR must be zero, and invalid currentTimestamp rejection."
     },
     {
       "path": "dust-incentive-provider-contract/index.ts",
-      "sha256": "5a4097c350867b2a679af026c2c42e0f3e0efa4131415eda18c7ff1d6db7ea0b",
-      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+      "sha256": "5d6028ed1de2e1bef2323941181e7604a945cb6f3e305d24898ecf11f4a9b65c",
+      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence. Use the supplied snapshot time or provider block time to zero humanized APR after reward distribution ends. Validate an explicit currentTimestamp as a nonnegative safe integer and resolve block time only when TVL, reward price and emission are all positive, keeping APR zero at or after distributionEnd."
     },
     {
       "path": "dust-incentive-provider-contract/types.ts",
@@ -2374,7 +2375,8 @@
     },
     {
       "path": "pool-contract/validation.ts",
-      "sha256": "c53717057428bd973523bab394a6f4de5e52c63cc4357fdddc9b28f0e34e8370"
+      "sha256": "b3fab3e4c3c849af571d4f07bd7850820a96ef2303a0814ea1275417f78b9716",
+      "reason": "Replace the raw-compare assertNonZeroAddress with the shared commons/address check and add positiveRawAmount, the strict positive raw-amount parser built on unsignedDecimal."
     },
     {
       "path": "sdk-compatibility.test.ts",
@@ -2387,18 +2389,18 @@
     },
     {
       "path": "ve-dust-revenue-contract/index.test.ts",
-      "sha256": "d4798d7773e7c7232c3bf190bbc816353eac358106034ab92005732cc72ab057",
-      "reason": "Accept readonly exact uint256 IDs in revenue batch encoders and verify canonical calldata without changing existing aggregation policies."
+      "sha256": "d7c8523206583cc9e1f0fe7ddb677cf3652e9a1c0eb4be90e7c344dec4b4df66",
+      "reason": "Accept readonly exact uint256 IDs in revenue batch encoders and verify canonical calldata without changing existing aggregation policies. Answer the new ERC20 decimals reads in the existing revenue fixtures and cover per-token decimals, USD-token totals, decimals failures, caching and raw-amount hasRewards without changing existing expectations. Cover failed decimals reads, a skipped fallback index, a complete fallback and an explicit usdRewardTokens override."
     },
     {
       "path": "ve-dust-revenue-contract/index.ts",
-      "sha256": "eeb22e0bcd4cbd05484a752d6dd66eea636a7bb49da1eb4503c7fd3c4e8f55c5",
-      "reason": "Accept readonly exact uint256 IDs in revenue batch encoders and verify canonical calldata without changing existing aggregation policies."
+      "sha256": "13173dbc89d1845dfc036277868115cc4131cdd2773aae2362f99bacb0c1adcf",
+      "reason": "Accept readonly exact uint256 IDs in revenue batch encoders and verify canonical calldata without changing existing aggregation policies. Format each revenue reward token with its own ERC20 decimals and total only declared or default USD reward tokens without adding raw units across tokens, while keeping single-USDC output identical. Return unpricedRewardTokens from getProtocolData, sum the readable USD tokens when some decimals reads fail, and select no default USD token when the fallback enumeration skipped an index."
     },
     {
       "path": "ve-dust-revenue-contract/types.ts",
-      "sha256": "e816c3d94fb6ac5f93d982335f2a21242fa23e331271cc0527baa5fad17ff696",
-      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+      "sha256": "9dd5f602411824933716184fdc9605bfe0f45422f2b756003132a8a120ed3ec0",
+      "reason": "Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence. Add the optional usdRewardTokens context field and the optional rewardTokenDecimals and unpricedRewardTokens result fields, additively, so per-token decimals and excluded tokens are visible to callers. Document that unpricedRewardTokens also covers pending exclusions and the incomplete-list case."
     },
     {
       "path": "weth-gateway-legacy-contract/index.test.ts",
@@ -2406,7 +2408,8 @@
     },
     {
       "path": "weth-gateway-legacy-contract/index.ts",
-      "sha256": "5672eca7a1309d684f27948ff96e7bfca39c1a150a37663a38cdae59d1067fe2"
+      "sha256": "72e701f65ec87554fc3b830329cce016f9da4ebe8589d50c16db11a486de97f4",
+      "reason": "Populate methods reject an unset, malformed or zero gateway and a zero or native-sentinel beneficiary or recipient, and the constructor canonicalizes the Contract target so ethers never starts an ENS lookup. Replace the eager contract field with an accessor that validates the gateway, and read getWETHAddress from the checksummed gateway."
     },
     {
       "path": "weth-gateway-legacy-contract/types.ts",
@@ -2484,7 +2487,23 @@
     },
     {
       "path": "pool-contract/fund-routing.test.ts",
-      "sha256": "adb369428117c3ec039c4855ff2f4eb049cd78bb074160f6d9e5b01fee802694"
+      "sha256": "138119a81892fa455e58570424d3a18c49db4427aa6744d2f7a11c5da5a9eed8",
+      "reason": "Regress zero-gateway native value routing and unsupported native borrow beneficiaries."
+    },
+    {
+      "path": "commons/address.ts",
+      "reason": "New Neverland support file holding the canonical getAddress-based zero and native-sentinel predicates, the shared beneficiary assertion and the nonzero gateway check used by the validators, PoolBundle, WETHGatewayService and WETHGatewayLegacyAdapter. Reject the native sentinel in nonzeroGatewayAddress, in any spelling.",
+      "sha256": "429d4ba26a76b8496aedd1d81612f3862e495cb0941b16d71a423ae8e2f62f68"
+    },
+    {
+      "path": "pool-contract/native-guards.test.ts",
+      "reason": "New Neverland test file covering native gateway destinations in every zero and malformed spelling, ENS-free construction, beneficiary rejection, reserve-sentinel acceptance and case-insensitive native borrow beneficiaries. Cover native-sentinel gateways, the contract accessor and getWETHAddress.",
+      "sha256": "05d5ca3c534e4f3d202d4f7918ed877436d7ed13327cc38de1a735467683c770"
+    },
+    {
+      "path": "pool-contract/amount-parsing.test.ts",
+      "reason": "New Neverland test file covering the valueToWei grammar, private BigNumber configuration and bounds, method-level RangeErrors for the decimal Pool, gateway and approval methods, and strict PoolBundle and synchronous-builder raw amounts. Add a linear-time regression test and a 56-spelling valueToWei equivalence table.",
+      "sha256": "9066eaef9cde88d6be4ecbfd7625846ba66c95405dc12c05dd07a213edd930b5"
     }
   ]
 }

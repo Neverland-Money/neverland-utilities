@@ -2,6 +2,7 @@ import { poolAbi } from '@neverland-money/contract-types';
 import type { Provider, TransactionRequest } from 'ethers';
 import { type Interface, MaxUint256, Signature } from 'ethers';
 
+import { assertBeneficiary } from '../commons/address';
 import { AbiBaseService } from '../commons/base-service';
 import { estimateGasByNetwork } from '../commons/gas-station';
 import {
@@ -25,7 +26,7 @@ import {
   type LPSignedSupplyParamsType,
   type LPSupplyParamsType,
 } from './pool-types';
-import { assertErc20Reserve, assertNonZeroAddress, legacyRateMode } from './validation';
+import { assertErc20Reserve, legacyRateMode, positiveRawAmount } from './validation';
 
 export type SupplyTxBuilder = {
   generateTxData: ({
@@ -113,7 +114,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
       }: LPSupplyParamsType): TransactionRequest => {
         let actionTx: TransactionRequest = {};
         const onBehalfOfParam = onBehalfOf ?? user;
-        assertNonZeroAddress(onBehalfOfParam, 'onBehalfOf');
+        assertBeneficiary(onBehalfOfParam, 'onBehalfOf');
         const referralCodeParam = referralCode ?? '0';
         if (reserve.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()) {
           actionTx = this.wethGatewayService.generateDepositEthTxData({
@@ -126,7 +127,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
         } else {
           const txData = this.contractInterface.encodeFunctionData('supply', [
             reserve,
-            amount,
+            positiveRawAmount(amount),
             onBehalfOfParam,
             referralCodeParam,
           ]);
@@ -150,11 +151,11 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
         const decomposedSignature: Signature = Signature.from(signature);
         const populatedTx: TransactionRequest = {};
         const onBehalfOfParam = onBehalfOf ?? user;
-        assertNonZeroAddress(onBehalfOfParam, 'onBehalfOf');
+        assertBeneficiary(onBehalfOfParam, 'onBehalfOf');
         const referralCodeParam = referralCode ?? '0';
         const txData = this.contractInterface.encodeFunctionData('supplyWithPermit', [
           reserve,
-          amount,
+          positiveRawAmount(amount),
           onBehalfOfParam,
           referralCodeParam,
           deadline,
@@ -183,9 +184,13 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
         let actionTx: TransactionRequest = {};
         const referralCodeParam = referralCode ?? '0';
         const onBehalfOfParam = onBehalfOf ?? user;
-        assertNonZeroAddress(onBehalfOfParam, 'onBehalfOf');
+        assertBeneficiary(onBehalfOfParam, 'onBehalfOf');
         const numericRateMode = legacyRateMode(interestRateMode);
         if (reserve.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()) {
+          if (onBehalfOfParam.toLowerCase() !== user.toLowerCase()) {
+            throw new TypeError('Native borrow requires onBehalfOf to equal user');
+          }
+
           if (!debtTokenAddress) {
             throw new Error(
               `To borrow ETH you need to pass the stable or variable WETH debt Token Address corresponding the interestRateMode`,
@@ -203,7 +208,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
         } else {
           const txData = this.contractInterface.encodeFunctionData('borrow', [
             reserve,
-            amount,
+            positiveRawAmount(amount),
             numericRateMode,
             referralCodeParam,
             onBehalfOfParam,
@@ -221,7 +226,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
       generateTxData: ({ user, reserve, amount, interestRateMode, onBehalfOf }) => {
         const numericRateMode = legacyRateMode(interestRateMode);
         const onBehalfOfParam = onBehalfOf ?? user;
-        assertNonZeroAddress(onBehalfOfParam, 'onBehalfOf');
+        assertBeneficiary(onBehalfOfParam, 'onBehalfOf');
         if (reserve.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()) {
           return this.wethGatewayService.generateRepayEthTxData({
             lendingPool: this.poolAddress,
@@ -235,7 +240,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
         const actionTx: TransactionRequest = {};
         const txData = this.contractInterface.encodeFunctionData('repay', [
           reserve,
-          amount === '-1' ? MaxUint256.toString() : amount,
+          positiveRawAmount(amount === '-1' ? MaxUint256.toString() : amount),
           numericRateMode,
           onBehalfOfParam,
         ]);
@@ -258,11 +263,11 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
         const populatedTx: TransactionRequest = {};
         const numericRateMode = legacyRateMode(interestRateMode);
         const onBehalfOfParam = onBehalfOf ?? user;
-        assertNonZeroAddress(onBehalfOfParam, 'onBehalfOf');
+        assertBeneficiary(onBehalfOfParam, 'onBehalfOf');
 
         const txData = this.contractInterface.encodeFunctionData('repayWithPermit', [
           reserve,
-          amount === '-1' ? MaxUint256.toString() : amount,
+          positiveRawAmount(amount === '-1' ? MaxUint256.toString() : amount),
           numericRateMode,
           onBehalfOfParam,
           deadline,
@@ -287,7 +292,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
 
         const txData = this.contractInterface.encodeFunctionData('repayWithATokens', [
           reserve,
-          amount === '-1' ? MaxUint256.toString() : amount,
+          positiveRawAmount(amount === '-1' ? MaxUint256.toString() : amount),
           numericRateMode,
         ]);
         actionTx.to = this.poolAddress;

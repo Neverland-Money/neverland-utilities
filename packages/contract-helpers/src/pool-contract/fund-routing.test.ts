@@ -217,6 +217,46 @@ describe('lending fund routing', () => {
     expect(decodedArgs(gatewayInterface, tx.data)).toEqual([POOL, USER, 0n]);
   });
 
+  it('rejects a zero gateway before constructing any native value transaction', () => {
+    const provider = new OfflineProvider();
+    const weth = new WETHGatewayService(provider, new ERC20Service(provider), ZeroAddress);
+    const bundle = new PoolBundle(provider, { POOL, WETH_GATEWAY: ZeroAddress });
+
+    expect(() => weth.depositETH({ lendingPool: POOL, user: USER, amount: '1' })).toThrow(
+      'WETH_GATEWAY must not be the zero address',
+    );
+    expect(() =>
+      weth.generateDepositEthTxData({ lendingPool: POOL, user: USER, amount: '1000' }),
+    ).toThrow('WETH_GATEWAY must be a nonzero Ethereum address');
+    expect(() =>
+      bundle.supplyTxBuilder.generateTxData({
+        user: USER,
+        reserve: API_ETH_MOCK_ADDRESS,
+        amount: '1000',
+      }),
+    ).toThrow('WETH_GATEWAY must be a nonzero Ethereum address');
+  });
+
+  it('rejects a native borrow beneficiary that the gateway cannot encode', async () => {
+    const pool = new Pool(new OfflineProvider(), { POOL, WETH_GATEWAY: GATEWAY });
+    const bundle = new PoolBundle(new OfflineProvider(), { POOL, WETH_GATEWAY: GATEWAY });
+    const request = {
+      user: USER,
+      reserve: API_ETH_MOCK_ADDRESS,
+      amount: '1',
+      interestRateMode: InterestRate.Variable,
+      debtTokenAddress: DEBT_TOKEN,
+      onBehalfOf: RESERVE,
+    };
+
+    await expect(pool.borrow(request)).rejects.toThrow(
+      'Native borrow requires onBehalfOf to equal user',
+    );
+    expect(() => bundle.borrowTxBuilder.generateTxData(request)).toThrow(
+      'Native borrow requires onBehalfOf to equal user',
+    );
+  });
+
   it('maps InterestRate.None to variable debt on the pool and gateway paths alike', () => {
     const bundle = new PoolBundle(new OfflineProvider(), { POOL, WETH_GATEWAY: GATEWAY });
     const poolRepay = bundle.repayTxBuilder.generateTxData({

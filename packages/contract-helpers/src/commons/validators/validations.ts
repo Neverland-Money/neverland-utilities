@@ -1,4 +1,5 @@
-import { isAddress, ZeroAddress } from 'ethers';
+import { isAddress } from 'ethers';
+import { isNativeSentinel, isZeroAddress } from '../address';
 
 //
 // import 'reflect-metadata';
@@ -12,10 +13,17 @@ import {
   type paramsType,
 } from './param-validators';
 
-/** Lending inputs never target address(0); the Pool would otherwise credit it irrecoverably. */
-function assertNotZeroAddress(value: unknown): void {
-  if (typeof value === 'string' && value.toLowerCase() === ZeroAddress) {
+/**
+ * Lending inputs never target address(0) in any spelling, and a beneficiary never the keyless
+ * native sentinel; the Pool or gateway would otherwise credit or pay it irrecoverably.
+ */
+function assertNotZeroAddress(value: unknown, beneficiary = false): void {
+  if (isZeroAddress(value)) {
     throw new Error(`Address: ${value} must not be the zero address`);
+  }
+
+  if (beneficiary && isNativeSentinel(value)) {
+    throw new Error(`Address: ${value} must not be the native sentinel`);
   }
 }
 
@@ -43,7 +51,8 @@ export function isEthAddressValidator(
           );
         }
 
-        assertNotZeroAddress(args[0][storedParams.field]);
+        // Decorated beneficiaries and recipients are all onBehalfOf; reserves keep the sentinel.
+        assertNotZeroAddress(args[0][storedParams.field], storedParams.field === 'onBehalfOf');
       } else {
         const isOptional = isParamOptional?.[storedParams.index];
         if (args[storedParams.index] && !isOptional && !isAddress(args[storedParams.index])) {

@@ -35,9 +35,12 @@ describe('Utils', () => {
       const value = valueToWei('1', 6);
       expect(value).toEqual('1000000');
     });
-    it('Expects the value to be in wei decimals and fixed 0', () => {
-      const value = valueToWei('123.123541241123', 6);
-      expect(value).toEqual('123123541');
+    it('rejects amounts that would require rounding to a token base unit', () => {
+      expect(() => valueToWei('123.123541241123', 6)).toThrow(
+        'cannot be represented with 6 decimals',
+      );
+      expect(() => valueToWei('0.6', 0)).toThrow('cannot be represented with 0 decimals');
+      expect(valueToWei('123.123541', 6)).toBe('123123541');
     });
   });
 

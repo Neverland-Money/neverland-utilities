@@ -24,4 +24,23 @@ describe('calculateIncentiveAPR', () => {
 
     expect(result).toEqual('0.000021024');
   });
+
+  it('does not report infinite APR for an empty or unpriced supply', () => {
+    const request = {
+      emissionPerSecond: '1000000000000000000',
+      rewardTokenPriceInMarketReferenceCurrency: '1',
+      totalTokenSupply: '0',
+      priceInMarketReferenceCurrency: '1',
+      decimals: 18,
+      rewardTokenDecimals: 18,
+    };
+    expect(calculateIncentiveAPR(request)).toBe('0');
+    expect(
+      calculateIncentiveAPR({
+        ...request,
+        totalTokenSupply: '1',
+        priceInMarketReferenceCurrency: '0',
+      }),
+    ).toBe('0');
+  });
 });

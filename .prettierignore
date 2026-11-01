@@ -1,6 +1,5 @@
 coverage/
 dist/
-/.nx/workspace-data
 
 # Compiler incremental build metadata (dist/ is already excluded above).
 **/*.tsbuildinfo
@@ -16,10 +15,8 @@ packages/math-utils/src/__fixtures__/math-regression-vectors.json
 packages/math-utils/src/__fixtures__/financial-regression-vectors.json
 packages/contract-helpers/src/__fixtures__/transaction-regression-vectors.json
 
-# Local scratch/cache and vendored tooling are outside maintained workspace source.
-.claude/
-.remember/
-.superpowers/
-docs/superpowers/
-.yarn/
+# Dot folders and local docs, except tracked CI configuration.
+.*/
+!.github/
+docs/
 node_modules/

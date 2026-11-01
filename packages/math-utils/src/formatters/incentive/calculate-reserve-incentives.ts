@@ -14,6 +14,8 @@ export interface CalculateReserveIncentivesRequest {
   decimals: number;
   priceInMarketReferenceCurrency: string; // Can be priced in ETH or USD depending on market
   marketReferenceCurrencyDecimals: number;
+  /** Unix seconds of the reserve snapshot; defaults to wall-clock time for direct callers. */
+  currentTimestamp?: number;
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- Public interface retains consumer declaration merging.
@@ -59,14 +61,10 @@ export function calculateRewardTokenPrice(
   return '0';
 }
 
-// Determine is reward emsission is active or distribution has ended
-const rewardEmissionActive = (reward: RewardInfoHumanized) => {
-  if (reward.emissionEndTimestamp > reward.incentivesLastUpdateTimestamp) {
-    return true;
-  }
-
-  return false;
-};
+// An unchanged controller update timestamp does not extend an ended campaign.
+const rewardEmissionActive = (reward: RewardInfoHumanized, currentTimestamp: number): boolean =>
+  reward.emissionEndTimestamp > reward.incentivesLastUpdateTimestamp &&
+  reward.emissionEndTimestamp > currentTimestamp;
 
 // Calculate supply and variableBorrow incentives APR for a reserve asset
 export function calculateReserveIncentives({
@@ -76,10 +74,11 @@ export function calculateReserveIncentives({
   totalVariableDebt,
   decimals,
   priceInMarketReferenceCurrency,
+  currentTimestamp = Math.floor(Date.now() / 1000),
 }: CalculateReserveIncentivesRequest): CalculateReserveIncentivesResponse {
   const aIncentivesData: ReserveIncentiveResponse[] =
     reserveIncentiveData.aIncentiveData.rewardsTokenInformation.map(reward => {
-      const aIncentivesAPR = rewardEmissionActive(reward)
+      const aIncentivesAPR = rewardEmissionActive(reward, currentTimestamp)
         ? calculateIncentiveAPR({
             emissionPerSecond: reward.emissionPerSecond,
             rewardTokenPriceInMarketReferenceCurrency: calculateRewardTokenPrice(
@@ -103,7 +102,7 @@ export function calculateReserveIncentives({
     });
   const vIncentivesData: ReserveIncentiveResponse[] =
     reserveIncentiveData.vIncentiveData.rewardsTokenInformation.map(reward => {
-      const vIncentivesAPR = rewardEmissionActive(reward)
+      const vIncentivesAPR = rewardEmissionActive(reward, currentTimestamp)
         ? calculateIncentiveAPR({
             emissionPerSecond: reward.emissionPerSecond,
             rewardTokenPriceInMarketReferenceCurrency: calculateRewardTokenPrice(

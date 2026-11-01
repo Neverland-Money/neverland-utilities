@@ -402,6 +402,10 @@ export class Pool extends AbiBaseService<typeof poolAbi> implements PoolInterfac
     }: LPBorrowParamsType,
   ): Promise<EthereumTransactionTypeExtended[]> {
     if (reserve.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()) {
+      if (onBehalfOf && onBehalfOf.toLowerCase() !== user.toLowerCase()) {
+        throw new TypeError('Native borrow requires onBehalfOf to equal user');
+      }
+
       if (!debtTokenAddress) {
         throw new Error(
           `To borrow ETH you need to pass the stable or variable WETH debt Token Address corresponding the interestRateMode`,

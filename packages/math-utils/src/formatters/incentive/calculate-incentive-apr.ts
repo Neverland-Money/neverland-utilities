@@ -35,5 +35,9 @@ export function calculateIncentiveAPR({
     normalize(totalTokenSupply, decimals),
   ).multipliedBy(priceInMarketReferenceCurrency);
 
+  if (totalSupplyNormalized.lte(0)) {
+    return '0';
+  }
+
   return emissionPerYear.dividedBy(totalSupplyNormalized).toFixed();
 }

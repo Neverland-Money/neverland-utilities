@@ -54,9 +54,10 @@ precondition for a release, and still run the full sequence on the release commi
 
 Before publishing, set the date in the heading of each changelog entry you are releasing to the
 release date, for example `## [3.0.0](...) (2026-10-27)`, and merge that change. The package check
-requires the first changelog heading to equal the manifest version, but it does not check the date.
-Confirm that every `README.md` still contains `v<version>` for its package version, then rerun
-`yarn format:check` and `yarn test:packages`.
+requires the first changelog heading to equal the manifest version, but it does not check the date;
+the release guard checks both for every package it will publish. Confirm that every `README.md`
+still contains `v<version>` for its package version, then rerun `yarn format:check` and
+`yarn test:packages`.
 
 ## Publish prepared versions
 
@@ -69,16 +70,49 @@ git status --short
 git rev-parse HEAD origin/main
 ```
 
-`lerna publish from-package` does not enforce the `allowBranch` setting in `lerna.json`, so nothing
-stops a release from another branch or from a stale checkout. Confirm that the working tree is clean
-and that `HEAD` is the validated commit on `origin/main`. Also confirm the target registry account,
-package access, prepared versions and release artifacts, then publish the versions already prepared
-in manifests:
+`lerna publish from-package` does not enforce the `allowBranch` setting in `lerna.json`, ignores
+untracked files, and counts a package whose registry lookup fails as unpublished. Each release
+script therefore runs `scripts/check-release-identity.mjs` first and stops before Lerna starts when
+any check fails. Yarn 4 does not run `pre<script>` hooks, so the guard is chained into each script
+with `&&`. The guard is read-only: it runs git read commands, `git ls-remote` and HTTPS GET requests
+to the npm registry, and never fetches or writes refs. `release:prepared` runs it with
+`--mode=prepared`, which requires:
+
+- an `origin` remote whose fetch and push URLs are the repository named in `package.json`;
+- the `main` branch, with `HEAD` equal to `refs/heads/main` on `origin` as `git ls-remote` reports
+  it;
+- an empty `git status --porcelain --untracked-files=all`, so no modified, staged or untracked file
+  can reach a tarball;
+- at least one package whose manifest version is not yet on the registry (the publish set). A
+  registry or network error fails the check instead of counting as unpublished, and a version that
+  was published and later unpublished is rejected;
+- for each package in the publish set, a top changelog heading that names the manifest version and
+  carries the release date, which is today's UTC date. `RELEASE_DATE` (`YYYY-MM-DD`) is accepted
+  only when it is within one day of today's UTC date (yesterday, today or tomorrow), as an allowance
+  for time-zone skew; any other value fails. It cannot get past a stale heading: set the heading
+  date and merge that change to `main` instead;
+- when `NPM_CONFIG_PROVENANCE` or `npm_config_provenance` requests npm provenance, a GitHub Actions
+  run (`GITHUB_ACTIONS=true`) with `ACTIONS_ID_TOKEN_REQUEST_URL` and
+  `ACTIONS_ID_TOKEN_REQUEST_TOKEN` set, which the job receives from `permissions: id-token: write`.
+
+The guard prints one line per check and exits with status 1 when any check fails. Run it on its own
+as a dry run first:
+
+```bash
+node scripts/check-release-identity.mjs --mode=prepared
+```
+
+The guard does not know whether CI passed for `HEAD`, and it does not replace the validation
+sequence. Confirm that `HEAD` is the validated commit on `origin/main`. Also confirm the target
+registry account, package access, prepared versions and release artifacts, then publish the versions
+already prepared in manifests:
 
 ```bash
 yarn release:check
 yarn release:prepared
 ```
+
+Arguments passed to a release script, such as `--yes`, reach `lerna publish`, not the guard.
 
 `release:prepared` runs `lerna publish from-package`. Contract helpers require the matching exact
 contract-types and math-utils versions, so publish those dependencies first or let Lerna order the
@@ -86,6 +120,17 @@ selected packages. Address-book is independent. `lerna.json` sets `exact: true`,
 release writes exact internal dependency versions. Use `release:latest` only for an intentional
 conventional-commit versioning release; it can update versions, create tags and create GitHub
 releases. Canary publication is a separate release channel.
+
+`release:latest` and `release:canary` set `NPM_CONFIG_PROVENANCE=true`, and npm generates provenance
+only in a supported CI run. Their guard modes therefore always require the GitHub Actions token
+variables and fail on a workstation. Without the guard, a local `release:latest` would push the
+release commit, tags and GitHub releases before npm rejected the publish. The repository has no
+publish workflow yet, so neither script can currently pass the guard. `--mode=latest` also requires
+the `origin` identity, `main`, a clean work tree and `HEAD` equal to `main` on `origin`, because
+Lerna pushes the current branch and would otherwise carry unreviewed local commits to `main`.
+`--mode=canary` requires the `origin` identity, a clean work tree and a `HEAD` that an `origin`
+remote-tracking branch already contains, so every canary version resolves to a pushed commit;
+canaries may come from any pushed branch.
 
 ## Tag the release
 

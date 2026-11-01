@@ -8,12 +8,7 @@ const typescriptFiles = ['packages/**/*.ts', 'scripts/fixtures/**/*.ts'];
 export default [
   {
     ignores: [
-      '.claude/**',
-      '.remember/**',
-      '.superpowers/**',
-      'docs/superpowers/**',
-      '.yarn/**',
-      '.nx/**',
+      '**/.*/**',
       '**/node_modules/**',
       'packages/*/dist/**',
       'coverage/**',
@@ -22,7 +17,6 @@ export default [
       'packages/contract-types/src/abis/*Abi.ts',
       'packages/contract-types/src/abis/index.ts',
       'packages/contract-types/src/types.ts',
-      // Complete regression vectors retain bytes guarded by their hash manifest.
       'packages/math-utils/src/__fixtures__/math-regression-vectors.json',
       'packages/math-utils/src/__fixtures__/financial-regression-vectors.json',
       'packages/contract-helpers/src/__fixtures__/transaction-regression-vectors.json',
