@@ -55,10 +55,11 @@ All notable changes to this project will be documented in this file. See
   work, and `'-1'` keeps its maximum meaning where supported. Round amounts down to the token's
   decimals first.
 - **contract-helpers:** `PoolBundle` builders and the synchronous `WETHGatewayService` builders take
-  raw amounts as plain unsigned decimal digit strings and throw for empty, padded, `+`, `0x`, `0b`,
-  `0o`, negative, fractional and exponent strings (`TypeError`), for zero and for values above
-  MaxUint256 (`RangeError`). `'-1'` still selects the maximum where supported. Upstream accepted
-  0x-hex amounts; convert them with `BigInt(hex).toString()`.
+  raw amounts as plain unsigned decimal digit strings and throw for empty, whitespace-padded, `+`,
+  `0x`, `0b`, `0o`, negative, fractional and exponent strings (`TypeError`), for zero and for values
+  above MaxUint256 (`RangeError`). Leading zeros are accepted: `'007'` is 7 and `'000'` is zero.
+  `'-1'` still selects the maximum where supported. Upstream accepted 0x-hex amounts; convert them
+  with `BigInt(hex).toString()`.
 - **contract-helpers:** native borrow rejects an `onBehalfOf` address other than the caller
   (compared case-insensitively) because the gateway cannot encode it.
 - **WETHGatewayLegacyAdapter:** `depositETH`, `borrowETH`, `repayETH` and `withdrawETH` reject an
@@ -68,6 +69,10 @@ All notable changes to this project will be documented in this file. See
   `depositETH`, `repayETH` and `withdrawETH` reject a zero or native-sentinel `onBehalfOf` (the
   withdrawal recipient). The constructor still accepts any string, ENS names are not resolved as
   gateways, and the populated `to` is the checksummed gateway.
+- **WETHGatewayService:** the synchronous builders and decorated native methods, and the native
+  `Pool` and `PoolBundle` paths built on them, use the checksummed gateway as the populated `to` and
+  as the delegation and approval target for every accepted spelling (0x in any case, unprefixed hex
+  or ICAP). ethers would otherwise send an unprefixed or ICAP gateway through ENS resolution.
 - **contract-helpers:** decorated native methods return `[]` and log
   `[WethGatewayValidator] You need to pass valid addresses` for an unset or malformed gateway, as in
   upstream; treat `[]` as a failed build. The synchronous builders, the native `PoolBundle` builders

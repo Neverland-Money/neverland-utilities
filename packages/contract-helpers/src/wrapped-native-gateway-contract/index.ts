@@ -111,7 +111,7 @@ export class WETHGatewayService
     this.borrowETH = this.borrowETH.bind(this);
     this.wethGatewayInstance = this.iface;
     this.generateDepositEthTxData = (args: WETHDepositParamsType): TransactionRequest => {
-      this.assertGatewayAddress();
+      const gateway = this.gatewayAddress();
       assertBeneficiary(args.onBehalfOf ?? args.user, 'onBehalfOf');
       const value = positiveRawAmount(args.amount);
       const txData = this.adapter.encodeDepositETH(
@@ -121,7 +121,7 @@ export class WETHGatewayService
       );
       const actionTx: TransactionRequest = {
         data: txData,
-        to: this.wethGatewayAddress,
+        to: gateway,
         from: args.user,
         value,
       };
@@ -129,7 +129,7 @@ export class WETHGatewayService
     };
 
     this.generateBorrowEthTxData = (args: WETHBorrowParamsType): TransactionRequest => {
-      this.assertGatewayAddress();
+      const gateway = this.gatewayAddress();
       const txData = this.adapter.encodeBorrowETH(
         args.lendingPool,
         positiveRawAmount(args.amount).toString(),
@@ -138,14 +138,14 @@ export class WETHGatewayService
       );
       const actionTx: TransactionRequest = {
         data: txData,
-        to: this.wethGatewayAddress,
+        to: gateway,
         from: args.user,
       };
       return actionTx;
     };
 
     this.generateRepayEthTxData = ({ lendingPool, amount, user, onBehalfOf, interestRateMode }) => {
-      this.assertGatewayAddress();
+      const gateway = this.gatewayAddress();
       assertBeneficiary(onBehalfOf ?? user, 'onBehalfOf');
       const value = positiveRawAmount(amount);
       const txData = this.adapter.encodeRepayETH(
@@ -156,7 +156,7 @@ export class WETHGatewayService
       );
       const actionTx: TransactionRequest = {
         data: txData,
-        to: this.wethGatewayAddress,
+        to: gateway,
         from: user,
         value,
       };
@@ -174,9 +174,10 @@ export class WETHGatewayService
     { lendingPool, user, amount, onBehalfOf, referralCode }: WETHDepositParamsType,
   ): EthereumTransactionTypeExtended[] {
     const convertedAmount: string = valueToWei(amount, 18);
+    const gateway = this.gatewayAddress();
     const txCallback: () => Promise<transactionType> = this.generateTxCallback({
       rawTxMethod: async () => ({
-        to: this.wethGatewayAddress,
+        to: gateway,
         data: this.adapter.encodeDepositETH(lendingPool, onBehalfOf ?? user, referralCode ?? '0'),
       }),
       from: user,
@@ -214,10 +215,11 @@ export class WETHGatewayService
       throw new Error(`To borrow ETH you need to pass the variable WETH debt Token Address`);
     }
 
+    const gateway = this.gatewayAddress();
     const delegationApproved: boolean = await this.baseDebtTokenService.isDelegationApproved({
       debtTokenAddress,
       allowanceGiver: user,
-      allowanceReceiver: this.wethGatewayAddress,
+      allowanceReceiver: gateway,
       amount,
     });
 
@@ -225,7 +227,7 @@ export class WETHGatewayService
       const approveDelegationTx: EthereumTransactionTypeExtended =
         this.baseDebtTokenService.approveDelegation({
           user,
-          delegatee: this.wethGatewayAddress,
+          delegatee: gateway,
           debtTokenAddress,
           amount: MaxUint256.toString(),
         });
@@ -235,7 +237,7 @@ export class WETHGatewayService
 
     const txCallback: () => Promise<transactionType> = this.generateTxCallback({
       rawTxMethod: async () => ({
-        to: this.wethGatewayAddress,
+        to: gateway,
         data: this.adapter.encodeBorrowETH(
           lendingPool,
           convertedAmount,
@@ -268,11 +270,12 @@ export class WETHGatewayService
     const { isApproved, approve }: IERC20ServiceInterface = this.erc20Service;
     const convertedAmount: string =
       amount === '-1' ? MaxUint256.toString() : valueToWei(amount, 18);
+    const gateway = this.gatewayAddress();
 
     const approved: boolean = await isApproved({
       token: aTokenAddress,
       user,
-      spender: this.wethGatewayAddress,
+      spender: gateway,
       amount,
     });
 
@@ -280,7 +283,7 @@ export class WETHGatewayService
       const approveTx: EthereumTransactionTypeExtended = approve({
         user,
         token: aTokenAddress,
-        spender: this.wethGatewayAddress,
+        spender: gateway,
         amount: MaxUint256.toString(),
       });
       txs.push(approveTx);
@@ -288,7 +291,7 @@ export class WETHGatewayService
 
     const txCallback: () => Promise<transactionType> = this.generateTxCallback({
       rawTxMethod: async () => ({
-        to: this.wethGatewayAddress,
+        to: gateway,
         data: this.adapter.encodeWithdrawETH(lendingPool, convertedAmount, onBehalfOf ?? user),
       }),
       from: user,
@@ -312,10 +315,11 @@ export class WETHGatewayService
     { lendingPool, user, amount, onBehalfOf, interestRateMode }: WETHRepayParamsType,
   ): EthereumTransactionTypeExtended[] {
     const convertedAmount: string = valueToWei(amount, 18);
+    const gateway = this.gatewayAddress();
 
     const txCallback: () => Promise<transactionType> = this.generateTxCallback({
       rawTxMethod: async () => ({
-        to: this.wethGatewayAddress,
+        to: gateway,
         data: this.adapter.encodeRepayETH(
           lendingPool,
           convertedAmount,
@@ -337,7 +341,12 @@ export class WETHGatewayService
     ];
   }
 
-  private assertGatewayAddress(): void {
-    nonzeroGatewayAddress(this.wethGatewayAddress);
+  /**
+   * The checksummed gateway for every populated `to` and allowance target: ethers would send an
+   * unprefixed or ICAP spelling through ENS resolution. Throws when the gateway is unset,
+   * malformed, zero or the native sentinel.
+   */
+  private gatewayAddress(): string {
+    return nonzeroGatewayAddress(this.wethGatewayAddress);
   }
 }

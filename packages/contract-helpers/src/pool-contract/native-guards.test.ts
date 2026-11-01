@@ -160,6 +160,38 @@ describe('native gateway destination', () => {
       expect(decodedArgs(gatewayInterface, tx.data)).toEqual([POOL, USER, 0n]);
     },
   );
+
+  it.each([
+    ['lowercase', GATEWAY.toLowerCase()],
+    ['unprefixed', GATEWAY.slice(2)],
+    ['ICAP', getIcapAddress(GATEWAY)],
+  ])(
+    'populates service requests and allowance reads to the checksummed gateway given its %s spelling',
+    async (_spelling, gateway) => {
+      const { provider, service } = lending(gateway);
+      const resolveName = jest.spyOn(provider, 'resolveName');
+      const reads = provider.mockContract({
+        allowance: async () => MaxUint256,
+        borrowAllowance: async () => MaxUint256,
+        decimals: async () => 18n,
+      });
+      expect(service.generateDepositEthTxData(deposit).to).toBe(GATEWAY);
+      expect(service.generateBorrowEthTxData(borrow).to).toBe(GATEWAY);
+      expect(service.generateRepayEthTxData(repay).to).toBe(GATEWAY);
+      const actions = [
+        ...service.depositETH(deposit),
+        ...(await service.borrowETH(borrow)),
+        ...(await service.withdrawETH(withdraw)),
+        ...service.repayETH(repay),
+      ];
+      // Both allowances read as unlimited, so each method returns only its gateway action.
+      expect(actions).toHaveLength(4);
+      const populated = await Promise.all(actions.map(async ({ tx }) => tx()));
+      for (const request of populated) expect(request.to).toBe(GATEWAY);
+      expect(reads).toHaveBeenCalledWith(USER, GATEWAY);
+      expect(resolveName).not.toHaveBeenCalled();
+    },
+  );
 });
 
 describe('native sentinel gateway', () => {

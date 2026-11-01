@@ -154,14 +154,15 @@ application's global `BigNumber.config` does not change them.
 
 `PoolBundle` builders and the synchronous `WETHGatewayService` builders take raw base-unit amounts
 as plain unsigned decimal digit strings. They throw
-`TypeError('amount must be an unsigned decimal integer string')` for empty, whitespace-only, padded,
-`+`, `0x`, `0b`, `0o`, negative, fractional and exponent strings;
+`TypeError('amount must be an unsigned decimal integer string')` for empty, whitespace-only,
+whitespace-padded, `+`, `0x`, `0b`, `0o`, negative, fractional and exponent strings;
 `RangeError('amount must be positive')` for zero; and `RangeError('amount is out of range')` above
-MaxUint256. `'-1'` still selects the maximum for `repayTxBuilder.generateTxData` on ERC20 reserves,
-`repayTxBuilder.generateSignedTxData` and `repayWithATokensTxBuilder.generateTxData`. For native
-actions the parsed amount lands in different places. Deposit sends it as `value` (the `depositETH`
-calldata carries no amount). Borrow encodes it in the calldata and sets no `value`. Repay encodes it
-in the calldata and also sends it as `value`.
+MaxUint256. Leading zeros are accepted: `'007'` is 7 and `'000'` is zero. `'-1'` still selects the
+maximum for `repayTxBuilder.generateTxData` on ERC20 reserves, `repayTxBuilder.generateSignedTxData`
+and `repayWithATokensTxBuilder.generateTxData`. For native actions the parsed amount lands in
+different places. Deposit sends it as `value` (the `depositETH` calldata carries no amount). Borrow
+encodes it in the calldata and sets no `value`. Repay encodes it in the calldata and also sends it
+as `value`.
 
 The current Monad `UI_INCENTIVE_DATA_PROVIDER.getReservesIncentivesData` aggregate reverts because
 the DUST rewards controller does not implement the `getRewardOracle` call expected by that generic
@@ -662,15 +663,16 @@ otherwise; chunk larger sets:
   IDs.
 - `getBatchClaimRewardsTxData` takes 1 to 64 token IDs and 1 to 32 reward tokens, in any order.
 
-Per-token amounts use each reward token's ERC20 `decimals()`, read once per helper and token.
-`totalRevenueUSD` and `pendingRewardsUSD` count only USD reward tokens, at $1 per whole token, and
-never add raw units of different tokens. Pass them as `usdRewardTokens`, which is the recommended
-setup. Pass `[]` to count none. When it is omitted, only the first registered reward token counts
-(USDC on Monad), but only if the reward-token list is complete. If the `getRewardTokens()` read
-failed and the index-enumeration fallback skipped an index (a failed `rewardTokens(i)` read), a skip
-may have shifted the list, so no default USD token is selected: nothing counts toward USD totals,
-`pendingRewardsUSD` is '0.00', and the enumerated tokens are listed in `unpricedRewardTokens`. An
-explicit `usdRewardTokens` always wins over this rule.
+Per-token amounts use each reward token's ERC20 `decimals()`. A successful read is cached per helper
+and token; a failed read is not cached, so the next call retries it. `totalRevenueUSD` and
+`pendingRewardsUSD` count only USD reward tokens, at $1 per whole token, and never add raw units of
+different tokens. Pass them as `usdRewardTokens`, which is the recommended setup. Pass `[]` to count
+none. When it is omitted, only the first registered reward token counts (USDC on Monad), but only if
+the reward-token list is complete. If the `getRewardTokens()` read failed and the index-enumeration
+fallback skipped an index (a failed `rewardTokens(i)` read), a skip may have shifted the list, so no
+default USD token is selected: nothing counts toward USD totals, `pendingRewardsUSD` is '0.00', and
+the enumerated tokens are listed in `unpricedRewardTokens`. An explicit `usdRewardTokens` always
+wins over this rule.
 
 Fields, as `types.ts` defines them:
 

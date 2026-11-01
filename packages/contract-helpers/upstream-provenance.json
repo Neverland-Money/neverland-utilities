@@ -2062,7 +2062,7 @@
     "Delegate DUST market APR to math-utils using canonical native bigint reads, one batch clock and explicit unresolved-result omissions.",
     "Return plain mutable UI DTOs, retain exact raw enumeration cursors, add opt-in complete ownership checks, and decode canonical historical/current emission layouts without inventing resolution flags.",
     "Omit fixed upstream gas limits from synchronous builders because Monad bills the full gas limit; rebuild lending-core 1.1 E-mode categories from embedded reserve fields; reject zero-address and native-sentinel misuse, accept referral code 0 and revocable exact delegations, require boolean collateral flags and map InterestRate.None to variable debt.",
-    "Security hardening: reject zero and native-sentinel gateways and beneficiaries in every spelling, with a validating adapter contract accessor and canonical getWETHAddress; reject inexact or non-base-10 decimal amounts with a linear-time parser, malformed raw amounts, and unsupported native borrow beneficiaries; zero DUST incentive APR at or after distributionEnd; and count revenue only in declared USD reward tokens with per-token decimals, naming excluded tokens in unpricedRewardTokens and selecting no default USD token after a skipped fallback enumeration index."
+    "Security hardening: reject zero and native-sentinel gateways and beneficiaries in every spelling, with a validating adapter contract accessor, canonical getWETHAddress and checksummed gateway targets in every populated request; reject inexact or non-base-10 decimal amounts with a linear-time parser, malformed raw amounts, and unsupported native borrow beneficiaries; zero DUST incentive APR at or after distributionEnd; and count revenue only in declared or default USD reward tokens with per-token decimals, naming excluded tokens in unpricedRewardTokens and selecting no default USD token after a skipped fallback enumeration index."
   ],
   "transformedFiles": [
     {
@@ -2221,8 +2221,8 @@
     {
       "path": "v3-wethgateway-contract/index.ts",
       "originalSha256": "438ac66fd6111dcb3a7698f52a604d1512aecdc11fabb343080ff812100d6cde",
-      "vendoredSha256": "5df02c6c346b9b4e70f6b59a0f93e702f268ec254f77cbcb3d722e21304e9f6e",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Omit fixed upstream gas limits from the synchronous gateway builders. Validate the gateway destination in direct native transaction builders. Use the canonical nonzero gateway check, reject zero and native-sentinel beneficiaries, and parse amounts as positive plain-decimal uint256 values used for both calldata and msg.value."
+      "vendoredSha256": "8489ce084f040e6ca909733bda08dbd509e12000f031a6e0a7ab6ead11dfc637",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Omit fixed upstream gas limits from the synchronous gateway builders. Validate the gateway destination in direct native transaction builders. Use the canonical nonzero gateway check and its checksummed address as every populated transaction and allowance target, reject zero and native-sentinel beneficiaries, and parse amounts as positive plain-decimal uint256 values used for both calldata and msg.value."
     },
     {
       "path": "v3-wethgateway-contract/wethGateway.test.ts",
@@ -2497,8 +2497,8 @@
     },
     {
       "path": "pool-contract/native-guards.test.ts",
-      "reason": "New Neverland test file covering native gateway destinations in every zero and malformed spelling, ENS-free construction, beneficiary rejection, reserve-sentinel acceptance and case-insensitive native borrow beneficiaries. Cover native-sentinel gateways, the contract accessor and getWETHAddress.",
-      "sha256": "05d5ca3c534e4f3d202d4f7918ed877436d7ed13327cc38de1a735467683c770"
+      "reason": "New Neverland test file covering native gateway destinations in every zero and malformed spelling, ENS-free construction, beneficiary rejection, reserve-sentinel acceptance and case-insensitive native borrow beneficiaries. Cover native-sentinel gateways, the contract accessor and getWETHAddress, and checksummed service transaction and allowance targets for every accepted gateway spelling.",
+      "sha256": "2e02ea2f7e7fe026ee6c4b0a23cd21362a257b406e393e1c3f4a95ba18911359"
     },
     {
       "path": "pool-contract/amount-parsing.test.ts",
