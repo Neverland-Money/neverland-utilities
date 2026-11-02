@@ -1,0 +1,1233 @@
+{
+  "schemaVersion": 1,
+  "reference": {
+    "repository": "https://github.com/Neverland-Money/neverland-lending",
+    "package": "@neverland-money/lending-core",
+    "version": "1.1.0",
+    "commit": "a26582fcc24df718a57efd505d51d8cdeeed388d",
+    "sourceFiles": [
+      {
+        "path": "contracts/protocol/libraries/math/MathUtils.sol",
+        "sha256": "7f73c927e9801debfe0666e2a6364b92f62fd2d58d0c4b485ff04765fd4dc58d",
+        "sourceLines": [
+          "23-34",
+          "50-85"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/math/WadRayMath.sol",
+        "sha256": "d3dcae32d34a163087cfe6373f0fc97806a61a81941672c90d1dfceaf127b09e",
+        "sourceLines": [
+          "47-55",
+          "65-131"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/math/PercentageMath.sol",
+        "sha256": "38a5cc26b8067ac37156e69ddfccbdc1e597d990e9f76893ca3caaf55b053258",
+        "sourceLines": [
+          "66-76",
+          "122-134"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/helpers/TokenMath.sol",
+        "sha256": "7124571849db86872cd24956d2e9c7595918c098ba4dc938bbc0803e17248436",
+        "sourceLines": [
+          "14-60"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/logic/ReserveLogic.sol",
+        "sha256": "233a8f9fcf3b588e7faf933f7c3e856bdf17a664c2e63988b1f666e266529bd8",
+        "sourceLines": [
+          "46-84"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/logic/GenericLogic.sol",
+        "sha256": "1819e49cbab936ca09f6544cad5d01acca2044ff146beacd42b77a914ae4a27a",
+        "sourceLines": [
+          "86-175",
+          "195-207",
+          "221-270"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/logic/EModeLogic.sol",
+        "sha256": "451f1a6392b2c4c1e87f05423e6a58c73d29ae18e091a085ebd21552eb5ea3e7",
+        "sourceLines": [
+          "74-98"
+        ]
+      },
+      {
+        "path": "contracts/protocol/libraries/logic/PoolLogic.sol",
+        "sha256": "592dd04d3649d8c49b2069042fd55443cfe3cf03844e2b197507c47ee730756a",
+        "sourceLines": [
+          "199-212"
+        ]
+      }
+    ]
+  },
+  "markets": [
+    {
+      "name": "main",
+      "currentTimestamp": 1792915611,
+      "categories": [
+        {
+          "id": 2,
+          "ltv": "9300",
+          "liquidationThreshold": "9400"
+        }
+      ],
+      "reserves": [
+        {
+          "asset": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+          "id": "0",
+          "decimals": 6,
+          "liquidityIndex": "1028305472141796797485279013",
+          "currentLiquidityRate": "32348928426112362188830913",
+          "variableBorrowIndex": "1073215275182865422812826062",
+          "currentVariableBorrowRate": "55505408081523150319962361",
+          "lastUpdateTimestamp": "1792915573",
+          "ltv": "8500",
+          "liquidationThreshold": "9000",
+          "eModeCategory": 2,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "753997836561153610032594554756584381452590250467636",
+          "price": "99980920",
+          "expectedNormalizedIncome": "1028305512224687604905282779",
+          "expectedNormalizedVariableDebt": "1073215346962153931939891909",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
+          "id": "1",
+          "decimals": 18,
+          "liquidityIndex": "1065239112501922939500617712",
+          "currentLiquidityRate": "40474617945020660805549128",
+          "variableBorrowIndex": "1136927524820008323890960617",
+          "currentVariableBorrowRate": "89979852612512426695016503",
+          "lastUpdateTimestamp": "1792914099",
+          "ltv": "7000",
+          "liquidationThreshold": "7500",
+          "eModeCategory": 1,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "379853439004397394742088926800577938766337116216152",
+          "price": "2125856",
+          "expectedNormalizedIncome": "1065241179666461913866982547",
+          "expectedNormalizedVariableDebt": "1136932429652484039697947225",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+          "id": "2",
+          "decimals": 6,
+          "liquidityIndex": "1025653677679874178994979062",
+          "currentLiquidityRate": "36654146074549887824909263",
+          "variableBorrowIndex": "1070329650283122698725705803",
+          "currentVariableBorrowRate": "59083593786422952622761521",
+          "lastUpdateTimestamp": "1792914795",
+          "ltv": "8500",
+          "liquidationThreshold": "9000",
+          "eModeCategory": 2,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "753997831161164877085651660637412392343379114467636",
+          "price": "99870730",
+          "expectedNormalizedIncome": "1025654650443672201546078947",
+          "expectedNormalizedVariableDebt": "1070331286603517589443191178",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0x0555E30da8f98308EdB960aa94C0Db47230d2B9c",
+          "id": "3",
+          "decimals": 8,
+          "liquidityIndex": "1010062325680045213557767734",
+          "currentLiquidityRate": "2275635847957428500906373",
+          "variableBorrowIndex": "1049838621711587400587527847",
+          "currentVariableBorrowRate": "45550898762094952102404072",
+          "lastUpdateTimestamp": "1792897808",
+          "ltv": "7000",
+          "liquidationThreshold": "7500",
+          "eModeCategory": 0,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "5708990770827993361720002055289601635923478190936",
+          "price": "8054264858463",
+          "expectedNormalizedIncome": "1010063623270147335289435210",
+          "expectedNormalizedVariableDebt": "1049865618472762185731434337",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0xEE8c0E9f1BFFb4Eb878d8f15f368A02a35481242",
+          "id": "4",
+          "decimals": 18,
+          "liquidityIndex": "1009881351610466255436545319",
+          "currentLiquidityRate": "2342968919047440862310118",
+          "variableBorrowIndex": "1048880133246323035332789761",
+          "currentVariableBorrowRate": "45696884634020523535659247",
+          "lastUpdateTimestamp": "1792900830",
+          "ltv": "7000",
+          "liquidationThreshold": "7500",
+          "eModeCategory": 0,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "5708990771073069773444629084940175455445125438296",
+          "price": "234314144607",
+          "expectedNormalizedIncome": "1009882460616962505059885644",
+          "expectedNormalizedVariableDebt": "1048902598654484339135729267",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0xA3227C5969757783154C60bF0bC1944180ed81B9",
+          "id": "5",
+          "decimals": 18,
+          "liquidityIndex": "1000000000000000000000000000",
+          "currentLiquidityRate": "0",
+          "variableBorrowIndex": "1000000000000000000000000000",
+          "currentVariableBorrowRate": "40000000000000000000000000",
+          "lastUpdateTimestamp": "1792860161",
+          "ltv": "5500",
+          "liquidationThreshold": "6000",
+          "eModeCategory": 1,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "379853413250604976046666143404927105192431906198908",
+          "price": "2383022",
+          "expectedNormalizedIncome": "1000000000000000000000000000",
+          "expectedNormalizedVariableDebt": "1000070334791949733919567665",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0x1B68626dCa36c7fE922fD2d55E4f631d962dE19c",
+          "id": "6",
+          "decimals": 18,
+          "liquidityIndex": "1000000000000000000000000000",
+          "currentLiquidityRate": "0",
+          "variableBorrowIndex": "1000000000000000000000000000",
+          "currentVariableBorrowRate": "40000000000000000000000000",
+          "lastUpdateTimestamp": "1792911152",
+          "ltv": "6500",
+          "liquidationThreshold": "7000",
+          "eModeCategory": 1,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "379853415742907468143383405099565343218078051735908",
+          "price": "3490398",
+          "expectedNormalizedIncome": "1000000000000000000000000000",
+          "expectedNormalizedVariableDebt": "1000005655774488469018225899",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
+          "id": "7",
+          "decimals": 6,
+          "liquidityIndex": "1035285168667751459102601169",
+          "currentLiquidityRate": "45753804550855765275095786",
+          "variableBorrowIndex": "1079018039859225986694249011",
+          "currentVariableBorrowRate": "72376267682358038676077032",
+          "lastUpdateTimestamp": "1792915573",
+          "ltv": "8500",
+          "liquidationThreshold": "9000",
+          "eModeCategory": 2,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "753997834068851117903236295932351155709877418467636",
+          "price": "99975913",
+          "expectedNormalizedIncome": "1035285225745153156899205662",
+          "expectedNormalizedVariableDebt": "1079018133961885439499931105",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0x8498312A6B3CbD158bf0c93AbdCF29E6e4F55081",
+          "id": "8",
+          "decimals": 18,
+          "liquidityIndex": "1000000000000000000000000000",
+          "currentLiquidityRate": "0",
+          "variableBorrowIndex": "1000000000000000000000000000",
+          "currentVariableBorrowRate": "40000000000000000000000000",
+          "lastUpdateTimestamp": "1792798987",
+          "ltv": "5500",
+          "liquidationThreshold": "6000",
+          "eModeCategory": 1,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "379853411173686232632735091992728573504393506198908",
+          "price": "2356238",
+          "expectedNormalizedIncome": "1000000000000000000000000000",
+          "expectedNormalizedVariableDebt": "1000147935852537172894054357",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0x103222f020e98Bba0AD9809A011FDF8e6F067496",
+          "id": "9",
+          "decimals": 6,
+          "liquidityIndex": "1000733124115984994089024885",
+          "currentLiquidityRate": "0",
+          "variableBorrowIndex": "1021132368504956186893315687",
+          "currentVariableBorrowRate": "0",
+          "lastUpdateTimestamp": "1792861743",
+          "ltv": "8500",
+          "liquidationThreshold": "9000",
+          "eModeCategory": 0,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "5708991269284337943576596272075157535367356752180",
+          "price": "104886729",
+          "expectedNormalizedIncome": "1000733124115984994089024885",
+          "expectedNormalizedVariableDebt": "1021132368504956186893315687",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0x9c82eB49B51F7Dc61e22Ff347931CA32aDc6cd90",
+          "id": "10",
+          "decimals": 18,
+          "liquidityIndex": "1000000000000000000000000000",
+          "currentLiquidityRate": "0",
+          "variableBorrowIndex": "1000000000000000000000000000",
+          "currentVariableBorrowRate": "0",
+          "lastUpdateTimestamp": "1791047009",
+          "ltv": "1",
+          "liquidationThreshold": "1",
+          "eModeCategory": 0,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "57089907708238478319081175390562315446665449897985",
+          "price": "81457600",
+          "expectedNormalizedIncome": "1000000000000000000000000000",
+          "expectedNormalizedVariableDebt": "1000000000000000000000000000",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0xd18B7EC58Cdf4876f6AFebd3Ed1730e4Ce10414b",
+          "id": "11",
+          "decimals": 8,
+          "liquidityIndex": "1003303574447009723030428438",
+          "currentLiquidityRate": "3316672013231140142998925",
+          "variableBorrowIndex": "1015705995918161263253224990",
+          "currentVariableBorrowRate": "47722177269854504758968747",
+          "lastUpdateTimestamp": "1792901906",
+          "ltv": "7000",
+          "liquidationThreshold": "7500",
+          "eModeCategory": 0,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "11417981541649340583461031081938593323778818448216",
+          "price": "8051420392399",
+          "expectedNormalizedIncome": "1003305020576952791017700344",
+          "expectedNormalizedVariableDebt": "1015727061099491531813055797",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0x01bFF41798a0BcF287b996046Ca68b395DbC1071",
+          "id": "12",
+          "decimals": 6,
+          "liquidityIndex": "1002206502371183515879370347",
+          "currentLiquidityRate": "3932174068274509741526456",
+          "variableBorrowIndex": "1010129972598035585191721251",
+          "currentVariableBorrowRate": "48929366218572388360730953",
+          "lastUpdateTimestamp": "1792899988",
+          "ltv": "4000",
+          "liquidationThreshold": "5500",
+          "eModeCategory": 0,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "11417981541650171350958396654349934272499521687456",
+          "price": "399581000000",
+          "expectedNormalizedIncome": "1002208454676679034069262141",
+          "expectedNormalizedVariableDebt": "1010154458152178105287833440",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0x06aB4F89B4abAeE213a8Cf64188DEa47e4AB11EB",
+          "id": "13",
+          "decimals": 18,
+          "liquidityIndex": "1001792146785661106637771289",
+          "currentLiquidityRate": "31003994460304928676514268",
+          "variableBorrowIndex": "1004953723489825909367349258",
+          "currentVariableBorrowRate": "82007163081108736508488923",
+          "lastUpdateTimestamp": "1792861712",
+          "ltv": "6500",
+          "liquidationThreshold": "7000",
+          "eModeCategory": 1,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "379853419397121382065432119293717688780902609983844",
+          "price": "2125856",
+          "expectedNormalizedIncome": "1001845231486503577405772595",
+          "expectedNormalizedVariableDebt": "1005094588259018891886559562",
+          "expectedStableDebtTotalSupply": "0"
+        }
+      ],
+      "accounts": [
+        {
+          "account": "0x8d5c2df3eef09088fcccf3376d8ecd0dd505f642",
+          "configuration": "2",
+          "eModeCategoryId": "0",
+          "expectedAccountData": {
+            "totalCollateralBase": "13788975624972",
+            "totalDebtBase": "0",
+            "availableBorrowsBase": "11720629281226",
+            "currentLiquidationThreshold": "9000",
+            "ltv": "8500",
+            "healthFactor": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+          },
+          "reserves": [
+            {
+              "asset": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+              "scaledATokenBalance": "134119742622",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "137916070636",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x0555E30da8f98308EdB960aa94C0Db47230d2B9c",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xEE8c0E9f1BFFb4Eb878d8f15f368A02a35481242",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xA3227C5969757783154C60bF0bC1944180ed81B9",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x1B68626dCa36c7fE922fD2d55E4f631d962dE19c",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x8498312A6B3CbD158bf0c93AbdCF29E6e4F55081",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x103222f020e98Bba0AD9809A011FDF8e6F067496",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x9c82eB49B51F7Dc61e22Ff347931CA32aDc6cd90",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xd18B7EC58Cdf4876f6AFebd3Ed1730e4Ce10414b",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x01bFF41798a0BcF287b996046Ca68b395DbC1071",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x06aB4F89B4abAeE213a8Cf64188DEa47e4AB11EB",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            }
+          ]
+        },
+        {
+          "account": "0x078cd0a04ba02b7f31a02641aa10c6143f526942",
+          "configuration": "41992859",
+          "eModeCategoryId": "2",
+          "expectedAccountData": {
+            "totalCollateralBase": "26934211545",
+            "totalDebtBase": "16400643760",
+            "availableBorrowsBase": "3210155665",
+            "currentLiquidationThreshold": "7748",
+            "ltv": "7281",
+            "healthFactor": "1272496312534380662"
+          },
+          "reserves": [
+            {
+              "asset": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+              "scaledATokenBalance": "11353580",
+              "scaledVariableDebt": "152846964",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "11674948",
+              "expectedVTokenBalance": "164037708"
+            },
+            {
+              "asset": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
+              "scaledATokenBalance": "1036714505264612230443",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "1104350982565407972647",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "12",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "13"
+            },
+            {
+              "asset": "0x0555E30da8f98308EdB960aa94C0Db47230d2B9c",
+              "scaledATokenBalance": "165750",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "167418",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xEE8c0E9f1BFFb4Eb878d8f15f368A02a35481242",
+              "scaledATokenBalance": "18842020307401114",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "19028225831033013",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xA3227C5969757783154C60bF0bC1944180ed81B9",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x1B68626dCa36c7fE922fD2d55E4f631d962dE19c",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
+              "scaledATokenBalance": "32064296",
+              "scaledVariableDebt": "13",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "33195691",
+              "expectedVTokenBalance": "15"
+            },
+            {
+              "asset": "0x8498312A6B3CbD158bf0c93AbdCF29E6e4F55081",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x103222f020e98Bba0AD9809A011FDF8e6F067496",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x9c82eB49B51F7Dc61e22Ff347931CA32aDc6cd90",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xd18B7EC58Cdf4876f6AFebd3Ed1730e4Ce10414b",
+              "scaledATokenBalance": "15368",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "15418",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x01bFF41798a0BcF287b996046Ca68b395DbC1071",
+              "scaledATokenBalance": "2288",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "2293",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x06aB4F89B4abAeE213a8Cf64188DEa47e4AB11EB",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            }
+          ]
+        },
+        {
+          "account": "0xedf1cd3bea06f4a658dfec4a76be74095c511f0a",
+          "configuration": "2059",
+          "eModeCategoryId": "2",
+          "expectedAccountData": {
+            "totalCollateralBase": "702251195221",
+            "totalDebtBase": "640276017623",
+            "availableBorrowsBase": "10429939868",
+            "currentLiquidationThreshold": "9371",
+            "ltv": "9266",
+            "healthFactor": "1027914213467641792"
+          },
+          "reserves": [
+            {
+              "asset": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+              "scaledATokenBalance": "6729799581",
+              "scaledVariableDebt": "5967098843",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "6920290005",
+              "expectedVTokenBalance": "6403982056"
+            },
+            {
+              "asset": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
+              "scaledATokenBalance": "4572315335081748501954",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "4870618581349535864624",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x0555E30da8f98308EdB960aa94C0Db47230d2B9c",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xEE8c0E9f1BFFb4Eb878d8f15f368A02a35481242",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xA3227C5969757783154C60bF0bC1944180ed81B9",
+              "scaledATokenBalance": "50858222905932",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "50858222905932",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x1B68626dCa36c7fE922fD2d55E4f631d962dE19c",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x8498312A6B3CbD158bf0c93AbdCF29E6e4F55081",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x103222f020e98Bba0AD9809A011FDF8e6F067496",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x9c82eB49B51F7Dc61e22Ff347931CA32aDc6cd90",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xd18B7EC58Cdf4876f6AFebd3Ed1730e4Ce10414b",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x01bFF41798a0BcF287b996046Ca68b395DbC1071",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x06aB4F89B4abAeE213a8Cf64188DEa47e4AB11EB",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            }
+          ]
+        },
+        {
+          "account": "0x7e0371ec1177d3cf177a1a9a87dbc1e1864cd828",
+          "configuration": "32785",
+          "eModeCategoryId": "2",
+          "expectedAccountData": {
+            "totalCollateralBase": "160811029619156",
+            "totalDebtBase": "149453889109931",
+            "availableBorrowsBase": "100368435884",
+            "currentLiquidationThreshold": "9400",
+            "ltv": "9300",
+            "healthFactor": "1011431477241913499"
+          },
+          "reserves": [
+            {
+              "asset": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "509932092183",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "547266947240"
+            },
+            {
+              "asset": "0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "886270104288",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "948602621001"
+            },
+            {
+              "asset": "0x0555E30da8f98308EdB960aa94C0Db47230d2B9c",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xEE8c0E9f1BFFb4Eb878d8f15f368A02a35481242",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xA3227C5969757783154C60bF0bC1944180ed81B9",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x1B68626dCa36c7fE922fD2d55E4f631d962dE19c",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
+              "scaledATokenBalance": "1553675929147",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "1608497735041",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x8498312A6B3CbD158bf0c93AbdCF29E6e4F55081",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x103222f020e98Bba0AD9809A011FDF8e6F067496",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x9c82eB49B51F7Dc61e22Ff347931CA32aDc6cd90",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0xd18B7EC58Cdf4876f6AFebd3Ed1730e4Ce10414b",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x01bFF41798a0BcF287b996046Ca68b395DbC1071",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x06aB4F89B4abAeE213a8Cf64188DEa47e4AB11EB",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pendleAusd",
+      "currentTimestamp": 1792915611,
+      "categories": [],
+      "reserves": [
+        {
+          "asset": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
+          "id": "0",
+          "decimals": 6,
+          "liquidityIndex": "1015352169486074530287556103",
+          "currentLiquidityRate": "47883708645056308787102440",
+          "variableBorrowIndex": "1027558299296554268839204746",
+          "currentVariableBorrowRate": "71608482960131706621251668",
+          "lastUpdateTimestamp": "1792912874",
+          "ltv": "0",
+          "liquidationThreshold": "0",
+          "eModeCategory": 0,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "5708991601591336900685896874558873363087490023424",
+          "price": "99975913",
+          "expectedNormalizedIncome": "1015356389099555837887081574",
+          "expectedNormalizedVariableDebt": "1027564685466682511391131518",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0x9FC74f8Ed616B5BaF52a170caa97d6d3898602d1",
+          "id": "1",
+          "decimals": 6,
+          "liquidityIndex": "1000000000000000000000000000",
+          "currentLiquidityRate": "0",
+          "variableBorrowIndex": "1000000000000000000000000000",
+          "currentVariableBorrowRate": "20000000000000000000000000",
+          "lastUpdateTimestamp": "1792496659",
+          "ltv": "1",
+          "liquidationThreshold": "9350",
+          "eModeCategory": 0,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "5708991601591336889805564442677611126402348089345",
+          "price": "99975913",
+          "expectedNormalizedIncome": "1000000000000000000000000000",
+          "expectedNormalizedVariableDebt": "1000265732912950806172029482",
+          "expectedStableDebtTotalSupply": "0"
+        },
+        {
+          "asset": "0x8B562578b2f9Aa8C14cCda3c5d6CBCEaD3B06a57",
+          "id": "2",
+          "decimals": 6,
+          "liquidityIndex": "1000000000000000000000000000",
+          "currentLiquidityRate": "0",
+          "variableBorrowIndex": "1000000000000000000000000000",
+          "currentVariableBorrowRate": "20000000000000000000000000",
+          "lastUpdateTimestamp": "1792803517",
+          "ltv": "9500",
+          "liquidationThreshold": "9600",
+          "eModeCategory": 0,
+          "isolationModeTotalDebt": "0",
+          "unbacked": "0",
+          "configuration": "830767497365572420564879486465253805401372",
+          "price": "98821957",
+          "expectedNormalizedIncome": "1000000000000000000000000000",
+          "expectedNormalizedVariableDebt": "1000071092075291969011798961",
+          "expectedStableDebtTotalSupply": "0"
+        }
+      ],
+      "accounts": [
+        {
+          "account": "0xc853e78877c758cc43ad152726cb593f03d23030",
+          "configuration": "33",
+          "eModeCategoryId": "0",
+          "expectedAccountData": {
+            "totalCollateralBase": "13217546122520",
+            "totalDebtBase": "12553940186493",
+            "availableBorrowsBase": "2728629901",
+            "currentLiquidationThreshold": "9600",
+            "ltv": "9500",
+            "healthFactor": "1010745956179665857"
+          },
+          "reserves": [
+            {
+              "asset": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "122201209911",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "125569647826"
+            },
+            {
+              "asset": "0x9FC74f8Ed616B5BaF52a170caa97d6d3898602d1",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x8B562578b2f9Aa8C14cCda3c5d6CBCEaD3B06a57",
+              "scaledATokenBalance": "133751106776",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "133751106776",
+              "expectedVTokenBalance": "0"
+            }
+          ]
+        },
+        {
+          "account": "0xa883f0e08615ce4783c4a47779125c8a433de8a8",
+          "configuration": "33",
+          "eModeCategoryId": "0",
+          "expectedAccountData": {
+            "totalCollateralBase": "405450223575",
+            "totalDebtBase": "188658376109",
+            "availableBorrowsBase": "196519336287",
+            "currentLiquidationThreshold": "9600",
+            "ltv": "9500",
+            "healthFactor": "2063158936590844373"
+          },
+          "reserves": [
+            {
+              "asset": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
+              "scaledATokenBalance": "12575709463",
+              "scaledVariableDebt": "1836418007",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "12768826950",
+              "expectedVTokenBalance": "1887038292"
+            },
+            {
+              "asset": "0x9FC74f8Ed616B5BaF52a170caa97d6d3898602d1",
+              "scaledATokenBalance": "0",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "0",
+              "expectedVTokenBalance": "0"
+            },
+            {
+              "asset": "0x8B562578b2f9Aa8C14cCda3c5d6CBCEaD3B06a57",
+              "scaledATokenBalance": "4102835401",
+              "scaledVariableDebt": "0",
+              "currentStableDebt": "0",
+              "expectedNTokenBalance": "4102835401",
+              "expectedVTokenBalance": "0"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "withdrawals": [
+    {
+      "id": "supplier-usdc-full",
+      "market": "main",
+      "account": "0x8d5c2df3eef09088fcccf3376d8ecd0dd505f642",
+      "asset": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+      "withdrawalAmount": "137916070636",
+      "observedInputOverrides": {
+        "scaledATokenBalance": "0",
+        "nTokenBalance": "0",
+        "currentTimestamp": 1792915611
+      },
+      "derivedInputOverrides": {
+        "userConfiguration": "0",
+        "collateralEnabled": false
+      },
+      "pretransaction": {
+        "scaledATokenBalance": "134119742622",
+        "nTokenBalance": "137916070636",
+        "userConfiguration": "2"
+      },
+      "normalizedIncome": "1028305512224687604905282779",
+      "expectedAccountData": {
+        "totalCollateralBase": "0",
+        "totalDebtBase": "0",
+        "availableBorrowsBase": "0",
+        "currentLiquidationThreshold": "0",
+        "ltv": "0",
+        "healthFactor": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+      },
+      "nominalBalanceSubtraction": "0",
+      "extraReductionBeyondNominal": "0"
+    },
+    {
+      "id": "mixed-emode-usdc-below",
+      "market": "main",
+      "account": "0xedf1cd3bea06f4a658dfec4a76be74095c511f0a",
+      "asset": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+      "withdrawalAmount": "190172468",
+      "observedInputOverrides": {
+        "scaledATokenBalance": "6544861869",
+        "nTokenBalance": "6730117536",
+        "currentTimestamp": 1792915611
+      },
+      "derivedInputOverrides": {
+        "userConfiguration": "2059",
+        "collateralEnabled": true
+      },
+      "pretransaction": {
+        "scaledATokenBalance": "6729799581",
+        "nTokenBalance": "6920290005",
+        "userConfiguration": "2059"
+      },
+      "normalizedIncome": "1028305512224687604905282779",
+      "expectedAccountData": {
+        "totalCollateralBase": "683237576812",
+        "totalDebtBase": "640276017623",
+        "availableBorrowsBase": "0",
+        "currentLiquidationThreshold": "9371",
+        "ltv": "9265",
+        "healthFactor": "1000000000202537650"
+      },
+      "nominalBalanceSubtraction": "6730117537",
+      "extraReductionBeyondNominal": "1"
+    },
+    {
+      "id": "mixed-emode-usdc-boundary",
+      "market": "main",
+      "account": "0xedf1cd3bea06f4a658dfec4a76be74095c511f0a",
+      "asset": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+      "withdrawalAmount": "190172469",
+      "observedInputOverrides": {
+        "scaledATokenBalance": "6544861868",
+        "nTokenBalance": "6730117535",
+        "currentTimestamp": 1792915611
+      },
+      "derivedInputOverrides": {
+        "userConfiguration": "2059",
+        "collateralEnabled": true
+      },
+      "pretransaction": {
+        "scaledATokenBalance": "6729799581",
+        "nTokenBalance": "6920290005",
+        "userConfiguration": "2059"
+      },
+      "normalizedIncome": "1028305512224687604905282779",
+      "expectedAccountData": {
+        "totalCollateralBase": "683237576712",
+        "totalDebtBase": "640276017623",
+        "availableBorrowsBase": "0",
+        "currentLiquidationThreshold": "9371",
+        "ltv": "9265",
+        "healthFactor": "1000000000055725966"
+      },
+      "nominalBalanceSubtraction": "6730117536",
+      "extraReductionBeyondNominal": "1"
+    },
+    {
+      "id": "pendle-pt-below",
+      "market": "pendleAusd",
+      "account": "0xc853e78877c758cc43ad152726cb593f03d23030",
+      "asset": "0x8B562578b2f9Aa8C14cCda3c5d6CBCEaD3B06a57",
+      "withdrawalAmount": "1422002752",
+      "observedInputOverrides": {
+        "scaledATokenBalance": "132329104024",
+        "nTokenBalance": "132329104024",
+        "currentTimestamp": 1792915611
+      },
+      "derivedInputOverrides": {
+        "userConfiguration": "33",
+        "collateralEnabled": true
+      },
+      "pretransaction": {
+        "scaledATokenBalance": "133751106776",
+        "nTokenBalance": "133751106776",
+        "userConfiguration": "33"
+      },
+      "normalizedIncome": "1000000000000000000000000000",
+      "expectedAccountData": {
+        "totalCollateralBase": "13077021027708",
+        "totalDebtBase": "12553940186493",
+        "availableBorrowsBase": "0",
+        "currentLiquidationThreshold": "9600",
+        "ltv": "9500",
+        "healthFactor": "1000000000008497730"
+      },
+      "nominalBalanceSubtraction": "132329104024",
+      "extraReductionBeyondNominal": "0"
+    },
+    {
+      "id": "pendle-pt-boundary",
+      "market": "pendleAusd",
+      "account": "0xc853e78877c758cc43ad152726cb593f03d23030",
+      "asset": "0x8B562578b2f9Aa8C14cCda3c5d6CBCEaD3B06a57",
+      "withdrawalAmount": "1422002753",
+      "observedInputOverrides": {
+        "scaledATokenBalance": "132329104023",
+        "nTokenBalance": "132329104023",
+        "currentTimestamp": 1792915611
+      },
+      "derivedInputOverrides": {
+        "userConfiguration": "33",
+        "collateralEnabled": true
+      },
+      "pretransaction": {
+        "scaledATokenBalance": "133751106776",
+        "nTokenBalance": "133751106776",
+        "userConfiguration": "33"
+      },
+      "normalizedIncome": "1000000000000000000000000000",
+      "expectedAccountData": {
+        "totalCollateralBase": "13077021027609",
+        "totalDebtBase": "12553940186493",
+        "availableBorrowsBase": "0",
+        "currentLiquidationThreshold": "9600",
+        "ltv": "9500",
+        "healthFactor": "1000000000000927198"
+      },
+      "nominalBalanceSubtraction": "132329104023",
+      "extraReductionBeyondNominal": "0"
+    }
+  ],
+  "healthFactorBoundaryCases": [
+    {
+      "id": "mixed-emode-usdc-above",
+      "market": "main",
+      "account": "0xedf1cd3bea06f4a658dfec4a76be74095c511f0a",
+      "asset": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+      "withdrawalAmount": "190172470",
+      "scaledATokenBalance": "6544861867",
+      "expectedNTokenBalance": "6730117534",
+      "userConfiguration": "2059",
+      "expectedAccountData": {
+        "totalCollateralBase": "683237576612",
+        "totalDebtBase": "640276017623",
+        "availableBorrowsBase": "0",
+        "currentLiquidationThreshold": "9371",
+        "ltv": "9265",
+        "healthFactor": "999999999908914283"
+      },
+      "expectationKind": "Independent source-formula hypothetical state; transaction reverted, so this is not a mined posttransaction observation."
+    },
+    {
+      "id": "pendle-pt-above",
+      "market": "pendleAusd",
+      "account": "0xc853e78877c758cc43ad152726cb593f03d23030",
+      "asset": "0x8B562578b2f9Aa8C14cCda3c5d6CBCEaD3B06a57",
+      "withdrawalAmount": "1422002754",
+      "scaledATokenBalance": "132329104022",
+      "expectedNTokenBalance": "132329104022",
+      "userConfiguration": "33",
+      "expectedAccountData": {
+        "totalCollateralBase": "13077021027510",
+        "totalDebtBase": "12553940186493",
+        "availableBorrowsBase": "0",
+        "currentLiquidationThreshold": "9600",
+        "ltv": "9500",
+        "healthFactor": "999999999993356667"
+      },
+      "expectationKind": "Independent source-formula hypothetical state; transaction reverted, so this is not a mined posttransaction observation."
+    }
+  ],
+  "rationale": {
+    "reservesAndAccounts": "Exact fixed inputs and full six-field Pool account tuples; normalized indexes use half-up RAY multiplication, supply balances round down, and variable-debt balances round up. All reserve rows participate, including zero balances.",
+    "withdrawals": "Observed successful state values test ceiling scaled burns, floor residual balances, nominal subtraction rounding, formatted balances, and account health factors.",
+    "healthFactorBoundaryCases": "Explicit hypothetical source-formula states one atom above successful boundaries. The hypothetical health factors are below one; they are not observed mined posttransaction results.",
+    "metadata": "Unobserved reserve-wide liquidity and display metadata use neutral defaults and are not liquidity evidence.",
+    "stableDebt": "All user stable balances and reserve stable debt total supplies in these vectors were zero. Nonzero stable debt and other supported configurations have separate source-formula unit tests."
+  }
+}

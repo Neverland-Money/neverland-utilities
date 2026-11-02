@@ -1,15 +1,29 @@
-import { ethers } from 'ethers';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
+import { ethers } from 'ethers';
 import * as contractTypes from '../index';
-interface AbiItem {
+type AbiItem = {
   type: string;
-}
+};
 const files = readdirSync(__dirname)
   .filter(file => file.endsWith('.json'))
   .sort();
-const readAbi = (file: string): AbiItem[] =>
-  JSON.parse(readFileSync(join(__dirname, file), 'utf8')) as AbiItem[];
+const readAbi = (file: string): AbiItem[] => {
+  const value: unknown = JSON.parse(readFileSync(join(__dirname, file), 'utf8'));
+  if (
+    !Array.isArray(value) ||
+    !value.every(
+      (item: unknown): item is AbiItem =>
+        typeof item === 'object' &&
+        item !== null &&
+        'type' in item &&
+        typeof item.type === 'string',
+    )
+  )
+    throw new Error(`Invalid ABI: ${file}`);
+  return value;
+};
+
 describe('contract-types ABIs', () => {
   it('exposes the complete public contract catalog from the package entrypoint', () => {
     expect(Object.keys(contractTypes).sort()).toEqual(
@@ -25,8 +39,8 @@ describe('contract-types ABIs', () => {
         'dustRewardsControllerAbi',
         'poolAbi',
         'aTokenAbi',
-        'aaveOracleAbi',
-        'aaveProtocolDataProviderAbi',
+        'lendingOracleAbi',
+        'protocolDataProviderAbi',
         'aclManagerAbi',
         'defaultReserveInterestRateStrategyAbi',
         'dustAbi',
@@ -83,7 +97,7 @@ describe('contract-types ABIs', () => {
   });
   it.each(files)('exports %s from the package entry unchanged', file => {
     const name = file.replace(/\.json$/, '');
-    expect((contractTypes as unknown as Record<string, unknown>)[name]).toEqual(readAbi(file));
+    expect(Object.entries(contractTypes).find(([key]) => key === name)?.[1]).toEqual(readAbi(file));
   });
   it.each(files)('parses %s with no duplicate signatures', file => {
     const abi = readAbi(file);

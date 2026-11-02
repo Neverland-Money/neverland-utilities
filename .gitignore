@@ -1,7 +1,5 @@
 .DS_Store
 .env
-.idea/
-.vscode/
 *.tsbuildinfo
 *.log
 npm-debug.log*
@@ -9,5 +7,10 @@ coverage/
 packages/*/dist/
 node_modules
 package-lock.json
-.idea
 .yarn/install-state.gz
+
+# Dot folders, except those tracked
+.*/
+!.github/
+!.husky/
+!.yarn/

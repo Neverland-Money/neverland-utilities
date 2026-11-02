@@ -14,8 +14,8 @@ export type {
 } from 'viem';
 
 export type ATokenAbi = typeof abis.aTokenAbi;
-export type AaveOracleAbi = typeof abis.aaveOracleAbi;
-export type AaveProtocolDataProviderAbi = typeof abis.aaveProtocolDataProviderAbi;
+export type LendingOracleAbi = typeof abis.lendingOracleAbi;
+export type ProtocolDataProviderAbi = typeof abis.protocolDataProviderAbi;
 export type AclManagerAbi = typeof abis.aclManagerAbi;
 export type DefaultReserveInterestRateStrategyAbi =
   typeof abis.defaultReserveInterestRateStrategyAbi;

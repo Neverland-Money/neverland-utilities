@@ -15,7 +15,7 @@ jobs:
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -32,14 +32,33 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
+      # The same gates, in the same order, as the RELEASE.md validation sequence.
       - name: Install
-        run: yarn install --immutable
+        run: HUSKY=0 YARN_ENABLE_SCRIPTS=false yarn install --immutable --mode=skip-build
 
       - name: Build
         run: yarn build
 
+      - name: Check types
+        run: |
+          yarn check-types
+          yarn check-types:fixtures
+          node ./node_modules/typescript/bin/tsc -p tsconfig.test.json --noEmit
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Check formatting
+        run: yarn format:check
+
       - name: Test
         run: yarn test
+
+      - name: Validate workspace, fixtures and provenance
+        run: |
+          yarn test:validation
+          yarn test:sdk-fixtures
+          yarn check:sdk-provenance
 
       - name: Validate npm packages
         run: yarn test:packages

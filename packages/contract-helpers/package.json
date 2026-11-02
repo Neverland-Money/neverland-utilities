@@ -1,26 +1,26 @@
 {
   "name": "@neverland-money/contract-helpers",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Contract helper classes for Neverland protocol",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
+  "types": "dist/cjs/index.d.ts",
   "author": "Neverland Team",
   "license": "MIT",
   "files": [
     "dist",
     "README.md",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "LICENSE"
   ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "clean": "cd ../.. && npx rimraf packages/contract-helpers/dist packages/contract-helpers/*.log*",
+    "clean": "node -e \"const fs = require('node:fs'); for (const name of fs.readdirSync('.')) if (name === 'dist' || name.includes('.log')) fs.rmSync(name, { recursive: true, force: true });\"",
     "lint": "cd ../.. && eslint \"packages/contract-helpers/src/**/*.ts\"",
-    "check-types": "cd ../.. && tsc -p packages/contract-helpers/tsconfig.json --noEmit && tsc -p packages/contract-helpers/tsconfig.json --module commonjs --noEmit",
-    "prebuild": "npm run clean",
-    "build": "cd ../.. && tsc -p packages/contract-helpers/tsconfig.json && tsc -p packages/contract-helpers/tsconfig.json --module commonjs --outDir ./packages/contract-helpers/dist/cjs",
+    "check-types": "cd ../.. && node ./node_modules/typescript/bin/tsc -p packages/contract-helpers/tsconfig.json --noEmit && node ./node_modules/typescript/bin/tsc -p packages/contract-helpers/tsconfig.json --module commonjs --noEmit",
+    "build": "cd ../.. && node scripts/build-sdk-package.mjs contract-helpers",
     "test": "cd ../.. && yarn test packages/contract-helpers",
     "test:watch": "cd ../.. && yarn test --watch packages/contract-helpers",
     "cover": "cd ../.. && yarn cover packages/contract-helpers",
@@ -40,9 +40,161 @@
     "url": "git+https://github.com/Neverland-Money/neverland-utilities.git"
   },
   "dependencies": {
-    "@neverland-money/contract-types": "^2.0.0",
+    "@neverland-money/contract-types": "3.0.0",
+    "@neverland-money/math-utils": "1.0.0",
     "abitype": "^1.3.0",
+    "bignumber.js": "^9.3.1",
     "ethers": "^6.17.0",
+    "reflect-metadata": "^0.1.14",
     "tslib": "^2.8.1"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      },
+      "default": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json",
+    "./dist/esm/*.json": "./dist/esm/*.json",
+    "./dist/esm/*.map": "./dist/esm/*.map",
+    "./dist/esm/*.d.ts": "./dist/esm/*.d.ts",
+    "./dist/esm/claim-rewards-contract": {
+      "types": "./dist/esm/claim-rewards-contract/index.d.ts",
+      "default": "./dist/esm/claim-rewards-contract/index.js"
+    },
+    "./dist/esm/debt-token-contract": {
+      "types": "./dist/esm/debt-token-contract/index.d.ts",
+      "default": "./dist/esm/debt-token-contract/index.js"
+    },
+    "./dist/esm/dust-apr-contract": {
+      "types": "./dist/esm/dust-apr-contract/index.d.ts",
+      "default": "./dist/esm/dust-apr-contract/index.js"
+    },
+    "./dist/esm/dust-incentive-provider-contract": {
+      "types": "./dist/esm/dust-incentive-provider-contract/index.d.ts",
+      "default": "./dist/esm/dust-incentive-provider-contract/index.js"
+    },
+    "./dist/esm/dust-lock-contract": {
+      "types": "./dist/esm/dust-lock-contract/index.d.ts",
+      "default": "./dist/esm/dust-lock-contract/index.js"
+    },
+    "./dist/esm/erc20-contract": {
+      "types": "./dist/esm/erc20-contract/index.d.ts",
+      "default": "./dist/esm/erc20-contract/index.js"
+    },
+    "./dist/esm/erc20-permit-contract": {
+      "types": "./dist/esm/erc20-permit-contract/index.d.ts",
+      "default": "./dist/esm/erc20-permit-contract/index.js"
+    },
+    "./dist/esm/neverland-ui-provider-contract": {
+      "types": "./dist/esm/neverland-ui-provider-contract/index.d.ts",
+      "default": "./dist/esm/neverland-ui-provider-contract/index.js"
+    },
+    "./dist/esm/pool-contract": {
+      "types": "./dist/esm/pool-contract/index.d.ts",
+      "default": "./dist/esm/pool-contract/index.js"
+    },
+    "./dist/esm/ui-pool-data-provider-contract": {
+      "types": "./dist/esm/ui-pool-data-provider-contract/index.d.ts",
+      "default": "./dist/esm/ui-pool-data-provider-contract/index.js"
+    },
+    "./dist/esm/ve-dust-revenue-contract": {
+      "types": "./dist/esm/ve-dust-revenue-contract/index.d.ts",
+      "default": "./dist/esm/ve-dust-revenue-contract/index.js"
+    },
+    "./dist/esm/wallet-balance-provider": {
+      "types": "./dist/esm/wallet-balance-provider/index.d.ts",
+      "default": "./dist/esm/wallet-balance-provider/index.js"
+    },
+    "./dist/esm/weth-gateway-legacy-contract": {
+      "types": "./dist/esm/weth-gateway-legacy-contract/index.d.ts",
+      "default": "./dist/esm/weth-gateway-legacy-contract/index.js"
+    },
+    "./dist/esm/wrapped-native-gateway-contract": {
+      "types": "./dist/esm/wrapped-native-gateway-contract/index.d.ts",
+      "default": "./dist/esm/wrapped-native-gateway-contract/index.js"
+    },
+    "./dist/esm/*.js": {
+      "types": "./dist/esm/*.d.ts",
+      "default": "./dist/esm/*.js"
+    },
+    "./dist/esm/*": {
+      "types": "./dist/esm/*.d.ts",
+      "default": "./dist/esm/*.js"
+    },
+    "./dist/cjs/*.json": "./dist/cjs/*.json",
+    "./dist/cjs/*.map": "./dist/cjs/*.map",
+    "./dist/cjs/*.d.ts": "./dist/cjs/*.d.ts",
+    "./dist/cjs/claim-rewards-contract": {
+      "types": "./dist/cjs/claim-rewards-contract/index.d.ts",
+      "default": "./dist/cjs/claim-rewards-contract/index.js"
+    },
+    "./dist/cjs/debt-token-contract": {
+      "types": "./dist/cjs/debt-token-contract/index.d.ts",
+      "default": "./dist/cjs/debt-token-contract/index.js"
+    },
+    "./dist/cjs/dust-apr-contract": {
+      "types": "./dist/cjs/dust-apr-contract/index.d.ts",
+      "default": "./dist/cjs/dust-apr-contract/index.js"
+    },
+    "./dist/cjs/dust-incentive-provider-contract": {
+      "types": "./dist/cjs/dust-incentive-provider-contract/index.d.ts",
+      "default": "./dist/cjs/dust-incentive-provider-contract/index.js"
+    },
+    "./dist/cjs/dust-lock-contract": {
+      "types": "./dist/cjs/dust-lock-contract/index.d.ts",
+      "default": "./dist/cjs/dust-lock-contract/index.js"
+    },
+    "./dist/cjs/erc20-contract": {
+      "types": "./dist/cjs/erc20-contract/index.d.ts",
+      "default": "./dist/cjs/erc20-contract/index.js"
+    },
+    "./dist/cjs/erc20-permit-contract": {
+      "types": "./dist/cjs/erc20-permit-contract/index.d.ts",
+      "default": "./dist/cjs/erc20-permit-contract/index.js"
+    },
+    "./dist/cjs/neverland-ui-provider-contract": {
+      "types": "./dist/cjs/neverland-ui-provider-contract/index.d.ts",
+      "default": "./dist/cjs/neverland-ui-provider-contract/index.js"
+    },
+    "./dist/cjs/pool-contract": {
+      "types": "./dist/cjs/pool-contract/index.d.ts",
+      "default": "./dist/cjs/pool-contract/index.js"
+    },
+    "./dist/cjs/ui-pool-data-provider-contract": {
+      "types": "./dist/cjs/ui-pool-data-provider-contract/index.d.ts",
+      "default": "./dist/cjs/ui-pool-data-provider-contract/index.js"
+    },
+    "./dist/cjs/ve-dust-revenue-contract": {
+      "types": "./dist/cjs/ve-dust-revenue-contract/index.d.ts",
+      "default": "./dist/cjs/ve-dust-revenue-contract/index.js"
+    },
+    "./dist/cjs/wallet-balance-provider": {
+      "types": "./dist/cjs/wallet-balance-provider/index.d.ts",
+      "default": "./dist/cjs/wallet-balance-provider/index.js"
+    },
+    "./dist/cjs/weth-gateway-legacy-contract": {
+      "types": "./dist/cjs/weth-gateway-legacy-contract/index.d.ts",
+      "default": "./dist/cjs/weth-gateway-legacy-contract/index.js"
+    },
+    "./dist/cjs/wrapped-native-gateway-contract": {
+      "types": "./dist/cjs/wrapped-native-gateway-contract/index.d.ts",
+      "default": "./dist/cjs/wrapped-native-gateway-contract/index.js"
+    },
+    "./dist/cjs/*.js": {
+      "types": "./dist/cjs/*.d.ts",
+      "default": "./dist/cjs/*.js"
+    },
+    "./dist/cjs/*": {
+      "types": "./dist/cjs/*.d.ts",
+      "default": "./dist/cjs/*.js"
+    },
+    "./*": "./*"
   }
 }

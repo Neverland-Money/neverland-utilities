@@ -25,6 +25,7 @@ const hexStrings = (value: unknown, path: string): Array<[string, string]> => {
   if (value && typeof value === 'object') {
     return Object.entries(value).flatMap(([key, child]) => hexStrings(child, `${path}.${key}`));
   }
+
   return [];
 };
 
@@ -50,7 +51,9 @@ describe('address-book exports', () => {
   it.each(Object.entries(addressBook))(
     '%s is a deployment namespace with a CHAIN_ID',
     (_name, deployment) => {
-      expect(deployment).toEqual(expect.objectContaining({ CHAIN_ID: expect.any(Number) }));
+      expect(deployment).toEqual(
+        expect.objectContaining({ CHAIN_ID: expect.any(Number) as unknown }),
+      );
     },
   );
 });

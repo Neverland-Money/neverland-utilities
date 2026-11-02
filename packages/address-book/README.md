@@ -1,7 +1,7 @@
 # Neverland Address Book
 
 <p>
-  <a href="./README.md"><img src="https://img.shields.io/badge/Neverland%20Address%20Book-v1.0.2%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Address Book v1.0.2 - Monad mainnet (143) - MIT"/></a>
+  <a href="https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/address-book/README.md"><img src="https://img.shields.io/badge/Neverland%20Address%20Book-v1.0.3%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Address Book v1.0.3 - Monad mainnet (143) - MIT"/></a>
 </p>
 
 Deployed contract addresses for Neverland on Monad mainnet (chain 143). The values match the Smart
@@ -9,7 +9,7 @@ Contracts page of docs.neverland.money and were checked against the chain.
 
 ## Package
 
-The package is published as:
+Install the package:
 
 ```bash
 npm install @neverland-money/address-book
@@ -19,7 +19,11 @@ The published package includes:
 
 - `dist/esm/`: ES module build, used by bundlers through the `module` field.
 - `dist/cjs/`: CommonJS build, used by `require` through the `main` field.
-- `README.md` and `CHANGELOG.md`.
+- `README.md`, `CHANGELOG.md` and `LICENSE`.
+
+The `dist/esm` build is for bundlers. Its relative imports are extensionless, so native Node ESM
+cannot load its deep paths; a native Node `import` of the package root loads the CommonJS
+entrypoint.
 
 Example import:
 
@@ -68,16 +72,6 @@ its maturity.
 
 Stable debt tokens are legacy: stable borrowing is disabled.
 
-## Development
-
-Use Node `24` via the repository `.nvmrc`. Build and test from the repository root:
-
-```bash
-yarn install
-yarn build
-yarn test packages/address-book
-```
-
 ## Layout
 
 - `src/addresses/`: one file per deployment, currently `NeverlandMonadMainnet.ts`.
@@ -85,14 +79,33 @@ yarn test packages/address-book
 - `src/index.test.ts`: tests for the exports.
 - `dist/`: generated build output, not committed.
 
+## Development
+
+Use Node `24` via the repository `.nvmrc` and Yarn `4.3.1` via Corepack. From the repository root:
+
+```bash
+yarn build
+yarn test packages/address-book
+```
+
+See the
+[contributor guide](https://github.com/Neverland-Money/neverland-utilities/blob/main/CONTRIBUTING.md)
+for installation, source maintenance, and the complete validation workflow.
+
 ## Related Packages
 
-- `@neverland-money/contract-types`: typed ABIs.
-- `@neverland-money/contract-helpers`: helper classes that take these addresses.
+- [`@neverland-money/contract-types`](https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/contract-types/README.md):
+  typed contract ABIs.
+- [`@neverland-money/contract-helpers`](https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/contract-helpers/README.md):
+  ethers 6 helpers for Neverland contracts.
+- [`@neverland-money/math-utils`](https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/math-utils/README.md):
+  reserve, account, interest, and reward calculations.
 
 ## License And Notices
 
-See [LICENSE](../../LICENSE). Released under the MIT License.
+See
+[LICENSE](https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/address-book/LICENSE).
+Released under the MIT License.
 
 <p>
   <a href="https://neverland.money"><img src="https://img.shields.io/badge/Website-neverland.money-480052?style=for-the-badge&logo=safari&logoColor=white" height="22" alt="Website"/></a>

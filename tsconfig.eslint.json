@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.test.json",
+  "compilerOptions": {
+    "paths": {
+      "@neverland-money/address-book": ["./packages/address-book/src"],
+      "@neverland-money/contract-helpers": ["./packages/contract-helpers/src"],
+      "@neverland-money/contract-types": ["./packages/contract-types/src"],
+      "@neverland-money/math-utils": ["./packages/math-utils/src"],
+      "@neverland-money/contract-helpers/dist/__BUILD__/*": ["./packages/contract-helpers/src/*"]
+    }
+  },
+  "include": ["packages/**/*.ts", "scripts/fixtures/**/*.ts"],
+  "exclude": ["node_modules", "packages/*/dist", "packages/*/node_modules"]
+}

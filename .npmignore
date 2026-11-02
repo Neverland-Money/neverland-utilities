@@ -1,6 +1,6 @@
 src/
 tsconfig.json
-.eslintrc.js
+eslint.config.mjs
 .prettierrc
 *.test.ts
 .git/

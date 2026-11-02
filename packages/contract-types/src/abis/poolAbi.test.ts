@@ -1,6 +1,6 @@
+import { poolAbi, type PoolAbi } from '@neverland-money/contract-types';
 import { ethers } from 'ethers';
 import { decodeFunctionData, decodeFunctionResult, encodeFunctionData } from 'viem';
-import { poolAbi, type PoolAbi } from '@neverland-money/contract-types';
 const abi: PoolAbi = poolAbi;
 const asset = '0x1111111111111111111111111111111111111111';
 const user = '0x2222222222222222222222222222222222222222';
@@ -36,12 +36,14 @@ describe('lending Pool ABI', () => {
     });
     const decoded = new ethers.Interface(JSON.stringify(abi)).decodeFunctionData('supply', data);
     expect(decoded.asset).toBe(asset);
+    if (typeof decoded.amount !== 'bigint') throw new Error('Expected an ethers bigint amount');
     expect(decoded.amount.toString()).toBe('1000000');
     expect(decoded.onBehalfOf).toBe(user);
     expect(decoded.referralCode).toBe(7n);
   });
   it('decodes the full reserve tuple including its nested configuration', () => {
     // Encode an independent return fixture to catch missing, reordered, or renamed tuple fields.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- ABI address/hex typing preserves the public string API; ethers retains the existing runtime encoding and address validation.
     const data = ethers.AbiCoder.defaultAbiCoder().encode(
       [
         'tuple(tuple(uint256) configuration,uint128 liquidityIndex,uint128 currentLiquidityRate,' +

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "fileCount": 3,
+  "files": [
+    {
+      "path": "packages/math-utils/src/__fixtures__/math-regression-vectors.json",
+      "sha256": "6093edc9b5672706ef1a0cfebe133605370539cabaf195a09076c9b1a163c2d0",
+      "authority": "Immutable upstream and lending reference identities and expectation rationales are embedded in this complete regression data."
+    },
+    {
+      "path": "packages/math-utils/src/__fixtures__/financial-regression-vectors.json",
+      "sha256": "bd645b693a0de8f493a7e919761ea285d31f50f731bb64e151dc7a94402e0942",
+      "authority": "Immutable upstream and lending reference identities and expectation rationales are embedded in this complete regression data."
+    },
+    {
+      "path": "packages/contract-helpers/src/__fixtures__/transaction-regression-vectors.json",
+      "sha256": "7d8b10b6f8ef8941e821aa65fe7719f23e8b3f0e3930586f30fb5a1dad2bcf77",
+      "authority": "Immutable upstream and lending reference identities and expectation rationales are embedded in this complete regression data."
+    }
+  ]
+}
