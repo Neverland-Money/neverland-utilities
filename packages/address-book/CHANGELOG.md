@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [1.0.3](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/address-book@1.0.2...@neverland-money/address-book@1.0.3) (2026-10-27)
+## [1.0.3](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/address-book@1.0.2...@neverland-money/address-book@1.0.3) (2026-11-02)
 
 ### Bug Fixes
 

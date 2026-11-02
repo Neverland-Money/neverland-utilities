@@ -1,6 +1,6 @@
 # Change Log
 
-## [1.0.0] (2026-10-27)
+## [1.0.0] (2026-11-02)
 
 - Fork Aave `@aave/math-utils` 1.36.1 (MIT, Copyright (c) 2021 Aave). The fork keeps upstream's
   public functions, signatures, decimal-string inputs, `bignumber.js` return shapes and deep paths,
