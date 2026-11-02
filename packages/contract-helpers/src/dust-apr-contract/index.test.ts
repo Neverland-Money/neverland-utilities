@@ -217,6 +217,56 @@ describe('DustAPRCalculator strict DUST APR', () => {
     },
   );
 
+  // The pure kernel rejects the same values with the same message, but only after the contract
+  // reads, and a batch swallows that per-market failure. The up-front check is what rejects first.
+  it.each([
+    ['a negative bigint', -1n],
+    ['a bigint above uint256', 2n ** 256n],
+    ['null', null],
+    ['a numeric string', '0'],
+    ['an object', {}],
+  ])('rejects %s as the clock before any chain read', async (_label, nowSeconds) => {
+    const { provider, calculator, calls } = fixture();
+    const malformed = { ...options };
+    Reflect.set(malformed, 'nowSeconds', nowSeconds);
+    const rejection = calculator.calculateMarketAPR(
+      asset,
+      reward,
+      controller,
+      provider,
+      prices,
+      malformed,
+    );
+    await expect(rejection).rejects.toBeInstanceOf(math.UnresolvedDustAPRInputError);
+    await expect(rejection).rejects.toMatchObject({
+      name: 'UnresolvedDustAPRInputError',
+      reason: 'nowSeconds must be a nonnegative uint256 bigint',
+      message: 'DUST APR input unresolved: nowSeconds must be a nonnegative uint256 bigint',
+    });
+    expect(calls).toEqual([]);
+  });
+
+  it.each([-1n, 2n ** 256n])(
+    'rejects the bigint clock %s for the whole batch instead of omitting every market',
+    async nowSeconds => {
+      const { provider, calculator, calls } = fixture();
+      const rejection = calculator.calculateBatchAPR(
+        [market, { ...market, id: 'second' }],
+        controller,
+        provider,
+        prices,
+        { nowSeconds },
+      );
+      await expect(rejection).rejects.toBeInstanceOf(math.UnresolvedDustAPRInputError);
+      await expect(rejection).rejects.toMatchObject({
+        name: 'UnresolvedDustAPRInputError',
+        reason: 'nowSeconds must be a nonnegative uint256 bigint',
+        message: 'DUST APR input unresolved: nowSeconds must be a nonnegative uint256 bigint',
+      });
+      expect(calls).toEqual([]);
+    },
+  );
+
   it.each(['reward', 'asset'])('rejects all invalid PriceMap values for the %s', async token => {
     const { provider, calculator } = fixture();
     for (const value of [

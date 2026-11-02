@@ -1,6 +1,6 @@
 import { erc20Abi, poolAbi } from '@neverland-money/contract-types';
 import type { Provider } from 'ethers';
-import { Contract, Interface, MaxUint256, Signature, ZeroAddress } from 'ethers';
+import { Contract, Interface, MaxUint256, Signature } from 'ethers';
 import { AbiBaseService } from '../commons/base-service';
 import { estimateGasByNetwork } from '../commons/gas-station';
 import type {
@@ -45,8 +45,8 @@ import type {
   PoolSupplyWithPermitRawParams,
 } from './pool-types';
 import {
-  address,
   assertErc20Reserve,
+  finiteAddress,
   legacyRateMode,
   UINT256_MAX,
   unsignedDecimal,
@@ -83,20 +83,6 @@ export type PoolConfig = {
   POOL: tEthereumAddress;
   WETH_GATEWAY?: tEthereumAddress;
 };
-
-function finiteAddress(value: string, name: string): string {
-  const normalized = address(value, name);
-  if (
-    normalized === ZeroAddress ||
-    normalized.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()
-  ) {
-    throw new TypeError(
-      `${name} must be a nonzero ERC20/pool/user address; native sentinels are unsupported`,
-    );
-  }
-
-  return normalized;
-}
 
 function captureAmount(params: PoolSupplyRawParams) {
   const user = finiteAddress(params.user, 'user');

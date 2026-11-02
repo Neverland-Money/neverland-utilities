@@ -1,5 +1,5 @@
 import { dustRewardsControllerAbi } from '@neverland-money/contract-types';
-import { Interface, JsonRpcProvider, MaxUint256 } from 'ethers';
+import { getAddress, getIcapAddress, Interface, JsonRpcProvider, MaxUint256 } from 'ethers';
 import type { BigNumberish } from 'ethers';
 import { buildClaimAllRewardsToSelfTxData, buildClaimRewardsToSelfTxData } from '../index';
 import { ClaimRewardsHelper } from '.';
@@ -155,6 +155,20 @@ describe('provider-free claim builders', () => {
       }),
     ).toThrow();
   });
+
+  // Hex letters make case and checksum handling observable.
+  const LETTERED_CONTROLLER = getAddress('0xabcdef0123456789abcdef0123456789abcdef01');
+  it.each([
+    ['lowercase', LETTERED_CONTROLLER.toLowerCase()],
+    ['unprefixed', LETTERED_CONTROLLER.slice(2)],
+    ['ICAP', getIcapAddress(LETTERED_CONTROLLER)],
+  ])('targets the checksummed controller given its %s spelling', (_spelling, controller) => {
+    const input = { ...params, rewardsControllerAddress: controller };
+    expect(buildClaimAllRewardsToSelfTxData(input).to).toBe(LETTERED_CONTROLLER);
+    expect(
+      buildClaimRewardsToSelfTxData({ ...input, dustTokenAddress: TOKEN, amount: '1' }).to,
+    ).toBe(LETTERED_CONTROLLER);
+  });
 });
 
 describe('required claim lockTime', () => {
@@ -181,7 +195,8 @@ describe('required claim lockTime', () => {
     for (const build of builders) {
       expect(build).toThrow('lockTime is required');
       expect(build).toThrow('50% instant-claim toll');
-      expect(build).toThrow('at least 28 days');
+      expect(build).toThrow('use at least 35 days');
+      expect(build).toThrow('must land at least 28 days ahead');
       expect(build).toThrow('permanent lock with no toll');
     }
   });

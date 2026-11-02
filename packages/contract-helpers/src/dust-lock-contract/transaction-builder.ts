@@ -158,10 +158,14 @@ export class DustLockTransactionBuilder {
       this.lockAddress,
       toUint256(amount, 'amount'),
     ]);
-    return { to: this.dustTokenAddress, data };
+    return { to: ethers.getAddress(this.dustTokenAddress), data };
   }
 
+  /** Targets the checksummed lock, so ethers never resolves an unprefixed or ICAP spelling through ENS. */
   private encode(method: string, params: unknown[]): { to: string; data: string } {
-    return { to: this.lockAddress, data: this.lockInterface.encodeFunctionData(method, params) };
+    return {
+      to: ethers.getAddress(this.lockAddress),
+      data: this.lockInterface.encodeFunctionData(method, params),
+    };
   }
 }

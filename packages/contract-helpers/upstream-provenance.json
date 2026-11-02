@@ -2192,8 +2192,8 @@
     {
       "path": "v3-pool-contract-bundle/index.ts",
       "originalSha256": "c05f5272411af95478460022a5bc3ad7788675c98da8361ab0b4d1f703140d88",
-      "vendoredSha256": "a9280d3896511f7ecccd666714b59a80dc353e90bc85a384b5b15c9947d65de6",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Omit fixed upstream gas limits from the synchronous builders; map InterestRate.None to variable debt; reject a zero onBehalfOf; document getApprovedAmount units. Share the native-reserve guard with Pool and reject native sentinels before decoding signed supply and repay inputs. Reject native borrow requests for a beneficiary other than the signer because the gateway ABI cannot encode that beneficiary. Check onBehalfOf through the canonical beneficiary check, and parse every ERC20 builder amount as a positive plain-decimal uint256 after the existing '-1' mapping."
+      "vendoredSha256": "b79ff2ef7c3ea02dfcfc21fc47367d02ac8f2d7989a1f32c074f97a4178dc3e8",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Omit fixed upstream gas limits from the synchronous builders; map InterestRate.None to variable debt; reject a zero onBehalfOf; document getApprovedAmount units. Share the native-reserve guard with Pool and reject native sentinels before decoding signed supply and repay inputs. Reject native borrow requests for a beneficiary other than the signer because the gateway ABI cannot encode that beneficiary. Check onBehalfOf through the canonical beneficiary check, and parse every ERC20 builder amount as a positive plain-decimal uint256 after the existing '-1' mapping. Target every ERC20 request at the checksummed POOL through the shared finiteAddress check, so an unset, zero or native-sentinel POOL throws instead of producing an empty or unresolvable target."
     },
     {
       "path": "v3-pool-contract-bundle/pool-bundle.test.ts",
@@ -2203,8 +2203,8 @@
     {
       "path": "v3-pool-contract/index.ts",
       "originalSha256": "e740f1b87625475638159e157d3f376c04e89ccf36ac1895269929b2247a0cad",
-      "vendoredSha256": "397ff9ce437c628e854216e52aab5dfb39291acb2b2d76bfa0456192861d73cc",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Map InterestRate.None to variable debt; accept referral code 0 in supplyWithPermit; require a boolean collateral flag; reject the native sentinel in permit and collateral methods; snapshot earlier approvals so raw approvals estimate their own gas. Reject native borrow requests for a beneficiary other than the signer because the gateway ABI cannot encode that beneficiary."
+      "vendoredSha256": "805cea8f8cdfb7c9974f80c75b8495a0318d4958972ed1d0346bb53506017545",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Map InterestRate.None to variable debt; accept referral code 0 in supplyWithPermit; require a boolean collateral flag; reject the native sentinel in permit and collateral methods; snapshot earlier approvals so raw approvals estimate their own gas. Reject native borrow requests for a beneficiary other than the signer because the gateway ABI cannot encode that beneficiary. Import the shared finiteAddress check from validation."
     },
     {
       "path": "v3-pool-contract/lendingPoolTypes.ts",
@@ -2260,8 +2260,8 @@
     },
     {
       "path": "claim-rewards-contract/index.ts",
-      "sha256": "887ea8b9a32df222e381ca8cd99d15d9a80d278b3454763dd0103fd26f4f410c",
-      "reason": "Shared provider-free claim encoding with readonly assets, exact uint256 token and lock inputs, and canonical calldata regression coverage."
+      "sha256": "0cb9aecbd6bc2e66e8f3b85bcf726a0b94b41ae874c4605b8f73f12e7407b976",
+      "reason": "Shared provider-free claim encoding with readonly assets, exact uint256 token and lock inputs, and canonical calldata regression coverage. Target the checksummed rewards controller and give the 35-day lock advice in the missing-lockTime error."
     },
     {
       "path": "claim-rewards-contract/types.ts",
@@ -2284,8 +2284,8 @@
     },
     {
       "path": "dust-apr-contract/index.test.ts",
-      "sha256": "bfd45a6168e6545eaab84ca359d7bc02468699c42c54e7ee0ce6eeed6ea91954",
-      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs."
+      "sha256": "cb30c1a86dd75f2a1bef9bae8492c5ca034314c9eadad187b8843c4b84d6cd7f",
+      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs. Pin the clock validation that rejects before any chain read and fails the whole batch."
     },
     {
       "path": "dust-apr-contract/index.ts",
@@ -2294,8 +2294,8 @@
     },
     {
       "path": "dust-apr-contract/types.ts",
-      "sha256": "7054be0b827de69731d3dd4f977a2d490261e48567eaeb27a299f7d35e3a866c",
-      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs."
+      "sha256": "73491ded9efe8637efdc77be46ff2ed0dc8f38b28d3ddcff6af24c08ca5a3257",
+      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs. Document that market prices are keyed by the incentivized token address."
     },
     {
       "path": "dust-incentive-provider-contract/index.test.ts",
@@ -2314,8 +2314,8 @@
     },
     {
       "path": "dust-lock-contract/index.test.ts",
-      "sha256": "5178a3893ff9f0fc059ebeb6de2d617c5fa97ac3a0d45ae125ac434ec7c64fa8",
-      "reason": "Compose a provider-free canonical lock transaction builder with exact uint256 inputs, explicit calculation time and strict read primitives; preserve legacy aggregate behavior."
+      "sha256": "aa76f9b613c1693d587eae782d57c1b7a31b7f7d03917724d8d05a6674d83395",
+      "reason": "Compose a provider-free canonical lock transaction builder with exact uint256 inputs, explicit calculation time and strict read primitives; preserve legacy aggregate behavior. Expect checksummed lock and token targets."
     },
     {
       "path": "dust-lock-contract/index.ts",
@@ -2371,12 +2371,12 @@
     },
     {
       "path": "pool-contract/raw-pool.test.ts",
-      "sha256": "f0003092abfeacd3ff5ae6c7f60d567355c17a36b64922b4382b36a7551eadb7"
+      "sha256": "248c30cc9cb1debf0d37a747919f1974e131850dd22190f5962b31f05ae2664a"
     },
     {
       "path": "pool-contract/validation.ts",
-      "sha256": "b3fab3e4c3c849af571d4f07bd7850820a96ef2303a0814ea1275417f78b9716",
-      "reason": "Replace the raw-compare assertNonZeroAddress with the shared commons/address check and add positiveRawAmount, the strict positive raw-amount parser built on unsignedDecimal."
+      "sha256": "313d7fe7c55c7b7c432f5d602055090d1b675f2724557ff1bd9cc860616cebf7",
+      "reason": "Replace the raw-compare assertNonZeroAddress with the shared commons/address check and add positiveRawAmount, the strict positive raw-amount parser built on unsignedDecimal. Share finiteAddress, the checksummed nonzero pool, token and user address check, between Pool and PoolBundle."
     },
     {
       "path": "sdk-compatibility.test.ts",
@@ -2389,8 +2389,8 @@
     },
     {
       "path": "ve-dust-revenue-contract/index.test.ts",
-      "sha256": "d7c8523206583cc9e1f0fe7ddb677cf3652e9a1c0eb4be90e7c344dec4b4df66",
-      "reason": "Accept readonly exact uint256 IDs in revenue batch encoders and verify canonical calldata without changing existing aggregation policies. Answer the new ERC20 decimals reads in the existing revenue fixtures and cover per-token decimals, USD-token totals, decimals failures, caching and raw-amount hasRewards without changing existing expectations. Cover failed decimals reads, a skipped fallback index, a complete fallback and an explicit usdRewardTokens override."
+      "sha256": "e9d34b4dbdc79703a83f9852e50fab5373ecc51fa3715d2c16cb06a4be1f09c8",
+      "reason": "Accept readonly exact uint256 IDs in revenue batch encoders and verify canonical calldata without changing existing aggregation policies. Answer the new ERC20 decimals reads in the existing revenue fixtures and cover per-token decimals, USD-token totals, decimals failures, caching and raw-amount hasRewards without changing existing expectations. Cover failed decimals reads, a skipped fallback index, a complete fallback and an explicit usdRewardTokens override. Reject boolean batch IDs instead of encoding them as 0 or 1."
     },
     {
       "path": "ve-dust-revenue-contract/index.ts",
@@ -2433,8 +2433,8 @@
     },
     {
       "path": "claim-rewards-contract/index.test.ts",
-      "sha256": "c91a6c9d640f22d99618c8ff96a0453320204105d92611b13811211886933ef8",
-      "reason": "Shared provider-free claim encoding with readonly assets, exact uint256 token and lock inputs, and canonical calldata regression coverage."
+      "sha256": "d5cbd56b583a4d448f54f0dc1618b50c0a26d725521d0325e3535a037ac8fcd1",
+      "reason": "Shared provider-free claim encoding with readonly assets, exact uint256 token and lock inputs, and canonical calldata regression coverage. Cover checksummed controller targets for every accepted spelling and the lock advice in the missing-lockTime error."
     },
     {
       "path": "commons/abi-result.test.ts",
@@ -2453,13 +2453,13 @@
     },
     {
       "path": "dust-lock-contract/transaction-builder.test.ts",
-      "sha256": "deddc8746cfa323bdd73063c075264364821cbe3f589c3e3294203f3b33acc91",
-      "reason": "Compose a provider-free canonical lock transaction builder with exact uint256 inputs, explicit calculation time and strict read primitives; preserve legacy aggregate behavior."
+      "sha256": "9ff241b3fc00dd3646221b52ec1d9426f0b8637014d70ca30f65c683b6a7e6c4",
+      "reason": "Compose a provider-free canonical lock transaction builder with exact uint256 inputs, explicit calculation time and strict read primitives; preserve legacy aggregate behavior. Cover checksummed lock and token targets."
     },
     {
       "path": "dust-lock-contract/transaction-builder.ts",
-      "sha256": "fe5e6ade415449fa8957f7f3e2cc6eff5c9003a010548fa6860b4fb8e2aa095b",
-      "reason": "Compose a provider-free canonical lock transaction builder with exact uint256 inputs, explicit calculation time and strict read primitives; preserve legacy aggregate behavior."
+      "sha256": "390d0764a044a4b4525b113cd9b72d51b949ea3a178b68ab384af570d223d216",
+      "reason": "Compose a provider-free canonical lock transaction builder with exact uint256 inputs, explicit calculation time and strict read primitives; preserve legacy aggregate behavior. Target the checksummed lock and DUST token for every accepted spelling."
     },
     {
       "path": "neverland-ui-provider-contract/__tests__/fixtures.ts",
@@ -2478,17 +2478,17 @@
     },
     {
       "path": "neverland-ui-provider-contract/reads.test.ts",
-      "sha256": "9c890e772d63fb48304f4edbfbcbc1fef962ed10efa58a75fa3f4a520ff6fc8e",
-      "reason": "Materialize canonical UI results as plain DTOs, preserve raw bigint cursors, add strict ownership-cardinality pagination and canonical historical/current emission decoding with synthetic ABI regressions."
+      "sha256": "a4f697fea74c1214e69b6cbd0fb64405c5f61d1cb8af7f44a5df85e606c78b84",
+      "reason": "Materialize canonical UI results as plain DTOs, preserve raw bigint cursors, add strict ownership-cardinality pagination and canonical historical/current emission decoding with synthetic ABI regressions. Reject misaligned position arrays in strict dashboard and bundle pagination."
     },
     {
       "path": "emode-pipeline.test.ts",
-      "sha256": "c9e878808d65af63f4331a4810e067ef6093d5222269c2bc7b76250a8a1f14f5"
+      "sha256": "fd5d75b7ced19e950f06f04f4a5321667c851c37efdec837b2cc66f3368860ff"
     },
     {
       "path": "pool-contract/fund-routing.test.ts",
-      "sha256": "138119a81892fa455e58570424d3a18c49db4427aa6744d2f7a11c5da5a9eed8",
-      "reason": "Regress zero-gateway native value routing and unsupported native borrow beneficiaries."
+      "sha256": "e8821169cda0fcfdc62851e04bb2fb23a8173543f095dcb1b24a86b02fc0372f",
+      "reason": "Regress zero-gateway native value routing and unsupported native borrow beneficiaries. Cover checksummed PoolBundle pool targets and the rejection of an unset, empty, zero or native-sentinel POOL."
     },
     {
       "path": "commons/address.ts",

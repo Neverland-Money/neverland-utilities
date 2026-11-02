@@ -451,6 +451,26 @@ describe('Pool decimal and raw compatibility', () => {
     }
   });
 
+  // The pool contract would revert on the sentinel anyway; the guard fails before any transaction
+  // is built, and an ERC20 reserve still builds its single collateral transaction.
+  it.each([NATIVE, NATIVE.toLowerCase()])(
+    'rejects the native sentinel %s as a collateral toggle reserve',
+    async reserve => {
+      const pool = finitePool();
+      const toggle = async () =>
+        pool.setUsageAsCollateral({ user: USER, reserve, usageAsCollateral: true });
+      await expect(toggle).rejects.toBeInstanceOf(TypeError);
+      await expect(toggle).rejects.toThrow(
+        new TypeError(
+          'setUsageAsCollateral requires the wrapped token; the native sentinel is unsupported',
+        ),
+      );
+      await expect(
+        pool.setUsageAsCollateral({ user: USER, reserve: TOKEN, usageAsCollateral: false }),
+      ).resolves.toHaveLength(1);
+    },
+  );
+
   it.each(['supplyWithPermit', 'repayWithPermit'] as const)(
     'preserves %s finite decimal amounts and ethers6 SignatureLike objects',
     async method => {

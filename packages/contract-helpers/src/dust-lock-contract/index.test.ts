@@ -5,6 +5,9 @@ import type { UserLock } from './types';
 import { DustLockHelper } from '.';
 const LOCK = '0x00000000000000000000000000000000000010c4';
 const DUST = '0x0000000000000000000000000000000000000d57';
+// Builders target the checksummed form of whatever spelling they were configured with.
+const LOCK_TARGET = ethers.getAddress(LOCK);
+const DUST_TARGET = ethers.getAddress(DUST);
 const USER = '0x00000000000000000000000000000000000000a1';
 const MULTICALL = '0xcA11bde05977b3631167028862bE2a173976CA11';
 const lockIface = new ethers.Interface(dustLockAbi);
@@ -27,7 +30,7 @@ describe('DustLockHelper', () => {
   describe('getEarlyWithdrawTxData', () => {
     it('encodes earlyWithdraw(uint256) when no penalty cap is given', () => {
       const { to, data } = helper.getEarlyWithdrawTxData(7);
-      expect(to).toBe(LOCK);
+      expect(to).toBe(LOCK_TARGET);
       expect(data.slice(0, 10)).toBe(lockIface.getFunction('earlyWithdraw(uint256)')!.selector);
       expect(lockIface.decodeFunctionData('earlyWithdraw(uint256)', data).map(String)).toEqual([
         '7',
@@ -124,7 +127,7 @@ const MAX_UINT256 = ethers.MaxUint256.toString();
 describe('DustLockHelper canonical transaction inputs', () => {
   it('encodes createLockFor amount, duration seconds, and recipient in canonical order', () => {
     const tx = helper.getCreateLockForTxData({ to: USER, amount: MAX_UINT256, unlockTime: 86400 });
-    expect(tx.to).toBe(LOCK);
+    expect(tx.to).toBe(LOCK_TARGET);
     expect(tx.data.slice(0, 10)).toBe('0xec32e6df');
     expect(lockIface.decodeFunctionData('createLockFor', tx.data).toArray()).toEqual([
       ethers.MaxUint256,
@@ -203,7 +206,7 @@ const idEncoders = (id: BigNumberish) =>
 describe('DustLockHelper exact uint256 transactions', () => {
   it.each(exactIds)('canonically encodes every token transaction with exact ID %s', id => {
     for (const [signature, tx, expected] of idEncoders(id)) {
-      expect(tx.to).toBe(LOCK);
+      expect(tx.to).toBe(LOCK_TARGET);
       expect(lockIface.decodeFunctionData(signature, tx.data).toArray()).toEqual(expected);
     }
   });
@@ -246,7 +249,7 @@ describe('DustLockHelper exact uint256 transactions', () => {
       ] as const)
         expect(lockIface.decodeFunctionData(signature, tx.data).toArray()).toEqual(expected);
       const approval = helper.getApprovalTxData(USER, amount);
-      expect(approval.to).toBe(DUST);
+      expect(approval.to).toBe(DUST_TARGET);
       expect(erc20Iface.decodeFunctionData('approve', approval.data).toArray()).toEqual([
         ethers.getAddress(LOCK),
         BigInt(amount),

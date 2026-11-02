@@ -22,9 +22,9 @@ type ClaimRewardsToSelfParams = ClaimAllRewardsToSelfParams & {
 };
 const rewardsInterface = new ethers.Interface(dustRewardsControllerAbi);
 const LOCK_TIME_REQUIRED =
-  'lockTime is required: 0 claims instantly with the 50% instant-claim toll, a duration of at ' +
-  'least 28 days in seconds locks with a timed toll, and MaxUint256 creates a permanent lock ' +
-  'with no toll';
+  'lockTime is required: 0 claims instantly with the 50% instant-claim toll, a duration in ' +
+  'seconds locks with a timed toll (use at least 35 days: the unlock rounds down to a whole week ' +
+  'and must land at least 28 days ahead), and MaxUint256 creates a permanent lock with no toll';
 
 /** JavaScript callers can omit the field the types require, so reject it before encoding. */
 function requireLockTime(params: { lockTime?: BigNumberish | null }): BigNumberish {
@@ -44,14 +44,15 @@ export function buildClaimAllRewardsToSelfTxData(params: ClaimAllRewardsToSelfPa
 } {
   const { assetAddresses, rewardsControllerAddress, tokenId = 0 } = params;
   const lockTime = requireLockTime(params);
-  ethers.getAddress(rewardsControllerAddress);
+  // Checksummed, so ethers never resolves an unprefixed or ICAP spelling through ENS.
+  const to = ethers.getAddress(rewardsControllerAddress);
   const assets = assetAddresses.map(address => ethers.getAddress(address));
   const data = rewardsInterface.encodeFunctionData('claimAllRewardsToSelf', [
     assets,
     toUint256(lockTime, 'lockTime'),
     toUint256(tokenId, 'tokenId'),
   ]);
-  return { to: rewardsControllerAddress, data };
+  return { to, data };
 }
 
 /**
@@ -71,7 +72,7 @@ export function buildClaimRewardsToSelfTxData(params: ClaimRewardsToSelfParams):
     amount,
   } = params;
   const lockTime = requireLockTime(params);
-  ethers.getAddress(rewardsControllerAddress);
+  const to = ethers.getAddress(rewardsControllerAddress);
   const assets = assetAddresses.map(address => ethers.getAddress(address));
   const rewardToken = ethers.getAddress(dustTokenAddress);
   const amountWei = toUint256(ethers.parseUnits(amount, 18), 'amount');
@@ -82,7 +83,7 @@ export function buildClaimRewardsToSelfTxData(params: ClaimRewardsToSelfParams):
     toUint256(lockTime, 'lockTime'),
     toUint256(tokenId, 'tokenId'),
   ]);
-  return { to: rewardsControllerAddress, data };
+  return { to, data };
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- Public interface retains consumer declaration merging.

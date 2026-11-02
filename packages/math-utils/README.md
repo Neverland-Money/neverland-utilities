@@ -157,7 +157,9 @@ and no E-mode category data reached the formatter: no `legacyEMode` was passed a
 formatted reserves carries `eModes`. Without the guard, every collateral would silently use its
 ordinary LTV and liquidation threshold. Pass `eModes` to `formatReserves`, or `legacyEMode` to
 `formatUserSummary`; the contract-helpers `getEModesHumanized` rebuilds the categories from reserve
-data.
+data. The guard checks only that some category data arrived: partial `eModes` that omit the user's
+category are not detected, and the user's collateral then uses its ordinary parameters. Categories
+rebuilt from the same reserve list always include every category that has members.
 
 For each reserve, floor collateral base value and ceil the combined variable-plus-stable debt base
 value once, after adding the raw token balances. Honor the user collateral/borrow flags; include

@@ -246,6 +246,29 @@ describe.each(['dashboard', 'bundle'] as const)('strict %s raw-cursor pagination
     },
   );
 
+  // The per-row checks index into the shorter arrays, so without the length comparison a missing
+  // row would surface as a TypeError and an extra row would never be visited at all.
+  const aligned = dashboardPage([1n], 9n, false);
+  const stray = dashboardPage([2n], 9n, false);
+  it.each([
+    ['a missing lock row', { locks: [] }],
+    ['a missing reward row', { rewardSummaries: [] }],
+    ['an extra lock row', { locks: [...aligned.locks, ...stray.locks] }],
+    [
+      'an extra reward row',
+      { rewardSummaries: [...aligned.rewardSummaries, ...stray.rewardSummaries] },
+    ],
+  ] satisfies Array<[string, Partial<UserDashboardData>]>)(
+    'rejects %s as misaligned position arrays',
+    async (_label, override) => {
+      const { result } = run({ 0: { ...aligned, ...override } }, { requireComplete: true });
+      await expect(result).rejects.toMatchObject({
+        name: 'Error',
+        message: 'UI pagination position arrays are misaligned',
+      });
+    },
+  );
+
   it.each([0, -1, 1.5, Number.NaN, Number.POSITIVE_INFINITY, Number.MAX_SAFE_INTEGER + 1])(
     'rejects invalid strict page size %s before reading',
     async size => {

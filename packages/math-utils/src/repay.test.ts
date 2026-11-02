@@ -183,6 +183,31 @@ describe('calculateBufferedRepayAmount', () => {
     ).toBe('1');
   });
 
+  // With one ray of debt the buffered amount is the ray growth factor plus one atom, so the largest
+  // debt whose amount stays below the unlimited sentinel follows from that factor alone, without
+  // the SDK's exponentiation. At that boundary every intermediate power still fits, and the final
+  // multiplication of these non-power-of-two horizons is the only step that overflows: without the
+  // product bound this returns uint256.max or an even larger amount instead of rejecting.
+  it.each([
+    ['the default 600 s horizon at 5%', R / 20n, 600],
+    ['3600 s at 100%', R, 3600],
+    ['3 s at the maximal rate', UINT128_MAX, 3],
+    ['5 s at the maximal rate', UINT128_MAX, 5],
+  ] as const)(
+    'accepts the largest debt whose final growth multiplication fits and rejects the next atom: %s',
+    (_label, rate, windowSeconds) => {
+      const params = { variableBorrowRateRay: rate.toString(), windowSeconds };
+      const factor = BigInt(bufferedRepay({ ...params, debtRaw: R.toString() })) - 1n;
+      const largest = ((UINT256_MAX - 2n) * R) / factor;
+      expect(BigInt(bufferedRepay({ ...params, debtRaw: largest.toString() }))).toBeLessThanOrEqual(
+        UINT256_MAX - 1n,
+      );
+      const overflow = () => bufferedRepay({ ...params, debtRaw: (largest + 1n).toString() });
+      expect(overflow).toThrow(RangeError);
+      expect(overflow).toThrow(new RangeError('Buffered repayment must be below uint256.max'));
+    },
+  );
+
   it.each([
     '',
     '-1',

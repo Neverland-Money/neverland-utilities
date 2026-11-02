@@ -74,15 +74,20 @@ git rev-parse HEAD origin/main
 untracked files, and counts a package whose registry lookup fails as unpublished. Each release
 script therefore runs `scripts/check-release-identity.mjs` first and stops before Lerna starts when
 any check fails. Yarn 4 does not run `pre<script>` hooks, so the guard is chained into each script
-with `&&`. The guard is read-only: it runs git read commands, `git ls-remote` and HTTPS GET requests
-to the npm registry, and never fetches or writes refs. `release:prepared` runs it with
+with `&&`. After the guard, each release script runs `yarn clean` and `yarn build`, and
+`release:prepared` also runs `yarn test:packages`, so the tarballs come from a fresh, validated
+build even when npm's `ignore-scripts` setting makes Lerna skip every package's `prepublishOnly`
+build. The guard is read-only: it runs git read commands, `git ls-remote` and HTTPS GET requests to
+the npm registry, and never fetches or writes refs. `release:prepared` runs it with
 `--mode=prepared`, which requires:
 
 - an `origin` remote whose fetch and push URLs are the repository named in `package.json`;
 - the `main` branch, with `HEAD` equal to `refs/heads/main` on `origin` as `git ls-remote` reports
   it;
 - an empty `git status --porcelain --untracked-files=all`, so no modified, staged or untracked file
-  can reach a tarball;
+  that git reports can reach a tarball. Files git does not report, such as paths listed in
+  `.git/info/exclude` and entries marked skip-worktree or assume-unchanged, still compile into
+  `dist`, so publish from a fresh clone;
 - at least one package whose manifest version is not yet on the registry (the publish set). A
   registry or network error fails the check instead of counting as unpublished, and a version that
   was published and later unpublished is rejected;

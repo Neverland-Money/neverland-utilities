@@ -581,8 +581,8 @@
     },
     {
       "path": "repay.test.ts",
-      "sha256": "81d1fa1de26f84abd75469658f801640982d98dd14069699d6f5de4e06dc21cf",
-      "reason": "Independent source-formula, literal, partition/snapshot, and malformed-input tests for the finite repayment bound."
+      "sha256": "af012e1e7dc0ab1cb378dd66015b81227ab7786a4b0598a66c16c4d1d5d656aa",
+      "reason": "Independent source-formula, literal, partition/snapshot, and malformed-input tests for the finite repayment bound. Pin the final growth-multiplication bound at the largest accepted debt and the next atom."
     },
     {
       "path": "tsconfig.json",

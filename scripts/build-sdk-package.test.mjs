@@ -1,6 +1,14 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdtempSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { SourceMap } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -103,6 +111,25 @@ test('emits executable CJS/ESM graphs, import types, JSON attributes and determi
     for (const [file, bytes] of Object.entries(before))
       assert.equal(readFileSync(file, 'utf8'), bytes);
     assert.equal(readFileSync(join(directory, 'src/index.ts'), 'utf8'), source);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('clears stale output anywhere under dist before emitting', () => {
+  const { root, directory } = fixture();
+  try {
+    buildSdkPackage('fixture', root);
+    const stale = ['dist/esm/removed.js', 'dist/types/index.d.ts', 'dist/index.js'];
+    for (const file of stale) {
+      mkdirSync(join(directory, file, '..'), { recursive: true });
+      writeFileSync(join(directory, file), 'stale\n');
+    }
+
+    buildSdkPackage('fixture', root);
+    for (const file of stale) assert.equal(existsSync(join(directory, file)), false, file);
+    assert.ok(existsSync(join(directory, 'dist/esm/index.js')));
+    assert.ok(existsSync(join(directory, 'dist/cjs/index.js')));
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

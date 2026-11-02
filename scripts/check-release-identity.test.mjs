@@ -1,9 +1,11 @@
 /* eslint-disable camelcase -- npm reads lowercase npm_config_* environment variables. */
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 import {
   checkBranch,
   checkChangelogs,
@@ -643,13 +645,33 @@ test('every release script runs the guard with its mode before lerna publish', (
     const mode = name.slice('release:'.length);
     const guard = `node scripts/check-release-identity.mjs --mode=${mode} && `;
     assert.ok(command.startsWith(guard), `${name} must start with: ${guard}`);
+    // npm's ignore-scripts makes Lerna skip prepublishOnly, so the script builds dist itself.
+    const build = `${guard}yarn clean && yarn build && `;
+    assert.ok(command.startsWith(build), `${name} must clean and build before lerna publish`);
     assert.equal(command.split('lerna publish').length, 2, `${name}: one lerna publish`);
     if (/npm_config_provenance=/i.test(command)) {
       assert.ok(provenanceForcedModes.has(mode), `${name}: provenance forced but not checked`);
     }
   }
 
+  assert.ok(
+    scripts['release:prepared'].endsWith('&& yarn test:packages && lerna publish from-package'),
+    'release:prepared must validate the fresh tarballs right before publishing',
+  );
   for (const name of Object.keys(scripts)) {
     assert.doesNotMatch(name, /^pre(?:release|publish)/, `${name}: Yarn 4 never runs pre hooks`);
+  }
+});
+
+test('the guard runs and fails closed when started through a symlinked path', () => {
+  const directory = mkdtempSync(join(tmpdir(), 'release-identity-link-'));
+  try {
+    const link = join(directory, 'check-release-identity.mjs');
+    symlinkSync(fileURLToPath(new URL('check-release-identity.mjs', import.meta.url)), link);
+    const result = spawnSync(process.execPath, [link, '--mode=unknown'], { encoding: 'utf8' });
+    assert.equal(result.status, 1, result.stderr);
+    assert.match(result.stderr, /Unknown release mode "unknown"/);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
   }
 });

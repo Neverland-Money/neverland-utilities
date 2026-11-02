@@ -26,7 +26,7 @@ import {
   type LPSignedSupplyParamsType,
   type LPSupplyParamsType,
 } from './pool-types';
-import { assertErc20Reserve, legacyRateMode, positiveRawAmount } from './validation';
+import { assertErc20Reserve, finiteAddress, legacyRateMode, positiveRawAmount } from './validation';
 
 export type SupplyTxBuilder = {
   generateTxData: ({
@@ -131,7 +131,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
             onBehalfOfParam,
             referralCodeParam,
           ]);
-          actionTx.to = this.poolAddress;
+          actionTx.to = finiteAddress(this.poolAddress, 'POOL');
           actionTx.from = user;
           actionTx.data = txData;
         }
@@ -163,7 +163,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
           decomposedSignature.r,
           decomposedSignature.s,
         ]);
-        populatedTx.to = this.poolAddress;
+        populatedTx.to = finiteAddress(this.poolAddress, 'POOL');
         populatedTx.from = user;
         populatedTx.data = txData;
 
@@ -213,7 +213,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
             referralCodeParam,
             onBehalfOfParam,
           ]);
-          actionTx.to = this.poolAddress;
+          actionTx.to = finiteAddress(this.poolAddress, 'POOL');
           actionTx.from = user;
           actionTx.data = txData;
         }
@@ -244,7 +244,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
           numericRateMode,
           onBehalfOfParam,
         ]);
-        actionTx.to = this.poolAddress;
+        actionTx.to = finiteAddress(this.poolAddress, 'POOL');
         actionTx.from = user;
         actionTx.data = txData;
         return actionTx;
@@ -275,7 +275,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
           decomposedSignature.r,
           decomposedSignature.s,
         ]);
-        populatedTx.to = this.poolAddress;
+        populatedTx.to = finiteAddress(this.poolAddress, 'POOL');
         populatedTx.from = user;
         populatedTx.data = txData;
         return populatedTx;
@@ -295,7 +295,7 @@ export class PoolBundle extends AbiBaseService<typeof poolAbi> implements PoolBu
           positiveRawAmount(amount === '-1' ? MaxUint256.toString() : amount),
           numericRateMode,
         ]);
-        actionTx.to = this.poolAddress;
+        actionTx.to = finiteAddress(this.poolAddress, 'POOL');
         actionTx.from = user;
         actionTx.data = txData;
 

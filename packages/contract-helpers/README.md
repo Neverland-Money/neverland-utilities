@@ -102,6 +102,13 @@ The shared synchronous encoders map `InterestRate.Stable` to 1 and every other v
 `InterestRate.None`, to variable debt (2), the same numeric mode as the existing async methods.
 Native deposit/withdraw and all existing Neverland helper interfaces remain.
 
+The native helpers encode only the legacy `WrappedTokenGatewayV3` functions (`depositETH`,
+`borrowETH`, `repayETH`, `withdrawETH`) that the main market's `WETH_GATEWAY` serves. An isolated
+market's `NATIVE_GATEWAY`, such as `PENDLE_SHMON.NATIVE_GATEWAY` in the address book, is a
+`NeverlandNativeGateway` with its own `supply`, `borrow`, `repay` and `withdraw` functions and a
+reverting fallback. Passed as `WETH_GATEWAY`, it receives calls it does not implement, and they
+revert with `FallbackNotAllowed`. These helpers do not support native actions on isolated markets.
+
 Every builder that returns or populates a native-value or gateway-targeted transaction rejects a
 zero `WETH_GATEWAY` and the keyless `API_ETH_MOCK_ADDRESS` native sentinel, each in any spelling
 ethers accepts (0x-prefixed, unprefixed hex or ICAP), compared through `getAddress`. The decorated

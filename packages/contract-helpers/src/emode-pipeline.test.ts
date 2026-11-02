@@ -100,6 +100,25 @@ describe('E-mode decoder to formatter pipeline', () => {
     ]);
   });
 
+  it('places the highest bitmap bit, reserve id 255, in the first bitmap character', () => {
+    const [category] = synthesizeEModesFromReserves([reserve(255, 1)]);
+    expect(category.eMode.collateralBitmap).toBe(`1${'0'.repeat(255)}`);
+    expect(category.eMode.borrowableBitmap).toBe(`1${'0'.repeat(255)}`);
+  });
+
+  // Without the range check, an id past the 256 bits writes to a non-index array key and drops the
+  // reserve from its category, and a negative id grows the bitmap past 256 characters.
+  it.each([256, 257, 1000, -1, 0.5, Number.NaN, Number.MAX_SAFE_INTEGER + 1])(
+    'rejects reserve id %s, which has no bit in the 256-bit E-mode bitmap',
+    originalId => {
+      const rebuild = () => synthesizeEModesFromReserves([reserve(0, 1), reserve(originalId, 1)]);
+      expect(rebuild).toThrow(RangeError);
+      expect(rebuild).toThrow(
+        new RangeError(`Reserve id ${originalId} is outside the E-mode bitmap`),
+      );
+    },
+  );
+
   it('reproduces GenericLogic account values for an E-mode user', () => {
     const reserves = [reserve(0, 1), reserve(1, 1)];
     const { request } = summary(reserves, synthesizeEModesFromReserves(reserves));

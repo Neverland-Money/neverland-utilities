@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, realpathSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -466,6 +466,10 @@ export async function main(argv, dependencies = defaultDependencies(), output = 
   return 0;
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+// Compare real paths: started through a symlink, the guard must still run rather than exit 0 unchecked.
+if (
+  process.argv[1] &&
+  realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))
+) {
   process.exitCode = await main(process.argv.slice(2));
 }

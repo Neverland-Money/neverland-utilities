@@ -1,4 +1,4 @@
-import { getAddress, isAddress } from 'ethers';
+import { getAddress, isAddress, ZeroAddress } from 'ethers';
 import { InterestRate } from '../commons/types';
 import { API_ETH_MOCK_ADDRESS } from '../commons/utils';
 
@@ -55,4 +55,23 @@ export function address(value: string, name: string): string {
   }
 
   return getAddress(value);
+}
+
+/**
+ * The checksummed form of a pool, token or user address. Throws for an unset or malformed value,
+ * address(0) and the native sentinel, so a populated `to` can never be empty (which would make the
+ * request a contract creation) or an unprefixed or ICAP spelling that ethers resolves through ENS.
+ */
+export function finiteAddress(value: string, name: string): string {
+  const normalized = address(value, name);
+  if (
+    normalized === ZeroAddress ||
+    normalized.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()
+  ) {
+    throw new TypeError(
+      `${name} must be a nonzero ERC20/pool/user address; native sentinels are unsupported`,
+    );
+  }
+
+  return normalized;
 }

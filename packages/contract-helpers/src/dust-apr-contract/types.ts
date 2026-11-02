@@ -4,7 +4,14 @@ export type PriceMap = Record<string, number>;
 export interface MarketConfig {
   id: string;
   symbol: string;
+  /**
+   * The incentivized token registered with the rewards controller (an nToken or debt token), not
+   * its underlying. Its USD price is read from the `PriceMap` under this address, lowercased, so
+   * key the underlying's price by this address too: a price keyed only by the underlying is not
+   * found, and `calculateBatchAPR` then omits the market without an error.
+   */
   asset: string;
+  /** The DUST reward token; its USD price is read from the `PriceMap` under this address, lowercased. */
   dustToken: string;
   transferStrategy: string;
 }

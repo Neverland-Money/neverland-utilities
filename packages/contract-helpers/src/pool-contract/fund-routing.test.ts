@@ -4,7 +4,7 @@ import {
   variableDebtTokenAbi,
   wethGatewayLegacyAbi,
 } from '@neverland-money/contract-types';
-import { Interface, MaxUint256, ZeroAddress } from 'ethers';
+import { getAddress, getIcapAddress, Interface, MaxUint256, ZeroAddress } from 'ethers';
 import { OfflineProvider } from '../__tests__/offline-provider';
 import { estimateGasByNetwork } from '../commons/gas-station';
 import { InterestRate, ProtocolAction } from '../commons/types';
@@ -360,5 +360,54 @@ describe('lending fund routing', () => {
     expect((await action.gas())?.gasLimit).toBe(
       gasLimitRecommendations[ProtocolAction.supply].recommended,
     );
+  });
+});
+
+describe('PoolBundle pool target', () => {
+  // Hex letters make case and checksum handling observable.
+  const LETTERED_POOL = getAddress('0xabcdef0123456789abcdef0123456789abcdef01');
+  const request = { user: USER, reserve: RESERVE, amount: '1' };
+  const debt = { ...request, interestRateMode: InterestRate.Variable };
+  const permit = {
+    signature:
+      '0x532f8df4e2502bd869fb35e9301156f9b307380afdcc25cfbc87b2e939f16f7e47c326dc26eb918d327358797ee67ad7415d871ef7eaf0d4f6352d3ad021fbb41c',
+    deadline: '10000',
+  };
+
+  function erc20Builds(bundle: PoolBundle) {
+    return [
+      () => bundle.supplyTxBuilder.generateTxData(request),
+      () => bundle.supplyTxBuilder.generateSignedTxData({ ...request, ...permit }),
+      () => bundle.borrowTxBuilder.generateTxData(debt),
+      () => bundle.repayTxBuilder.generateTxData(debt),
+      () => bundle.repayTxBuilder.generateSignedTxData({ ...debt, ...permit }),
+      () =>
+        bundle.repayWithATokensTxBuilder.generateTxData({
+          ...request,
+          rateMode: InterestRate.Variable,
+        }),
+    ];
+  }
+
+  it.each([
+    ['lowercase', LETTERED_POOL.toLowerCase()],
+    ['unprefixed', LETTERED_POOL.slice(2)],
+    ['ICAP', getIcapAddress(LETTERED_POOL)],
+  ])('sends every ERC20 request to the checksummed pool given its %s spelling', (_s, pool) => {
+    const bundle = new PoolBundle(new OfflineProvider(), { POOL: pool, WETH_GATEWAY: GATEWAY });
+    for (const build of erc20Builds(bundle)) expect(build().to).toBe(LETTERED_POOL);
+  });
+
+  it.each([
+    ['unset', undefined],
+    ['empty', ''],
+    ['zero', ZeroAddress],
+    ['native sentinel', API_ETH_MOCK_ADDRESS],
+  ])('rejects a %s POOL instead of building a request with no usable target', (_s, pool) => {
+    const bundle = new PoolBundle(
+      new OfflineProvider(),
+      pool === undefined ? undefined : { POOL: pool },
+    );
+    for (const build of erc20Builds(bundle)) expect(build).toThrow(/^POOL must be /);
   });
 });

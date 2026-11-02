@@ -115,7 +115,8 @@ export function buildSdkPackage(name, root = repository) {
     };
     const program = ts.createProgram(parsed.fileNames, options);
     checkDiagnostics(ts.getPreEmitDiagnostics(program));
-    rmSync(outDir, { recursive: true, force: true });
+    // The first emit clears all of dist, so a stale sibling of esm/ or cjs/ cannot ship.
+    rmSync(build === 'esm' ? join(directory, 'dist') : outDir, { recursive: true, force: true });
     const transform = esmSpecifiers(options);
     const result = program.emit(
       undefined,

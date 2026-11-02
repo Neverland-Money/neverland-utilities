@@ -1,5 +1,5 @@
 import { dustLockAbi, erc20Abi } from '@neverland-money/contract-types';
-import { AbstractProvider, Interface, MaxUint256 } from 'ethers';
+import { AbstractProvider, getAddress, getIcapAddress, Interface, MaxUint256 } from 'ethers';
 import type { BigNumberish } from 'ethers';
 import { DustLockTransactionBuilder } from '../index';
 
@@ -100,5 +100,17 @@ describe('provider-free DustLock transaction builder', () => {
     expect(
       () => new DustLockTransactionBuilder({ lockAddress: LOCK, dustTokenAddress: 'bad' }),
     ).toThrow();
+  });
+
+  it('targets the checksummed lock and token for unprefixed or ICAP spellings', () => {
+    // Hex letters make case and checksum handling observable.
+    const lock = getAddress('0xabcdef0123456789abcdef0123456789abcdef01');
+    const dust = getAddress('0x0123456789abcdef0123456789abcdef01234567');
+    const spelled = new DustLockTransactionBuilder({
+      lockAddress: getIcapAddress(lock),
+      dustTokenAddress: dust.slice(2).toLowerCase(),
+    });
+    expect(spelled.getCreateLockTxData({ amount: '1', lockDuration: 0 }).to).toBe(lock);
+    expect(spelled.getApprovalTxData(USER, '1').to).toBe(dust);
   });
 });

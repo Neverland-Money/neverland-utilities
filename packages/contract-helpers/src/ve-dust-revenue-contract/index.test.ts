@@ -129,6 +129,18 @@ const invalidBatchIds: BigNumberish[] = [
   '1e3',
   2n ** 256n,
 ];
+
+/** The error a synchronous call throws; fails when the call returns instead. */
+function thrownBy(run: () => unknown): unknown {
+  try {
+    run();
+  } catch (error: unknown) {
+    return error;
+  }
+
+  throw new Error('Expected the call to throw');
+}
+
 describe('VeDustRevenueHelper exact immutable batch inputs', () => {
   it('canonically encodes all batch methods without mutating readonly arrays', () => {
     const rewards = Object.freeze([REWARD]);
@@ -179,6 +191,24 @@ describe('VeDustRevenueHelper exact immutable batch inputs', () => {
     expect(() => helper.getEnableSelfRepayLoanBatchTxData([0, value])).toThrow();
     expect(() => helper.getDisableSelfRepayLoanBatchTxData([0, value])).toThrow();
     expect(() => helper.getBatchClaimRewardsTxData([0, value], [REWARD])).toThrow();
+  });
+
+  // BigInt() reads a boolean as 1 or 0, so only the explicit type check keeps a flag passed as an
+  // ID from silently encoding as token 1 or token 0.
+  it.each([true, false])('rejects the boolean batch ID %s instead of encoding it', value => {
+    const ids: BigNumberish[] = [0, 0];
+    Reflect.set(ids, 1, value);
+    const encoders = [
+      () => helper.getEnableSelfRepayLoanBatchTxData(ids),
+      () => helper.getDisableSelfRepayLoanBatchTxData(ids),
+      () => helper.getBatchClaimRewardsTxData(ids, [REWARD]),
+    ];
+    for (const encode of encoders) {
+      expect(thrownBy(encode)).toMatchObject({
+        name: 'Error',
+        message: 'tokenId must be a bigint, string, or safe integer',
+      });
+    }
   });
 
   it('rejects the empty and oversized batches RevenueReward reverts on', () => {
