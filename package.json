@@ -38,7 +38,7 @@
     "release:latest": "node scripts/check-release-identity.mjs --mode=latest && yarn clean && yarn build && NPM_CONFIG_PROVENANCE=true lerna publish --yes --conventional-commits --create-release github --message 'chore(release): publish [ci skip]'",
     "release:canary": "node scripts/check-release-identity.mjs --mode=canary && yarn clean && yarn build && NPM_CONFIG_PROVENANCE=true lerna publish --canary --yes",
     "prepare": "husky install",
-    "test:packages": "node --test scripts/workspace-validation.test.mjs scripts/build-sdk-package.test.mjs scripts/sdk-helper-provenance.test.mjs scripts/sdk-provenance-paths.test.mjs scripts/check-buffered-repay-dependency.test.mjs scripts/check-release-identity.test.mjs && node scripts/check-packages.mjs",
+    "test:packages": "node --test scripts/workspace-validation.test.mjs scripts/build-sdk-package.test.mjs scripts/sdk-helper-provenance.test.mjs scripts/sdk-provenance-paths.test.mjs scripts/check-buffered-repay-dependency.test.mjs scripts/check-release-identity.test.mjs scripts/bigint-exponentiation.test.mjs && node scripts/check-packages.mjs",
     "check:sdk-provenance": "node scripts/check-sdk-provenance.mjs",
     "test:sdk-fixtures": "jest --runInBand packages/math-utils/src/math-regression.test.ts packages/math-utils/src/financial-regression.test.ts packages/contract-helpers/src/sdk-compatibility.test.ts",
     "format:check": "prettier --check .",

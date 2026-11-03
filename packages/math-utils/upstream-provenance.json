@@ -333,8 +333,8 @@
     {
       "path": "index.ts",
       "originalSha256": "187f20c7c9daee52803deccdba685cc0995c92133e5ef5ac0e6b26bb57af7dc8",
-      "vendoredSha256": "a075edfe60f5f406a5f83fa98a3573725d15f52fc6b05b6620a07c66637d07e9",
-      "reason": "Export shared Neverland display math, finite debt buffers and exact DUST market APR while preserving every original lending export."
+      "vendoredSha256": "01e9573b37c344620430387a1b9bb4c3d3a78c610244503e7bf64d558cb6bedb",
+      "reason": "Export shared Neverland display math, finite debt buffers, exact DUST market APR and bundle-safe pow10 while preserving every original lending export."
     },
     {
       "path": "formatters/compounded-interest/calculate-compounded-interest.ts",
@@ -560,6 +560,16 @@
   },
   "addedSupportFiles": [
     {
+      "path": "bigint.ts",
+      "sha256": "3a3ea6d29c07a4ea439c48727c69503d2c47225cdc00c5b1b7b69e2ad49753d1",
+      "reason": "Construct exact powers of ten from decimal strings so browser bundlers cannot lower BigInt exponentiation to Math.pow."
+    },
+    {
+      "path": "bigint.test.ts",
+      "sha256": "d406a344266f183a0fd1530221e9eb11bf5f0262189851e89f77c2d06edbc021",
+      "reason": "Pin exact bundle-safe powers of ten and reject invalid exponents."
+    },
+    {
       "path": "neverland-integer-math.test.ts",
       "sha256": "a37b3e2cd362b157c2dd699ffc42162dd9fdf1974c7c2159fc481a50f6b5fc89",
       "reason": "Independent regression/provenance evidence; complete financial expectations retain their independent source identities."
@@ -576,8 +586,8 @@
     },
     {
       "path": "repay.ts",
-      "sha256": "d60e84952e047d37e84b069409e66604404c4ef37b225c4e96b7c94e88aeecc1",
-      "reason": "Add the reviewed logarithmic ceiling-ray variable-debt repayment bound without modifying upstream math entrypoints. maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence."
+      "sha256": "d53a9105775a1091511ef4e77cdc05b29406dbe12251301ac906d34e99349361",
+      "reason": "Add the reviewed logarithmic ceiling-ray variable-debt repayment bound without modifying upstream math entrypoints. Maintained source formatting and narrowed ABI/test types retain current public behavior, original financial expectations and immutable evidence. Replace BigInt exponentiation with equivalent bundle-safe powers of ten and hex uint limits."
     },
     {
       "path": "repay.test.ts",
@@ -616,8 +626,8 @@
     },
     {
       "path": "dust-apr.ts",
-      "sha256": "a839f2cbd75ecf62910305cdccd4f7cc4e55ab883da5a88cfc5b12fd34bfae4d",
-      "reason": "Exact DUST market APR and independent integer regression vectors with explicit time, token-decimal normalization, checked display conversion and unresolved-input errors."
+      "sha256": "cbb1a1e808087b41aaeac50679cebe4eb451cbfbb84b02a1dea0374662539b5c",
+      "reason": "Exact DUST market APR and independent integer regression vectors with explicit time, token-decimal normalization, checked display conversion and unresolved-input errors. Use equivalent bundle-safe powers of ten and hex uint limits."
     }
   ],
   "neverlandDisplayExtraction": {

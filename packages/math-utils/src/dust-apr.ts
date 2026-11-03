@@ -1,6 +1,7 @@
+import { pow10 } from './bigint';
 import { annualizeEmissionRaw } from './neverland';
 
-const UINT256_MAX = 2n ** 256n - 1n;
+const UINT256_MAX = BigInt(`0x${'f'.repeat(64)}`);
 const MAX_SAFE_INTEGER = BigInt(Number.MAX_SAFE_INTEGER);
 const USD8 = 100_000_000n;
 /** DUST emissions are raw 18-decimal units; this kernel does not generalize reward decimals. */
@@ -63,7 +64,7 @@ function positivePrice(value: unknown, field: string): bigint {
 
 /** Format an 18-decimal fixed-point value the way ethers `formatUnits(value, 18)` does. */
 function formatUsd18(value: bigint): string {
-  const unit = 10n ** BigInt(DUST_DECIMALS);
+  const unit = pow10(DUST_DECIMALS);
   const fraction = (value % unit).toString().padStart(DUST_DECIMALS, '0').replace(/0+$/, '');
   return `${(value / unit).toString()}.${fraction || '0'}`;
 }
@@ -115,7 +116,7 @@ export function calculateMarketAPRFromInputs(input: DustMarketAPRInputs): Market
   const annualEmissions = annualizeEmissionRaw(emissionPerSecond);
   const annualRewardValue = (annualEmissions * rewardPriceUsd8) / USD8;
   const decimalGap = DUST_DECIMALS - assetDecimals;
-  const scale = 10n ** BigInt(Math.abs(decimalGap));
+  const scale = pow10(Math.abs(decimalGap));
   const normalizedSupply = decimalGap >= 0 ? totalSupplyRaw * scale : totalSupplyRaw / scale;
   const supplyValue = (normalizedSupply * assetPriceUsd8) / USD8;
   if (supplyValue <= 0n) {

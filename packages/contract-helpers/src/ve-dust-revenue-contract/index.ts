@@ -1,4 +1,5 @@
 import { dustLockAbi, erc20Abi, revenueRewardAbi } from '@neverland-money/contract-types';
+import { pow10 } from '@neverland-money/math-utils';
 import type { Abi } from 'abitype';
 import { ethers } from 'ethers';
 import type { BigNumberish } from 'ethers';
@@ -30,7 +31,7 @@ type UsdAmount = { amount: bigint; decimals: number };
 function formatUsdTotal(amounts: readonly UsdAmount[]): string {
   const scale = Math.max(USD_TOTAL_MIN_DECIMALS, ...amounts.map(entry => entry.decimals));
   const total = amounts.reduce(
-    (sum, entry) => sum + entry.amount * 10n ** BigInt(scale - entry.decimals),
+    (sum, entry) => sum + entry.amount * pow10(scale - entry.decimals),
     0n,
   );
   return ethers.formatUnits(total, scale);

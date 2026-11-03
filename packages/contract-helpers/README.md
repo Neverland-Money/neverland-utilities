@@ -1,12 +1,12 @@
 # Neverland Contract Helpers
 
 <p>
-  <a href="https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/contract-helpers/README.md"><img src="https://img.shields.io/badge/Neverland%20Contract%20Helpers-v3.0.0%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Contract Helpers v3.0.0 - Monad mainnet (143) - MIT"/></a>
+  <a href="https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/contract-helpers/README.md"><img src="https://img.shields.io/badge/Neverland%20Contract%20Helpers-v3.0.1%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Contract Helpers v3.0.1 - Monad mainnet (143) - MIT"/></a>
 </p>
 
-Contract helpers for Neverland lending, DUST locks, emissions and revenue rewards. Version 3.0.0
+Contract helpers for Neverland lending, DUST locks, emissions and revenue rewards. Version 3.0.1
 uses ethers **^6.17.0** for every helper and depends on contract-types exactly **3.0.0** and
-math-utils exactly **1.0.0**. `ethers`, `bignumber.js` and `reflect-metadata` are caret ranges, so a
+math-utils exactly **1.0.1**. `ethers`, `bignumber.js` and `reflect-metadata` are caret ranges, so a
 compatible newer version already in your application is shared with this package instead of being
 installed twice.
 
@@ -35,7 +35,9 @@ consumers can use ordinary ethers 6 types in either mode. Match explicit deep im
 `dist/esm` for ESM and `dist/cjs` for CommonJS. Both extensionless module paths and explicit `.js`
 paths are supported, including directory modules such as `dist/esm/erc20-contract`, and native Node
 ESM can import the `dist/esm` deep paths. The two runtime graphs have separate class identities;
-keep providers, contracts and constructors in the same graph.
+keep providers, contracts and constructors in the same graph. The 3.0.1 build avoids BigInt
+exponentiation in its validation, DUST APR and revenue formatting paths so client bundlers cannot
+turn those operations into `Math.pow` calls with BigInt arguments.
 
 ## Requirements
 

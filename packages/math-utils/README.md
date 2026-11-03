@@ -1,7 +1,7 @@
 # Neverland Math Utils
 
 <p>
-  <a href="https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/math-utils/README.md"><img src="https://img.shields.io/badge/Neverland%20Math%20Utils-v1.0.0%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Math Utils v1.0.0 - Monad mainnet (143) - MIT"/></a>
+  <a href="https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/math-utils/README.md"><img src="https://img.shields.io/badge/Neverland%20Math%20Utils-v1.0.1%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Math Utils v1.0.1 - Monad mainnet (143) - MIT"/></a>
 </p>
 
 `@neverland-money/math-utils` provides reserve, account, interest, incentive and repayment
@@ -31,6 +31,11 @@ files ship beside both builds, with explicit module boundaries for NodeNext. Can
 deep paths accept both extensionless and explicit `.js` forms. Use `dist/esm` deep paths in ESM and
 `dist/cjs` in CommonJS. Build-time TypeScript transforms emit native ESM specifiers and maps; the
 numeric behavior and recorded financial fixture values are preserved across both builds.
+
+`pow10(exponent)` returns an exact `bigint` power of ten for a nonnegative safe integer exponent. It
+uses decimal-string construction so client bundlers cannot lower BigInt exponentiation to
+`Math.pow`, which rejects BigInt inputs. The repayment and DUST APR calculations use the same
+bundle-safe approach without changing their results.
 
 ## Differences From Aave math-utils
 

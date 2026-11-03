@@ -1,6 +1,6 @@
 {
   "name": "@neverland-money/math-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Owned math utilities for the Neverland lending protocol",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

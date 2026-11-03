@@ -1,3 +1,5 @@
+import { pow10 } from './bigint';
+
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- Public interface retains consumer declaration merging.
 export interface CalculateBufferedRepayAmountParams {
   debtRaw: string;
@@ -5,10 +7,10 @@ export interface CalculateBufferedRepayAmountParams {
   windowSeconds?: number;
 }
 
-const RAY = 10n ** 27n;
+const RAY = pow10(27);
 const YEAR = 31_536_000n;
-const UINT128_MAX = 2n ** 128n - 1n;
-const UINT256_MAX = 2n ** 256n - 1n;
+const UINT128_MAX = BigInt(`0x${'f'.repeat(32)}`);
+const UINT256_MAX = BigInt(`0x${'f'.repeat(64)}`);
 
 function unsignedInteger(value: string, name: string, maximum: bigint): bigint {
   if (typeof value !== 'string' || !/^\d+$/.test(value)) {

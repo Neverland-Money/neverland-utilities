@@ -461,6 +461,7 @@ try {
     'nativeToUSD',
     'normalize',
     'normalizeBN',
+    'pow10',
     'rayDiv',
     'rayDivCeil',
     'rayDivFloor',

@@ -2284,13 +2284,13 @@
     },
     {
       "path": "dust-apr-contract/index.test.ts",
-      "sha256": "cb30c1a86dd75f2a1bef9bae8492c5ca034314c9eadad187b8843c4b84d6cd7f",
-      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs. Pin the clock validation that rejects before any chain read and fails the whole batch."
+      "sha256": "6ac5e125e1fc3003fab4be0ee1b30a3214b8a3edb9e1910c4b9d8bf6bc6beb64",
+      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs. Pin the clock validation that rejects before any chain read and fails the whole batch. Cover acceptance of the maximum uint256 clock for individual and batch calculations."
     },
     {
       "path": "dust-apr-contract/index.ts",
-      "sha256": "ddce53bceb0e4396721353f6fb72b56f87753e8362b2e9b439cb20dc38effc71",
-      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs."
+      "sha256": "4170f6ed0ec457cc6cd652f1c9c63a613c6ed14fabe462d094eed8de913b44d8",
+      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs. Use equivalent bundle-safe powers of ten and a hex uint limit."
     },
     {
       "path": "dust-apr-contract/types.ts",
@@ -2375,8 +2375,8 @@
     },
     {
       "path": "pool-contract/validation.ts",
-      "sha256": "313d7fe7c55c7b7c432f5d602055090d1b675f2724557ff1bd9cc860616cebf7",
-      "reason": "Replace the raw-compare assertNonZeroAddress with the shared commons/address check and add positiveRawAmount, the strict positive raw-amount parser built on unsignedDecimal. Share finiteAddress, the checksummed nonzero pool, token and user address check, between Pool and PoolBundle."
+      "sha256": "dca7aff29970cd36e2c394d2b04cb85e2755ccfb9545797eb48d89300a417e37",
+      "reason": "Replace the raw-compare assertNonZeroAddress with the shared commons/address check and add positiveRawAmount, the strict positive raw-amount parser built on unsignedDecimal. Share finiteAddress, the checksummed nonzero pool, token and user address check, between Pool and PoolBundle. Use an equivalent hex uint limit to avoid bundler-lowered BigInt exponentiation."
     },
     {
       "path": "sdk-compatibility.test.ts",
@@ -2394,8 +2394,8 @@
     },
     {
       "path": "ve-dust-revenue-contract/index.ts",
-      "sha256": "13173dbc89d1845dfc036277868115cc4131cdd2773aae2362f99bacb0c1adcf",
-      "reason": "Accept readonly exact uint256 IDs in revenue batch encoders and verify canonical calldata without changing existing aggregation policies. Format each revenue reward token with its own ERC20 decimals and total only declared or default USD reward tokens without adding raw units across tokens, while keeping single-USDC output identical. Return unpricedRewardTokens from getProtocolData, sum the readable USD tokens when some decimals reads fail, and select no default USD token when the fallback enumeration skipped an index."
+      "sha256": "58dcfbf992a56dbdd4a73e3b5d4fe84c1e50cbb28ee6150d06f5df2297b2ce16",
+      "reason": "Accept readonly exact uint256 IDs in revenue batch encoders and verify canonical calldata without changing existing aggregation policies. Format each revenue reward token with its own ERC20 decimals and total only declared or default USD reward tokens without adding raw units across tokens, while keeping single-USDC output identical. Return unpricedRewardTokens from getProtocolData, sum the readable USD tokens when some decimals reads fail, and select no default USD token when the fallback enumeration skipped an index. Use equivalent bundle-safe powers of ten for reward scaling."
     },
     {
       "path": "ve-dust-revenue-contract/types.ts",

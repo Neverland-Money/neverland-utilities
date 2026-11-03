@@ -2,7 +2,7 @@ import { getAddress, isAddress, ZeroAddress } from 'ethers';
 import { InterestRate } from '../commons/types';
 import { API_ETH_MOCK_ADDRESS } from '../commons/utils';
 
-export const UINT256_MAX = 2n ** 256n - 1n;
+export const UINT256_MAX = BigInt(`0x${'f'.repeat(64)}`);
 
 /** Neverland lending has no stable debt, so every mode except Stable selects variable debt (2), as the gateway does. */
 export function legacyRateMode(value: InterestRate | undefined): 1 | 2 {

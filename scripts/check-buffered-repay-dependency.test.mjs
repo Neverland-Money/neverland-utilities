@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { checkBufferedRepayDependency as verify } from './check-buffered-repay-dependency.mjs';
 
 const mathSource = fileURLToPath(new URL('../packages/math-utils', import.meta.url));
+const mathVersion = JSON.parse(readFileSync(join(mathSource, 'package.json'), 'utf8')).version;
 const sourceRequire = createRequire(
   new URL('../packages/math-utils/package.json', import.meta.url),
 );
@@ -31,7 +32,7 @@ function fixture(context, mutate) {
       name: '@neverland-money/contract-helpers',
       version: '2.1.0',
       main: 'index.js',
-      dependencies: { '@neverland-money/math-utils': '1.0.0' },
+      dependencies: { '@neverland-money/math-utils': mathVersion },
     }),
   );
   writeFileSync(
@@ -53,7 +54,7 @@ function fixture(context, mutate) {
     consumerRequire,
     helperRequire,
     helpers: consumerRequire('@neverland-money/contract-helpers'),
-    expectedVersion: '1.0.0',
+    expectedVersion: mathVersion,
   };
 }
 
@@ -81,7 +82,7 @@ for (const target of ['rootMath', 'localMath']) {
     const params = fixture(context, locations => {
       const path = join(locations[target], 'package.json');
       const manifest = JSON.parse(readFileSync(path, 'utf8'));
-      manifest.version = '1.0.1';
+      manifest.version = '0.0.0';
       writeFileSync(path, JSON.stringify(manifest));
     });
     assert.throws(() => verify(params), /math version/);
@@ -92,7 +93,7 @@ test('rejects a nonexact helper math dependency', context => {
   const params = fixture(context, ({ helper }) => {
     const path = join(helper, 'package.json');
     const manifest = JSON.parse(readFileSync(path, 'utf8'));
-    manifest.dependencies['@neverland-money/math-utils'] = '^1.0.0';
+    manifest.dependencies['@neverland-money/math-utils'] = `^${mathVersion}`;
     writeFileSync(path, JSON.stringify(manifest));
   });
   assert.throws(() => verify(params), /exact math dependency/);
