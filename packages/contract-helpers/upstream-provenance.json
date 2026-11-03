@@ -2284,8 +2284,8 @@
     },
     {
       "path": "dust-apr-contract/index.test.ts",
-      "sha256": "cb30c1a86dd75f2a1bef9bae8492c5ca034314c9eadad187b8843c4b84d6cd7f",
-      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs. Pin the clock validation that rejects before any chain read and fails the whole batch."
+      "sha256": "6ac5e125e1fc3003fab4be0ee1b30a3214b8a3edb9e1910c4b9d8bf6bc6beb64",
+      "reason": "Delegate exact DUST APR to math-utils, read canonical native bigint rewards and token supply, preserve transport errors, and distinguish dormant campaigns from unresolved batch inputs. Pin the clock validation that rejects before any chain read and fails the whole batch. Cover acceptance of the maximum uint256 clock for individual and batch calculations."
     },
     {
       "path": "dust-apr-contract/index.ts",

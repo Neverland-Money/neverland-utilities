@@ -217,6 +217,25 @@ describe('DustAPRCalculator strict DUST APR', () => {
     },
   );
 
+  it('accepts the maximum uint256 bigint clock for market and batch calculations', async () => {
+    const { provider, calculator, calls } = fixture();
+    const maximumClock = { nowSeconds: 2n ** 256n - 1n };
+    const dormantMarket = {
+      apr: 0,
+      isActive: false,
+      emissionPerSecond: '1000000000000000000',
+      distributionEnd: 1_700_086_400,
+    };
+
+    await expect(
+      calculator.calculateMarketAPR(asset, reward, controller, provider, prices, maximumClock),
+    ).resolves.toEqual(dormantMarket);
+    await expect(
+      calculator.calculateBatchAPR([market], controller, provider, prices, maximumClock),
+    ).resolves.toEqual({ healthy: dormantMarket });
+    expect(calls).toEqual(['getRewardsData', 'getRewardsData']);
+  });
+
   // The pure kernel rejects the same values with the same message, but only after the contract
   // reads, and a batch swallows that per-market failure. The up-front check is what rejects first.
   it.each([

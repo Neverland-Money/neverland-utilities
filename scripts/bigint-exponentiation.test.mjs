@@ -60,21 +60,25 @@ function bigintExponentiationSites(paths) {
 }
 
 test('shipped SDK source avoids BigInt exponentiation that bundlers can lower to Math.pow', () => {
-  const paths = ['math-utils', 'contract-helpers'].flatMap(name =>
+  const paths = ['math-utils', 'contract-helpers', 'contract-types', 'address-book'].flatMap(name =>
     sourceFiles(join(root, 'packages', name, 'src')),
   );
   assert.deepEqual(bigintExponentiationSites(paths), []);
 });
 
-test('detects BigInt exponentiation and exponentiation assignment', context => {
+test('detects BigInt literals, typed operands and exponentiation assignment', context => {
   const directory = mkdtempSync(join(tmpdir(), 'neverland-bigint-exponentiation-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
   const path = join(directory, 'fixture.ts');
   writeFileSync(
     path,
-    'let value: bigint = 10n;\nlet exponent: bigint = 2n;\nvalue ** exponent;\nvalue **= exponent;\nlet count = 2;\ncount **= 3;\n',
+    'let value: bigint = 10n;\nlet exponent: bigint = 2n;\nvalue ** exponent;\nvalue **= exponent;\nlet count = 2;\ncount **= 3;\n10n ** 27n;\n',
   );
 
   const fixture = relative(root, path);
-  assert.deepEqual(bigintExponentiationSites([path]), [`${fixture}:3`, `${fixture}:4`]);
+  assert.deepEqual(bigintExponentiationSites([path]), [
+    `${fixture}:3`,
+    `${fixture}:4`,
+    `${fixture}:7`,
+  ]);
 });
