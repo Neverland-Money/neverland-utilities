@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { readdirSync } from 'node:fs';
+import { mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join, relative } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -19,10 +20,7 @@ function sourceFiles(directory) {
   });
 }
 
-test('shipped SDK source avoids BigInt exponentiation that bundlers can lower to Math.pow', () => {
-  const paths = ['math-utils', 'contract-helpers'].flatMap(name =>
-    sourceFiles(join(root, 'packages', name, 'src')),
-  );
+function bigintExponentiationSites(paths) {
   const program = ts.createProgram(paths, {
     target: ts.ScriptTarget.ES2020,
     module: ts.ModuleKind.ESNext,
@@ -44,7 +42,8 @@ test('shipped SDK source avoids BigInt exponentiation that bundlers can lower to
     const visit = node => {
       if (
         ts.isBinaryExpression(node) &&
-        node.operatorToken.kind === ts.SyntaxKind.AsteriskAsteriskToken &&
+        (node.operatorToken.kind === ts.SyntaxKind.AsteriskAsteriskToken ||
+          node.operatorToken.kind === ts.SyntaxKind.AsteriskAsteriskEqualsToken) &&
         (isBigInt(node.left) || isBigInt(node.right))
       ) {
         const { line } = source.getLineAndCharacterOfPosition(node.getStart(source));
@@ -57,5 +56,25 @@ test('shipped SDK source avoids BigInt exponentiation that bundlers can lower to
     visit(source);
   }
 
-  assert.deepEqual(violations, []);
+  return violations;
+}
+
+test('shipped SDK source avoids BigInt exponentiation that bundlers can lower to Math.pow', () => {
+  const paths = ['math-utils', 'contract-helpers'].flatMap(name =>
+    sourceFiles(join(root, 'packages', name, 'src')),
+  );
+  assert.deepEqual(bigintExponentiationSites(paths), []);
+});
+
+test('detects BigInt exponentiation and exponentiation assignment', context => {
+  const directory = mkdtempSync(join(tmpdir(), 'neverland-bigint-exponentiation-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const path = join(directory, 'fixture.ts');
+  writeFileSync(
+    path,
+    'let value: bigint = 10n;\nlet exponent: bigint = 2n;\nvalue ** exponent;\nvalue **= exponent;\nlet count = 2;\ncount **= 3;\n',
+  );
+
+  const fixture = relative(root, path);
+  assert.deepEqual(bigintExponentiationSites([path]), [`${fixture}:3`, `${fixture}:4`]);
 });
