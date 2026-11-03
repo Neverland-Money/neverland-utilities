@@ -1,4 +1,5 @@
 export * from './bignumber';
+export * from './bigint';
 export * from './constants';
 export * from './ray.math';
 export * from './pool-math';

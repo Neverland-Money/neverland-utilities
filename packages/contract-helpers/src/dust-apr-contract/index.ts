@@ -1,6 +1,7 @@
 import { erc20Abi } from '@neverland-money/contract-types';
 import {
   calculateMarketAPRFromInputs,
+  pow10,
   UnresolvedDustAPRInputError,
 } from '@neverland-money/math-utils';
 import { ethers } from 'ethers';
@@ -12,6 +13,8 @@ export {
   calculateMarketAPRFromInputs,
   UnresolvedDustAPRInputError,
 } from '@neverland-money/math-utils';
+
+const UINT256_MAX = BigInt(`0x${'f'.repeat(64)}`);
 
 function resolveNowSeconds(options?: DustAPRCalculationOptions): bigint {
   const explicitNow = options?.nowSeconds;
@@ -25,7 +28,7 @@ function resolveNowSeconds(options?: DustAPRCalculationOptions): bigint {
     return BigInt(now);
   }
 
-  if (typeof now !== 'bigint' || now < 0n || now > 2n ** 256n - 1n) {
+  if (typeof now !== 'bigint' || now < 0n || now > UINT256_MAX) {
     throw new UnresolvedDustAPRInputError('nowSeconds must be a nonnegative uint256 bigint');
   }
 
@@ -46,7 +49,7 @@ function priceUsd8(price: number | undefined, token: string): bigint {
   const [whole, fraction = ''] = mantissa.split('.');
   const shift = Number(exponent) - fraction.length + 8;
   const digits = BigInt(whole + fraction);
-  const scaled = shift >= 0 ? digits * 10n ** BigInt(shift) : digits / 10n ** BigInt(-shift);
+  const scaled = shift >= 0 ? digits * pow10(shift) : digits / pow10(-shift);
   if (scaled <= 0n || scaled > BigInt(Number.MAX_SAFE_INTEGER)) {
     throw new UnresolvedDustAPRInputError(
       `${token} price must resolve to a positive safe USD8 integer`,

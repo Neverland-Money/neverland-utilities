@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-helpers@3.0.0...@neverland-money/contract-helpers@3.0.1) (2026-11-03)
+
+- Replace BigInt exponentiation in uint256 validation, DUST APR price scaling and veDUST revenue
+  formatting with bundle-safe exact integer operations. This prevents client bundlers from emitting
+  `Math.pow` with BigInt arguments without changing calculation results or validation limits.
+- Require `@neverland-money/math-utils` 1.0.1 for its bundle-safe `pow10` helper.
+
 ## [3.0.0](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-helpers@2.0.0...@neverland-money/contract-helpers@3.0.0) (2026-11-02)
 
 ### Breaking Changes

@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.0.1] (2026-11-03)
+
+- Replace BigInt exponentiation in buffered repayment and DUST APR calculations with bundle-safe
+  exact integer construction. This prevents client bundlers from emitting `Math.pow` with BigInt
+  arguments; calculation results and validation limits are unchanged.
+- Export `pow10(exponent)` for exact nonnegative safe integer powers of ten.
+
 ## [1.0.0] (2026-11-02)
 
 - Fork Aave `@aave/math-utils` 1.36.1 (MIT, Copyright (c) 2021 Aave). The fork keeps upstream's
