@@ -118,4 +118,8 @@ export interface UserReserveDataHumanized {
   scaledATokenBalance: string;
   usageAsCollateralEnabledOnUser: boolean;
   scaledVariableDebt: string;
+  /** Legacy ABI fields; Neverland stable borrowing is disabled. */
+  principalStableDebt?: string;
+  stableBorrowRate?: string;
+  stableBorrowLastUpdateTimestamp?: number;
 }

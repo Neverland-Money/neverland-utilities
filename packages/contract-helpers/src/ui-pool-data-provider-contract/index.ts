@@ -282,6 +282,9 @@ export class UiPoolDataProvider
         scaledATokenBalance: userReserveRaw.scaledATokenBalance.toString(),
         usageAsCollateralEnabledOnUser: userReserveRaw.usageAsCollateralEnabledOnUser,
         scaledVariableDebt: userReserveRaw.scaledVariableDebt.toString(),
+        principalStableDebt: userReserveRaw.principalStableDebt.toString(),
+        stableBorrowRate: userReserveRaw.stableBorrowRate.toString(),
+        stableBorrowLastUpdateTimestamp: getNumber(userReserveRaw.stableBorrowLastUpdateTimestamp),
       })),
       userEmodeCategoryId: getNumber(userEmodeCategoryId),
     };

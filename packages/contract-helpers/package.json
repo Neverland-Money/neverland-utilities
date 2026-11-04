@@ -1,6 +1,6 @@
 {
   "name": "@neverland-money/contract-helpers",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "Contract helper classes for Neverland protocol",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -195,6 +195,14 @@
       "types": "./dist/cjs/*.d.ts",
       "default": "./dist/cjs/*.js"
     },
-    "./*": "./*"
+    "./*": "./*",
+    "./dist/esm/ui-incentive-data-provider-contract": {
+      "types": "./dist/esm/ui-incentive-data-provider-contract/index.d.ts",
+      "default": "./dist/esm/ui-incentive-data-provider-contract/index.js"
+    },
+    "./dist/cjs/ui-incentive-data-provider-contract": {
+      "types": "./dist/cjs/ui-incentive-data-provider-contract/index.d.ts",
+      "default": "./dist/cjs/ui-incentive-data-provider-contract/index.js"
+    }
   }
 }

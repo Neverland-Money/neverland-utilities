@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-helpers@3.0.1...@neverland-money/contract-helpers@3.1.0) (2026-11-04)
+
+- Add native ethers 6 `UiIncentiveDataProvider` with ABI-derived raw reserve/user/full reads and
+  Neverland-compatible humanized incentive reads. Preserve exact raw-unit amount, price and index
+  strings, check bounded numeric metadata, and forward optional historical block tags.
+- Preserve legacy stable-debt ABI fields in incentive and humanized user reserve results for schema
+  compatibility. Neverland stable borrowing remains disabled.
+- Export the incentive provider and its types from the package root and ESM/CJS deep paths.
+
 ## [3.0.1](https://github.com/Neverland-Money/neverland-utilities/compare/@neverland-money/contract-helpers@3.0.0...@neverland-money/contract-helpers@3.0.1) (2026-11-03)
 
 - Replace BigInt exponentiation in uint256 validation, DUST APR price scaling and veDUST revenue

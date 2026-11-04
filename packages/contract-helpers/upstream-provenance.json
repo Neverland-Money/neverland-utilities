@@ -2162,14 +2162,14 @@
     {
       "path": "v3-UiIncentiveDataProvider-contract/types.ts",
       "originalSha256": "04d837cdb511a946b3b39fcd1481d0878f6e4c8b2725c825c6c988d9cb301230",
-      "vendoredSha256": "2a89dbc9ec490a8a7e724c1114a6cd43ffcef7878db6646d76da900606ce4e36",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+      "vendoredSha256": "f7e72f3f15e1aee19443c5d120ea8deaeb8161c5cadf847556f7799d63952355",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Expose optional stable-debt incentive schema fields for source-compatible legacy ABI decoding; Neverland stable borrowing is disabled."
     },
     {
       "path": "v3-UiPoolDataProvider-contract/types.ts",
       "originalSha256": "c69ea52740a1b173f68d17f496f559b8a6908d602df7ba5529b4096a9698f33d",
-      "vendoredSha256": "e1d646ad922187cacd0807c088c8888d43d8baa0e83883936adc6a26baa0abe1",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior."
+      "vendoredSha256": "d073c7fe7f84b3165c036050cac53eaebaa14f97d4aab3083f212970746cc97b",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Expose optional legacy stable-debt principal, rate and timestamp fields without requiring existing consumer-created DTOs to include them."
     },
     {
       "path": "v3-UiPoolDataProvider-legacy-contract/_mocks.ts",
@@ -2180,14 +2180,14 @@
     {
       "path": "v3-UiPoolDataProvider-legacy-contract/index.ts",
       "originalSha256": "0028e26170f3e7bf9830eafc070f7389fc006849eee261fb956388ea34c29b57",
-      "vendoredSha256": "25efcda25dedd36d114d37082137665ad81144b04177d69ea27e65b09192409e",
-      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Rebuild lending-core 1.1 E-mode categories from embedded reserve fields; remove Ethereum-mainnet AMM symbol overrides."
+      "vendoredSha256": "f6c718cc1ca9c3e7d2e5a0390b849465eb1da1f7d15330ece58e75c8635b5cec",
+      "reason": "Formatting, type-only imports and declaration comments preserve public interface kinds, financial arithmetic, defaulting, call order and runtime behavior. Rebuild lending-core 1.1 E-mode categories from embedded reserve fields; remove Ethereum-mainnet AMM symbol overrides. Preserve legacy stable-debt user principal and rate as exact raw strings and check timestamp conversion; Neverland stable borrowing remains disabled."
     },
     {
       "path": "v3-UiPoolDataProvider-legacy-contract/legacyUiPoolDataProvider.test.ts",
       "originalSha256": "79a8445b8ae7eaf8adae89f9d8e38c09550490c2e70a3165c98dd0ae10d1409a",
-      "vendoredSha256": "a4568c20293b561b8b30cc139138763ee5a1f29c652a4c5aa82c489e87a1addb",
-      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Expect rebuilt E-mode categories, raw on-chain symbols and concrete read values."
+      "vendoredSha256": "b4bf3d05905c958e7a41a96d3aeb338ce3234c6163f04112cb80beac22f852cb",
+      "reason": "Source formatting and explicit test table/mock types preserve every original case and financial expected value. Expect rebuilt E-mode categories, raw on-chain symbols and concrete read values. Assert zero legacy stable-debt schema fields in Neverland-compatible humanized user rows."
     },
     {
       "path": "v3-pool-contract-bundle/index.ts",
@@ -2329,8 +2329,8 @@
     },
     {
       "path": "index.ts",
-      "sha256": "c6d1984ccb94a03030f194416f28b474a1c45778d5b45430a456eff762d33c0b",
-      "reason": "Export provider-free claim and lock builders, exact DUST APR and shared UI result conversion, emission decoding and pagination types; retain existing lending exports."
+      "sha256": "e62be48c1bf7acb7fd979324c5ee0823fce9716438286ef3a5b2d5a1aa2ba727",
+      "reason": "Export provider-free claim and lock builders, exact DUST APR and shared UI result conversion, emission decoding and pagination types; retain existing lending exports. Export native ethers 6 incentive provider and raw/humanized compatibility types."
     },
     {
       "path": "interest-rate.ts",
@@ -2504,6 +2504,26 @@
       "path": "pool-contract/amount-parsing.test.ts",
       "reason": "New Neverland test file covering the valueToWei grammar, private BigNumber configuration and bounds, method-level RangeErrors for the decimal Pool, gateway and approval methods, and strict PoolBundle and synchronous-builder raw amounts. Add a linear-time regression test and a 56-spelling valueToWei equivalence table.",
       "sha256": "9066eaef9cde88d6be4ecbfd7625846ba66c95405dc12c05dd07a213edd930b5"
+    },
+    {
+      "path": "ui-incentive-data-provider-contract/index.ts",
+      "reason": "Native Neverland ethers 6 incentive reader and ABI-derived types/tests, or synthetic legacy stable-debt schema regression proof. No upstream implementation is copied; original retained/omitted manifest remains unchanged.",
+      "sha256": "9843d7fcb32c750c28383f968352b08568d451a4827b4310164a8f84682dd7ce"
+    },
+    {
+      "path": "ui-incentive-data-provider-contract/types.ts",
+      "reason": "Native Neverland ethers 6 incentive reader and ABI-derived types/tests, or synthetic legacy stable-debt schema regression proof. No upstream implementation is copied; original retained/omitted manifest remains unchanged.",
+      "sha256": "eeea0c53ee174e70083ce244b47ffa92c5d658402448267f21839ecb6f7f75f9"
+    },
+    {
+      "path": "ui-incentive-data-provider-contract/index.test.ts",
+      "reason": "Native Neverland ethers 6 incentive reader and ABI-derived types/tests, or synthetic legacy stable-debt schema regression proof. No upstream implementation is copied; original retained/omitted manifest remains unchanged.",
+      "sha256": "5c3c082b8ff1e7d1ef40ad7406dc7cc5acb5d06e1f98a47092ffc9c5340ea04c"
+    },
+    {
+      "path": "ui-pool-data-provider-contract/stable-schema.test.ts",
+      "reason": "Native Neverland ethers 6 incentive reader and ABI-derived types/tests, or synthetic legacy stable-debt schema regression proof. No upstream implementation is copied; original retained/omitted manifest remains unchanged.",
+      "sha256": "c7cb3ddb1b225fa86adc12c69c08e3fe7ee2382cda1038f52303767a3b2f7d90"
     }
   ]
 }
