@@ -1,10 +1,10 @@
 # Neverland Contract Helpers
 
 <p>
-  <a href="https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/contract-helpers/README.md"><img src="https://img.shields.io/badge/Neverland%20Contract%20Helpers-v3.0.1%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Contract Helpers v3.0.1 - Monad mainnet (143) - MIT"/></a>
+  <a href="https://github.com/Neverland-Money/neverland-utilities/blob/main/packages/contract-helpers/README.md"><img src="https://img.shields.io/badge/Neverland%20Contract%20Helpers-v3.1.0%20%C2%B7%20Monad%20mainnet%20%28143%29%20%C2%B7%20MIT-192170?style=for-the-badge" alt="Neverland Contract Helpers v3.1.0 - Monad mainnet (143) - MIT"/></a>
 </p>
 
-Contract helpers for Neverland lending, DUST locks, emissions and revenue rewards. Version 3.0.1
+Contract helpers for Neverland lending, DUST locks, emissions and revenue rewards. Version 3.1.0
 uses ethers **^6.17.0** for every helper and depends on contract-types exactly **3.0.0** and
 math-utils exactly **1.0.1**. `ethers`, `bignumber.js` and `reflect-metadata` are caret ranges, so a
 compatible newer version already in your application is shared with this package instead of being
@@ -54,6 +54,37 @@ turn those operations into `Math.pow` calls with BigInt arguments.
   because the `abitype` declarations that viem's types import are ESM-only; use `nodenext` or keep
   `skipLibCheck` on.
 
+## UI Incentive Reads
+
+```ts
+import { UiIncentiveDataProvider } from '@neverland-money/contract-helpers';
+
+const incentives = new UiIncentiveDataProvider({
+  uiIncentiveDataProviderAddress,
+  provider, // The caller's ethers 6 Provider; no internal RPC connection is created.
+  chainId: 143,
+});
+const reserves = await incentives.getReservesIncentivesDataHumanized(
+  { lendingPoolAddressProvider },
+  { blockTag: 123456 }, // Optional; block 0 is preserved too.
+);
+const userReserves = await incentives.getUserReservesIncentivesDataHumanized(
+  { lendingPoolAddressProvider, user },
+  { blockTag: 123456 },
+);
+```
+
+Humanized emissions, prices, indexes and unclaimed rewards are exact **raw-unit decimal strings**,
+including for six- and eighteen-decimal reward tokens. Decimals and timestamps use checked numeric
+conversion; unsafe timestamps throw. IDs and underlying assets are lowercase, with the same
+market/user identity layout as `UiPoolDataProvider`. Raw reads retain ethers `Result` tuples and
+bigint quantities. Provider errors propagate to the caller.
+
+The lending 1.1 ABI retains a-token, variable-debt and stable-debt incentive fields. Neverland has
+no stable borrowing; those stable-debt fields are schema compatibility data, not support for a
+stable borrowing feature. `UiPoolDataProvider.getUserReservesHumanized` also preserves its legacy
+stable-debt principal/rate/timestamp fields (zero for Neverland).
+
 ## Canonical Lending API
 
 The Aave-derived lending services below are new in 3.0.0; contract-helpers 2.0.0 shipped only the
@@ -61,17 +92,18 @@ native Neverland helpers. They were ported from `@aave/contract-helpers` 1.36.1 
 `bigint`. The root exports every service in this table except `WETHGatewayService`, which is
 available from the `wrapped-native-gateway-contract` deep path.
 
-| Service                 | Retained methods and units                                                                                                                                                                                                                                                         |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Pool`                  | `getReserveData`; `deposit`, `supply`, `borrow`, `repay`, `withdraw`, `supplyWithPermit`, `repayWithPermit`, `repayWithATokens`, `setUsageAsCollateral`, `setUserEMode`; decimal `amount` inputs; transaction callbacks                                                            |
-| `Pool` raw policy       | `supplyRaw`, `repayRaw`, `supplyWithPermitRaw`, `repayWithPermitRaw`; exact unsigned base-unit `amountRaw` strings                                                                                                                                                                 |
-| `PoolBundle`            | `supplyTxBuilder.generateTxData/generateSignedTxData/getApprovedAmount`, `borrowTxBuilder.generateTxData`, `repayTxBuilder.generateTxData/generateSignedTxData`, `repayWithATokensTxBuilder.generateTxData`; base-unit `amount` strings, synchronous `TransactionRequest` builders |
-| `WETHGatewayService`    | `depositETH`, `borrowETH`, `withdrawETH`, `repayETH`; synchronous `generateDepositEthTxData`, `generateBorrowEthTxData`, `generateRepayEthTxData`; deep path only                                                                                                                  |
-| `ERC20Service`          | `decimalsOf`, `getTokenData`, `isApproved`, `approve`, `approveTxData`, `approvedAmount`, `allowanceRaw`                                                                                                                                                                           |
-| `ERC20_2612Service`     | `getNonce`: `Promise<bigint \| null>` using standard `nonces(address)`                                                                                                                                                                                                             |
-| `BaseDebtToken`         | `approveDelegation`, `generateApproveDelegationTxData`, `isDelegationApproved`, `approvedDelegationAmount`, `borrowAllowanceRaw`                                                                                                                                                   |
-| `UiPoolDataProvider`    | `getReservesList`, `getReservesData`, `getUserReservesData`, `getReservesHumanized`, `getUserReservesHumanized`, `getEModes`, `getEModesHumanized`; the active lending 1.1 decoder                                                                                                 |
-| `WalletBalanceProvider` | `balanceOf`, `batchBalanceOf`, `getUserWalletBalancesForLendingPoolProvider`; bigint balances; `batchBalanceOf` accepts a block tag, including zero                                                                                                                                |
+| Service                   | Retained methods and units                                                                                                                                                                                                                                                         |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Pool`                    | `getReserveData`; `deposit`, `supply`, `borrow`, `repay`, `withdraw`, `supplyWithPermit`, `repayWithPermit`, `repayWithATokens`, `setUsageAsCollateral`, `setUserEMode`; decimal `amount` inputs; transaction callbacks                                                            |
+| `Pool` raw policy         | `supplyRaw`, `repayRaw`, `supplyWithPermitRaw`, `repayWithPermitRaw`; exact unsigned base-unit `amountRaw` strings                                                                                                                                                                 |
+| `PoolBundle`              | `supplyTxBuilder.generateTxData/generateSignedTxData/getApprovedAmount`, `borrowTxBuilder.generateTxData`, `repayTxBuilder.generateTxData/generateSignedTxData`, `repayWithATokensTxBuilder.generateTxData`; base-unit `amount` strings, synchronous `TransactionRequest` builders |
+| `WETHGatewayService`      | `depositETH`, `borrowETH`, `withdrawETH`, `repayETH`; synchronous `generateDepositEthTxData`, `generateBorrowEthTxData`, `generateRepayEthTxData`; deep path only                                                                                                                  |
+| `ERC20Service`            | `decimalsOf`, `getTokenData`, `isApproved`, `approve`, `approveTxData`, `approvedAmount`, `allowanceRaw`                                                                                                                                                                           |
+| `ERC20_2612Service`       | `getNonce`: `Promise<bigint \| null>` using standard `nonces(address)`                                                                                                                                                                                                             |
+| `BaseDebtToken`           | `approveDelegation`, `generateApproveDelegationTxData`, `isDelegationApproved`, `approvedDelegationAmount`, `borrowAllowanceRaw`                                                                                                                                                   |
+| `UiPoolDataProvider`      | `getReservesList`, `getReservesData`, `getUserReservesData`, `getReservesHumanized`, `getUserReservesHumanized`, `getEModes`, `getEModesHumanized`; the active lending 1.1 decoder                                                                                                 |
+| `UiIncentiveDataProvider` | `getReservesIncentivesData`, `getUserReservesIncentivesData`, `getFullReservesIncentiveData`, `getReservesIncentivesDataHumanized`, `getUserReservesIncentivesDataHumanized`; optional second `{ blockTag }` argument                                                              |
+| `WalletBalanceProvider`   | `balanceOf`, `batchBalanceOf`, `getUserWalletBalancesForLendingPoolProvider`; bigint balances; `batchBalanceOf` accepts a block tag, including zero                                                                                                                                |
 
 Raw amounts, rates, indexes, nonces, balances, allowance and delegation reads are bigint, including
 all small Solidity integer widths. Humanized amounts/indexes/rates remain exact strings; bounded
@@ -365,18 +397,18 @@ For applications that aliased `@aave/contract-helpers`. Each row lists the upstr
 `dist/esm` or `dist/cjs` and its replacement; the mapping is recorded in the repository's
 `upstream-provenance.json`.
 
-| Upstream path                                 | Neverland path                    | Notes                                                                                                                      |
-| --------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `baseDebtToken-contract`                      | `debt-token-contract`             | `BaseDebtToken`                                                                                                            |
-| `erc20-2612`                                  | `erc20-permit-contract`           | `ERC20_2612Service`                                                                                                        |
-| `erc20-contract`                              | `erc20-contract`                  | `ERC20Service`                                                                                                             |
-| `v3-wethgateway-contract`                     | `wrapped-native-gateway-contract` | `WETHGatewayService`                                                                                                       |
-| `v3-UiPoolDataProvider-legacy-contract`       | `ui-pool-data-provider-contract`  | `LegacyUiPoolDataProvider` is now `UiPoolDataProvider`                                                                     |
-| `v3-pool-contract`, `v3-pool-contract-bundle` | `pool-contract`                   | `Pool` and `PoolBundle` share one module; `LendingPoolMarketConfigV3` is now `PoolConfig`                                  |
-| `wallet-balance-provider`                     | `wallet-balance-provider`         | `WalletBalanceProvider`                                                                                                    |
-| `commons/BaseService`                         | `commons/base-service`            | The factory-based `BaseService` is replaced by `AbiBaseService`                                                            |
-| `commons/gasStation`                          | `commons/gas-station`             | `estimateGas`                                                                                                              |
-| `v3-UiIncentiveDataProvider-contract`         | none                              | `UiIncentiveDataProvider` is not shipped. Its nested DTO types remain as `LendingIncentiveDataHumanized` and related types |
+| Upstream path                                 | Neverland path                        | Notes                                                                                     |
+| --------------------------------------------- | ------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `baseDebtToken-contract`                      | `debt-token-contract`                 | `BaseDebtToken`                                                                           |
+| `erc20-2612`                                  | `erc20-permit-contract`               | `ERC20_2612Service`                                                                       |
+| `erc20-contract`                              | `erc20-contract`                      | `ERC20Service`                                                                            |
+| `v3-wethgateway-contract`                     | `wrapped-native-gateway-contract`     | `WETHGatewayService`                                                                      |
+| `v3-UiPoolDataProvider-legacy-contract`       | `ui-pool-data-provider-contract`      | `LegacyUiPoolDataProvider` is now `UiPoolDataProvider`                                    |
+| `v3-pool-contract`, `v3-pool-contract-bundle` | `pool-contract`                       | `Pool` and `PoolBundle` share one module; `LendingPoolMarketConfigV3` is now `PoolConfig` |
+| `wallet-balance-provider`                     | `wallet-balance-provider`             | `WalletBalanceProvider`                                                                   |
+| `commons/BaseService`                         | `commons/base-service`                | The factory-based `BaseService` is replaced by `AbiBaseService`                           |
+| `commons/gasStation`                          | `commons/gas-station`                 | `estimateGas`                                                                             |
+| `v3-UiIncentiveDataProvider-contract`         | `ui-incentive-data-provider-contract` | `UiIncentiveDataProvider`; native ethers 6 implementation added in 3.1.0                  |
 
 Use `@neverland-money/contract-helpers` and `@neverland-money/math-utils`; historical npm aliases
 such as `@aave/contract-helpers` may remain only as application migration references. There is no

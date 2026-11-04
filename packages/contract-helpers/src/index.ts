@@ -165,3 +165,13 @@ export type {
   UserWalletBalancesResponse,
   WalletBalanceProviderContext,
 } from './wallet-balance-provider';
+
+export { UiIncentiveDataProvider } from './ui-incentive-data-provider-contract';
+export type {
+  FullReservesIncentiveData,
+  ReservesIncentiveData,
+  UserReservesIncentiveData,
+  StableReservesIncentiveDataHumanized,
+  StableUserReservesIncentivesDataHumanized,
+  UiIncentiveDataProviderContext,
+} from './ui-incentive-data-provider-contract';

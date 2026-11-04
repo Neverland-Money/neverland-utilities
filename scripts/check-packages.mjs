@@ -15,6 +15,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { checkBufferedRepayDependency } from './check-buffered-repay-dependency.mjs';
+import { assertHelperOutputPath } from './sdk-helper-output-policy.mjs';
 import { vendoredPathMap } from './sdk-provenance-paths.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -156,11 +157,7 @@ try {
       }
 
       for (const file of paths) {
-        assert.doesNotMatch(
-          file,
-          /(?:aave-v3|typechain|umbrella|paraswap|governance|staking|faucet|migration|synthetix|rollups|permissions-manager|cl-feed-registry|token-wrapper|ui-incentive-data-provider)/,
-          'Removed helper output shipped',
-        );
+        assertHelperOutputPath(file);
         assert.doesNotMatch(
           readFileSync(join(directory, file), 'utf8'),
           /ethers-v5|@ethersproject\//,
@@ -367,6 +364,11 @@ try {
   assert.equal(require('@neverland-money/address-book').NeverlandMonadMainnet.CHAIN_ID, 143);
   const helpers = require('@neverland-money/contract-helpers');
   const math = require('@neverland-money/math-utils');
+  assert.equal(
+    require('@neverland-money/contract-helpers/dist/cjs/ui-incentive-data-provider-contract')
+      .UiIncentiveDataProvider,
+    helpers.UiIncentiveDataProvider,
+  );
   const helperRequire = createRequire(
     require.resolve('@neverland-money/contract-helpers/package.json'),
   );
@@ -401,6 +403,7 @@ try {
     'PoolBundle',
     'ProtocolAction',
     'SUPER_BIG_ALLOWANCE_NUMBER',
+    'UiIncentiveDataProvider',
     'UiPoolDataProvider',
     'UnresolvedDustAPRInputError',
     'VeDustRevenueHelper',
@@ -713,7 +716,8 @@ try {
     join(scratch, 'imports.mjs'),
     `
 import { poolAbi } from '@neverland-money/contract-types';
-import { DustLockHelper, PoolBundle } from '@neverland-money/contract-helpers';
+import { DustLockHelper, PoolBundle, UiIncentiveDataProvider } from '@neverland-money/contract-helpers';
+import { UiIncentiveDataProvider as DeepIncentives } from '@neverland-money/contract-helpers/dist/esm/ui-incentive-data-provider-contract';
 import { ERC20Service, AbiBaseService, Pool, calculateBufferedRepayAmount as helperBuffer } from '@neverland-money/contract-helpers';
 import { ERC20Service as DeepToken } from '@neverland-money/contract-helpers/dist/esm/erc20-contract';
 import { Pool as DeepPool } from '@neverland-money/contract-helpers/dist/esm/pool-contract/pool.js';
@@ -727,6 +731,7 @@ if (!poolAbi.length || typeof DustLockHelper !== 'function' || NeverlandMonadMai
 const provider = new JsonRpcProvider('http://127.0.0.1:1', 143, { staticNetwork: true });
 const address = '0x1111111111111111111111111111111111111111';
 const base = new AbiBaseService(provider, poolAbi);
+if (DeepIncentives !== UiIncentiveDataProvider || new UiIncentiveDataProvider({ provider, chainId:143, uiIncentiveDataProviderAddress:address }).provider !== provider) throw new Error('Invalid incentive provider ESM exports');
 if (base.provider !== provider || !(base.iface instanceof Interface) || !(base.getContractInstance(address) instanceof Contract) || new PoolBundle(provider, {POOL: address}).poolService.constructor !== Pool || DeepPool !== Pool || DeepToken !== ERC20Service || helperBuffer !== calculateBufferedRepayAmount || deepPrice !== explicitPrice || deepPrice([], '0x1', '123000000', '8') !== '1.23') throw new Error('Invalid native ESM identities/deep paths');
 if (Contract === createRequire(import.meta.url)('ethers').Contract) throw new Error('Expected distinct ethers import/require class identities');
 provider.destroy();
@@ -796,7 +801,7 @@ await import('./browser/browser-entry.mjs');
     `
 import { ${names.join(', ')} } from '@neverland-money/contract-types';
 import type { ${catalog.abis.map(entry => entry.typeName).join(', ')}, ContractFunctionName, ContractFunctionReturnType } from '@neverland-money/contract-types';
-import { DustLockHelper, ClaimRewardsHelper, NeverlandUiService, Pool, PoolBundle, InterestRate, ERC20Service, ERC20_2612Service, BaseDebtToken, UiPoolDataProvider, WalletBalanceProvider, buildErc2612PermitTypedData, calculateBufferedRepayAmount } from '@neverland-money/contract-helpers';
+import { DustLockHelper, ClaimRewardsHelper, NeverlandUiService, Pool, PoolBundle, InterestRate, ERC20Service, ERC20_2612Service, BaseDebtToken, UiPoolDataProvider, UiIncentiveDataProvider, WalletBalanceProvider, buildErc2612PermitTypedData, calculateBufferedRepayAmount } from '@neverland-money/contract-helpers';
 import { buildClaimAllRewardsToSelfTxData, buildClaimRewardsToSelfTxData, DustLockTransactionBuilder, VeDustRevenueHelper, DustAPRCalculator, UnresolvedDustAPRInputError, calculateMarketAPRFromInputs } from '@neverland-money/contract-helpers';
 import { materializeContractResult, decodeUserEmissionBreakdown } from '@neverland-money/contract-helpers';
 import type { DecodedUserEmissionBreakdown, UiPaginationOptions, DustMarketAPRInputs, MarketAPR } from '@neverland-money/contract-helpers';
@@ -810,6 +815,9 @@ import type { CalculateReserveIncentivesResponse } from '@neverland-money/math-u
 const finite: string = calculateBufferedRepayAmount({ debtRaw:'9999999', variableBorrowRateRay:'0', windowSeconds:600 }); void finite;
 void buildErc2612PermitTypedData;
 const provider: Provider = new JsonRpcProvider(); declare const config: PoolConfig;
+const incentives = new UiIncentiveDataProvider({provider,chainId:143,uiIncentiveDataProviderAddress:'0x1111111111111111111111111111111111111111'});
+void incentives.getReservesIncentivesDataHumanized({lendingPoolAddressProvider:'0x1111111111111111111111111111111111111111'},{blockTag:0});
+void incentives.getUserReservesIncentivesDataHumanized({lendingPoolAddressProvider:'0x1111111111111111111111111111111111111111',user:'0x1111111111111111111111111111111111111111'},{blockTag:123});
 const paginationOptions: UiPaginationOptions = {requireComplete:true};
 const uiReader = new NeverlandUiService('0x',provider); void uiReader.getUserDashboardWithPagination('0x',5,paginationOptions); void uiReader.getUiFullBundlePaginated('0x',5,paginationOptions);
 declare const interfaceValue: import('ethers').Interface; const plain:unknown=materializeContractResult(interfaceValue,'method',[]); void plain;

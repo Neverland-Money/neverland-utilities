@@ -28,6 +28,7 @@ export interface ReservesIncentiveDataHumanized {
   underlyingAsset: string;
   aIncentiveData: LendingIncentiveDataHumanized;
   vIncentiveData: LendingIncentiveDataHumanized;
+  sIncentiveData?: LendingIncentiveDataHumanized;
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- Public interface retains consumer declaration merging.
@@ -55,4 +56,5 @@ export interface UserReservesIncentivesDataHumanized {
   underlyingAsset: string;
   aTokenIncentivesUserData: UserIncentiveDataHumanized;
   vTokenIncentivesUserData: UserIncentiveDataHumanized;
+  sTokenIncentivesUserData?: UserIncentiveDataHumanized;
 }
